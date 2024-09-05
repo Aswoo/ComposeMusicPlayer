@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.presentation.music_screen
+package com.sdu.composemusicplayer.viewmodel
 
 import android.content.Context
 import android.os.Handler
@@ -32,6 +32,9 @@ class PlayerEnvironment @Inject constructor(
     private val _allMusics = MutableStateFlow(emptyList<MusicEntity>())
     private val allMusics: StateFlow<List<MusicEntity>> = _allMusics.asStateFlow()
 
+    private val _currentDuration = MutableStateFlow(0L)
+    private val currentDuration: StateFlow<Long> = _currentDuration
+
     private val _isPlaying = MutableStateFlow(false)
     val isPlaying: StateFlow<Boolean> = _isPlaying
 
@@ -47,7 +50,16 @@ class PlayerEnvironment @Inject constructor(
     private val _isBottomMusicPlayerShowed = MutableStateFlow(false)
     val isBottomMusicPlayerShowed: StateFlow<Boolean> = _isBottomMusicPlayerShowed
 
-    private val playerhandler: Handler = Handler((Looper.getMainLooper()))
+    private val _isPaused = MutableStateFlow(false)
+    private val isPaused: StateFlow<Boolean> = _isPaused
+
+
+    private val playerHandler: Handler = Handler((Looper.getMainLooper()))
+
+    private var playingRunnable: Runnable = kotlinx.coroutines.Runnable {
+
+    }
+    private val playingHandler: Handler = Handler((Looper.getMainLooper()))
 
     private val exoPlayer = ExoPlayer.Builder(context).build().apply {
         addListener(object : Player.Listener {
@@ -103,8 +115,22 @@ class PlayerEnvironment @Inject constructor(
         return allMusics
     }
 
+    fun getCurrentPlayedMusic(): Flow<MusicEntity> {
+        return currentPlayedMusic
+    }
+
+    fun isPlaying(): Flow<Boolean> = isPlaying
+
     fun isBottomMusicPlayerShowed(): Flow<Boolean> {
         return isBottomMusicPlayerShowed
+    }
+
+    fun getCurrentDuration(): Flow<Long> = currentDuration
+
+    fun isPaused(): Flow<Boolean> = isPaused
+
+    suspend fun resetIsPaused() {
+        _isPaused.emit(false)
     }
 
     suspend fun play(music: MusicEntity) {
@@ -112,30 +138,98 @@ class PlayerEnvironment @Inject constructor(
             _hasStopped.emit(false)
             _currentPlayedMusic.emit(music)
 
-            playerhandler.post {
+            playerHandler.post {
                 exoPlayer.setMediaItem(MediaItem.fromUri(music.audioPath.toUri()))
                 exoPlayer.prepare()
                 exoPlayer.play()
             }
+
+            playingRunnable = kotlinx.coroutines.Runnable {
+                val duration = if (exoPlayer.duration != -1L) exoPlayer.currentPosition else 0L
+                _currentDuration.tryEmit(duration)
+
+                playingHandler.postDelayed(playingRunnable,1000)
+
+            }
+            playingHandler.post(playingRunnable)
         }
     }
 
     suspend fun pause() {
-        playerhandler.post { exoPlayer.pause() }
+        playerHandler.post { exoPlayer.pause() }
+        _isPaused.emit(true)
     }
 
     suspend fun resume() {
         if (hasStopped.value && currentPlayedMusic.value != MusicEntity.default) {
             play(currentPlayedMusic.value)
-        } else playerhandler.post { exoPlayer.play() }
+        } else playerHandler.post { exoPlayer.play() }
+    }
+
+    suspend fun previous() {
+        val currentIndex =
+            allMusics.value.indexOfFirst { it.audioId == currentPlayedMusic.value.audioId }
+
+        val previousMusic = when {
+            currentIndex == 0 -> allMusics.value[allMusics.value.lastIndex]
+            currentIndex >= 1 -> allMusics.value[currentIndex - 1]
+            else -> allMusics.value[0]
+        }
+
+        CoroutineScope(dispatcher).launch {
+            play(previousMusic)
+        }
+    }
+
+    suspend fun next() {
+        val currentIndex = allMusics.value.indexOfFirst {
+            it.audioId == currentPlayedMusic.value.audioId
+        }
+        val nextMuisc = when {
+            currentIndex == allMusics.value.lastIndex -> allMusics.value[0]
+            currentIndex != -1 -> allMusics.value[currentIndex + 1]
+            else -> allMusics.value[0]
+        }
+        CoroutineScope(dispatcher).launch {
+            play(nextMuisc)
+        }
+    }
+
+    fun snapTo(duration: Long, fromUser: Boolean = true) {
+        _currentDuration.tryEmit(duration)
+        if (fromUser) playerHandler.post { exoPlayer.seekTo(duration) }
     }
 
     suspend fun setShowBottomMusicPlayer(isShowed: Boolean) {
         _isBottomMusicPlayerShowed.emit(isShowed)
     }
 
+    suspend fun updateMusicList(musicList: List<MusicEntity>) {
+        _allMusics.emit(musicList)
+    }
+
     suspend fun refreshMusicList() {
         val scannedMusics = MusicUtil.fetchMusicFromDevice(context = context)
+        insertAllMusics(scannedMusics)
+    }
+
+    private suspend fun insertAllMusics(newMusicList: List<MusicEntity>) {
+        val musicsToInsert = arrayListOf<MusicEntity>()
+        val musicsToDelete = arrayListOf<MusicEntity>()
+
+        val storedMusicsIDs = allMusics.value.map { it.audioId }
+        val newMusicsIDs = newMusicList.map { it.audioId }
+
+        newMusicList.forEach {
+            if (it.audioId !in storedMusicsIDs) musicsToInsert.add(it)
+        }
+        allMusics.value.forEach {
+            if (it.audioId !in newMusicsIDs) musicsToDelete.add(it)
+        }
+
+        musicRepository.insertMusics(*musicsToInsert.toTypedArray())
+        musicRepository.deleteMusics(*musicsToDelete.toTypedArray())
+
     }
 }
 

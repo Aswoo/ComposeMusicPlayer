@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.presentation.music_screen
+package com.sdu.composemusicplayer.viewmodel
 
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
 
@@ -7,6 +7,7 @@ data class MusicUiState(
     val currentPlayedMusic: MusicEntity = MusicEntity.default,
     val currentDuration : Long = 0L,
     val isPlaying: Boolean = false,
-    val isBottomPlayerShow : Boolean = false
+    val isBottomPlayerShow : Boolean = false,
+    val isPaused: Boolean = false
 ) {
 }

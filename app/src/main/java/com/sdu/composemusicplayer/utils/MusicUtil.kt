@@ -3,6 +3,7 @@ package com.sdu.composemusicplayer.utils
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.sdu.composemusicplayer.R
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
 import kotlin.time.Duration.Companion.milliseconds
@@ -83,12 +84,15 @@ object MusicUtil {
                     isTrackSmallerThan100KBSkipped and isTrackShorterThan60SecondsSkipped -> {
                         if (sizeGreaterThan100KB and durationGreaterThan60Sec) musicList.add(music)
                     }
+
                     !isTrackSmallerThan100KBSkipped and isTrackShorterThan60SecondsSkipped -> {
                         if (durationGreaterThan60Sec) musicList.add(music)
                     }
+
                     isTrackSmallerThan100KBSkipped and !isTrackShorterThan60SecondsSkipped -> {
                         if (sizeGreaterThan100KB) musicList.add(music)
                     }
+
                     !isTrackSmallerThan100KBSkipped and !isTrackShorterThan60SecondsSkipped -> {
                         musicList.add(music)
                     }
@@ -99,4 +103,19 @@ object MusicUtil {
         return musicList
     }
 
+}
+
+fun <T> Collection<T>.move(from: Int, to: Int): List<T> {
+    if(from == to) return this.toList()
+    return ArrayList(this).apply {
+        val temp = get(from)
+        removeAt(from)
+        add(to,temp)
+    }
+}
+fun <T> SnapshotStateList<T>.swap(newList: List<T>) : SnapshotStateList<T> {
+    clear()
+    addAll(newList)
+
+    return this
 }

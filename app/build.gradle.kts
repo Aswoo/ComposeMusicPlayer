@@ -78,10 +78,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.androidx.room.ktx)
-    kapt(libs.room.runtime)
-    implementation(libs.room.compiler)
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
 
     implementation(libs.androidx.compose.navigation)
+    implementation(libs.accompanist.navigation)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
@@ -91,7 +92,12 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     implementation(libs.accompanist.permission)
 
-    implementation(libs.media3.exoplayer)
+    implementation(libs.motion.layout)
+    implementation(libs.material.icon)
 
+    implementation(libs.composereorderable)
+
+    implementation(libs.media3.exoplayer)
+    implementation ("androidx.compose.material:material:1.2.0")
 
 }

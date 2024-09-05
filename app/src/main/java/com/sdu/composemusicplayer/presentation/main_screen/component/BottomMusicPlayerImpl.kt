@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.presentation.component
+package com.sdu.composemusicplayer.presentation.main_screen.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -9,10 +9,13 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.sdu.composemusicplayer.presentation.music_screen.MusicUiState
+import androidx.navigation.NavController
+import com.sdu.composemusicplayer.navigation.Routes
+import com.sdu.composemusicplayer.viewmodel.MusicUiState
 
 @Composable
 fun BoxScope.BottomMusicPlayerImpl(
+    navController: NavController,
     musicUiState: MusicUiState,
     onPlayPlauseClicked: (isPlaying: Boolean) -> Unit
 ) {
@@ -29,7 +32,8 @@ fun BoxScope.BottomMusicPlayerImpl(
             currentMusic = musicUiState.currentPlayedMusic,
             currentDuration = musicUiState.currentDuration,
             isPlaying = musicUiState.isPlaying,
-            onClick = { /*TODO*/ }, onPlayPauseClicked = onPlayPlauseClicked
+            onClick = { navController.navigate(Routes.Player.name) },
+            onPlayPauseClicked = onPlayPlauseClicked
         )
     }
 }

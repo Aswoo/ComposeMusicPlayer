@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.presentation.music_screen
+package com.sdu.composemusicplayer.viewmodel
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

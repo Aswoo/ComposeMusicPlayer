@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.presentation.music_screen
+package com.sdu.composemusicplayer.presentation.main_screen
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -11,10 +11,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -27,23 +25,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.NavController
 import com.kolee.composemusicexoplayer.ui.theme.Dimens
 import com.sdu.composemusicplayer.R
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
-import com.sdu.composemusicplayer.presentation.component.BottomMusicPlayerHeight
-import com.sdu.composemusicplayer.presentation.component.MusicItem
+import com.sdu.composemusicplayer.presentation.main_screen.component.BottomMusicPlayerHeight
+import com.sdu.composemusicplayer.presentation.main_screen.component.BottomMusicPlayerImpl
+import com.sdu.composemusicplayer.presentation.main_screen.component.MusicItem
 import com.sdu.composemusicplayer.ui.theme.TextDefaultColor
+import com.sdu.composemusicplayer.viewmodel.MusicUiState
+import com.sdu.composemusicplayer.viewmodel.PlayerEvent
+import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 
 private val TAG = "MusicScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MusicScreen(playerVM: PlayerViewModel = hiltViewModel()) {
+fun MainScreen(navController: NavController, playerVM: PlayerViewModel) {
     val context = LocalContext.current
 
     val musicUiState by playerVM.uiState.collectAsState()
@@ -59,7 +60,8 @@ fun MusicScreen(playerVM: PlayerViewModel = hiltViewModel()) {
     ) {
         Column {
             Spacer(modifier = Modifier.height(Dimens.One))
-            TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
+            /* TODO */
+            TopAppBar(colors = TopAppBarDefaults.largeTopAppBarColors(
                 containerColor = Color.Transparent
             ), title = {
                 Text(
@@ -75,15 +77,24 @@ fun MusicScreen(playerVM: PlayerViewModel = hiltViewModel()) {
 
             }
         }
-        BottomMusicPlayerImpl(musicUiState = musicUiState) { isPlaying ->
+        BottomMusicPlayerImpl(
+            navController = navController,
+            musicUiState = musicUiState
+        ) { isPlaying ->
             playerVM.onEvent(PlayerEvent.PlayPause(isPlaying))
         }
     }
 
     ComposableLifeCycle { _, event ->
         when (event) {
-            Lifecycle.Event.ON_CREATE -> TODO()
-            Lifecycle.Event.ON_START -> TODO()
+            Lifecycle.Event.ON_CREATE -> {
+
+            }
+
+            Lifecycle.Event.ON_START -> {
+
+            }
+
             Lifecycle.Event.ON_RESUME -> {
                 Log.d(TAG, "MusicScreen : ON_RESUME")
                 playerVM.onEvent(PlayerEvent.RefreshMusicList)
@@ -93,15 +104,15 @@ fun MusicScreen(playerVM: PlayerViewModel = hiltViewModel()) {
                 Log.d(TAG, "MusicScreen : ON_PAUSE")
             }
 
-            Lifecycle.Event.ON_STOP -> TODO()
-            Lifecycle.Event.ON_DESTROY -> TODO()
-            Lifecycle.Event.ON_ANY -> TODO()
+            Lifecycle.Event.ON_STOP -> {}
+            Lifecycle.Event.ON_DESTROY -> {}
+            Lifecycle.Event.ON_ANY -> {}
         }
     }
 }
 
 @Composable
-fun MusicListContent(musicUiState: MusicUiState, onSelectedMusic: (music: MusicEntity)) {
+fun MusicListContent(musicUiState: MusicUiState, onSelectedMusic: (music: MusicEntity) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()

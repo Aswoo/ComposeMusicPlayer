@@ -12,8 +12,10 @@ androidxComposeNavigation = "2.6.0"
 accompanistPermission = "0.24.1-alpha"
 room = "2.6.0"
 media3 = "1.0.0-beta01"
+accompanistVersion = '0.30.1'
+constraintMotionLayout = "1.0.1"
 
-composeBom = "2024.04.01"
+composeBom = "2023.04.00"
 
 hilt = "2.46.1"
 hiltNavigationCompose = "1.0.0"
@@ -36,15 +38,21 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
+# icon
+material-icon = {group ="androidx.compose.material",name = "material-icons-extended"}
+
 androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxComposeNavigation" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+
+
 
 coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 coil-kt-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
 
-accompanist-permission = {group = "com.google.accompanist",name = "accompanist-permissions",version.ref = "accompanistPermission"}
-composereorderable = { group = "org.burnoutcrew.composereorderable",name = "reorderable",version.ref ="composereorderable"}
+accompanist-permission = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermission" }
+
+
 
 # dagger hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
@@ -52,12 +60,23 @@ hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testi
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 
 # Room
-room-runtime = { group = "androidx.room",name = "room-runtime",version.ref = "room"}
-room-compiler = { group = "androidx.room",name = "room-compiler",version.ref = "room"}
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version = "room" }
 
 # ExoPlayer
-media3-exoplayer = {group = "androidx.media3",name = "media3-exoplayer",version.ref ="media3"}
+media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3" }
+
+# accom
+accompanist-navigation = { group = "com.google.accompanist", name = "accompanist-navigation-material", version.ref = "accompanistVersion" }
+
+#motion layout
+motion-layout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraintMotionLayout" }
+
+#drag and move
+composereorderable = { group = "org.burnoutcrew.composereorderable", name = "reorderable", version.ref = "composereorderable" }
+
+
 
 [plugins]
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }

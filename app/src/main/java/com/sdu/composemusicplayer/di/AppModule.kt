@@ -15,7 +15,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMusicDB(@ApplicationContext context : Context) : MusicDB {
+    fun provideMusicDB(@ApplicationContext context: Context): MusicDB =
         MusicDB.getInstance(context)
-    }
 }

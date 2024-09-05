@@ -1,5 +1,8 @@
-package com.sdu.composemusicplayer.presentation.component
+@file:OptIn(ExperimentalMaterial3Api::class)
 
+package com.sdu.composemusicplayer.presentation.main_screen.component
+
+import androidx.annotation.FloatRange
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,7 +30,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Canvas
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -85,7 +95,9 @@ fun BottomMusicPlayer(
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
-            PlayPauseButton()
+            PlayPauseButton(isPlaying = isPlaying, progress = progress) {
+                onPlayPauseClicked(isPlaying)
+            }
         }
     }
 }
@@ -99,6 +111,8 @@ fun PlayPauseButton(
     Box(contentAlignment = Alignment.Center, modifier = Modifier
         .clip(RoundedCornerShape(100.dp))
         .clickable { onClick() }) {
+
+        CirCleProgress(progress = progress)
         Icon(
             painter = painterResource(id = if (isPlaying) R.drawable.ic_pause_filled_rounded else R.drawable.ic_play_filled_rounded),
             contentDescription = null
@@ -139,6 +153,50 @@ fun AlbumImage(albumPath: String) {
                 modifier = Modifier.fillMaxSize()
             )
         }
+    }
+}
+
+@Composable
+fun CirCleProgress(@FloatRange(from = 0.0, to = 1.0) progress: Float) {
+    val backgroundColor = MaterialTheme.colorScheme.background
+    val primaryColor = MaterialTheme.colorScheme.primary
+
+    val stroke = with(LocalDensity.current) {
+        Stroke(
+            width = 4.dp.toPx(),
+            cap = StrokeCap.Round
+        )
+    }
+    androidx.compose.foundation.Canvas(modifier = Modifier.size(56.dp)) {
+        val startAngle = 270f
+        val sweepAngle = progress * 360f
+
+        val diameterOffset = stroke.width / 2
+        val arcDimen = size.width - 2 * diameterOffset
+
+
+        // progress bg
+        drawArc(
+            color = backgroundColor,
+            startAngle = startAngle,
+            sweepAngle = 360f,
+            useCenter = false,
+            topLeft = Offset(diameterOffset, diameterOffset),
+            size = Size(arcDimen, arcDimen),
+            style = stroke
+        )
+
+        //progress
+        drawArc(
+            color = primaryColor,
+            startAngle = startAngle,
+            sweepAngle = sweepAngle,
+            useCenter = false,
+            topLeft = Offset(diameterOffset, diameterOffset),
+            size = Size(arcDimen, arcDimen),
+            style = stroke
+        )
+
     }
 }
 
