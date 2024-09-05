@@ -61,7 +61,7 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
                 albumPath = musicUiState.currentPlayedMusic.albumPath,
                 modifier = Modifier
                     .layoutId("album_image")
-                    .fillMaxWidth(0.8f)
+                    .fillMaxWidth()
                     .aspectRatio(1f, true)
             )
             Column(

@@ -35,6 +35,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.DefaultTintColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -47,6 +48,8 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.sdu.composemusicplayer.R
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
+import com.sdu.composemusicplayer.ui.theme.TextDefaultColor
+import com.sdu.composemusicplayer.ui.theme.TintDefaultColor
 
 @Composable
 fun BottomMusicPlayer(
@@ -81,7 +84,8 @@ fun BottomMusicPlayer(
                     text = currentMusic.title, maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleSmall.copy(
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
+                        color = TextDefaultColor
                     )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -90,7 +94,8 @@ fun BottomMusicPlayer(
                     text = currentMusic.artist, maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
+                        color = TextDefaultColor
                     )
                 )
             }
@@ -115,7 +120,8 @@ fun PlayPauseButton(
         CirCleProgress(progress = progress)
         Icon(
             painter = painterResource(id = if (isPlaying) R.drawable.ic_pause_filled_rounded else R.drawable.ic_play_filled_rounded),
-            contentDescription = null
+            contentDescription = null,
+            tint = TintDefaultColor
         )
     }
 

@@ -41,7 +41,7 @@ fun AudioWave(isMusicPlaying: Boolean) {
             )
         ), label = ""
     )
-    val fraction2 by transition1.animateFloat(
+    val fraction2 by transition2.animateFloat(
         initialValue = 0.3f,
         targetValue = 1f,
         animationSpec = infiniteRepeatable(
@@ -52,7 +52,7 @@ fun AudioWave(isMusicPlaying: Boolean) {
             )
         ), label = ""
     )
-    val fraction3 by transition1.animateFloat(
+    val fraction3 by transition3.animateFloat(
         initialValue = 0.3f,
         targetValue = 1f,
         animationSpec = infiniteRepeatable(

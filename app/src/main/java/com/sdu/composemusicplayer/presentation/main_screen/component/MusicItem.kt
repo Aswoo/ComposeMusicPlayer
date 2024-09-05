@@ -96,7 +96,7 @@ fun MusicItem(music: MusicEntity, isMusicPlaying: Boolean, selected: Boolean, on
                 enter = scaleIn(),
                 exit = scaleOut()
             ) {
-
+                AudioWave(isMusicPlaying = isMusicPlaying)
             }
         }
     }
