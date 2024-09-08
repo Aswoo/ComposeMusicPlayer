@@ -2,6 +2,7 @@
 
 package com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,6 +46,8 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
     val context = LocalContext.current
 
     val musicUiState by playerVM.uiState.collectAsState()
+
+    Log.d("Fraction",fraction.toString())
 
     val motionScene = remember {
         context.resources.openRawResource(R.raw.motion_scene).readBytes().decodeToString()

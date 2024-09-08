@@ -30,6 +30,7 @@ import com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent.Mot
 import com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent.SheetContent
 import com.sdu.composemusicplayer.utils.Constants
 import com.sdu.composemusicplayer.utils.currentfraction
+import com.sdu.composemusicplayer.utils.currentfraction3
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 import kotlinx.coroutines.launch
 
@@ -37,8 +38,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun MusicPlayerSheet(navController: NavController, playerVM: PlayerViewModel) {
     val musicUiState by playerVM.uiState.collectAsState()
-    var showBottomSheet by remember { mutableStateOf(false) }
-
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(

@@ -1,5 +1,6 @@
 package com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -41,6 +42,7 @@ fun SheetContent(
     val musicList = remember {
         mutableStateListOf<MusicEntity>()
     }
+    Log.d("HHHI",musicUiState.musicList.toString())
 
     val reorderableState = rememberReorderableLazyListState(onMove = { from, to ->
         musicList.swap(
@@ -55,6 +57,7 @@ fun SheetContent(
     })
 
     LaunchedEffect(key1 = musicUiState.musicList) {
+        Log.d("SWAP","${musicUiState.musicList.size}")
         musicList.swap(musicUiState.musicList)
     }
     BackHandler(isExpaned) {

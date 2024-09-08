@@ -83,8 +83,16 @@ fun SheetMusicItem(
             ) {
                 Text(
                     text = music.title, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodySmall.copy(
+                    style = MaterialTheme.typography.bodyMedium.copy(
                         color = if (selected) Purple500 else LocalContentColor.current,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = Inter
+                    )
+                )
+                Text(
+                    text = music.artist, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = if (selected) Purple500.copy(alpha =  0.7f) else LocalContentColor.current,
                         fontWeight = FontWeight.Bold,
                         fontFamily = Inter
                     )

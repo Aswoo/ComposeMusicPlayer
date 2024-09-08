@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.sdu.composemusicplayer.utils
 
 
@@ -18,9 +20,26 @@ val BottomSheetScaffoldState.currentfraction: Float
         val fraction = bottomSheetState.progress
         val currentValue = bottomSheetState.currentValue
 
-        return when {
-            currentValue == BottomSheetValue.Collapsed -> 0f
-            currentValue == BottomSheetValue.Expanded -> 1f
+        return when (currentValue) {
+            BottomSheetValue.Collapsed -> 0f
+            BottomSheetValue.Expanded -> 1f
             else -> 1f - fraction
         }
+    }
+
+@OptIn(ExperimentalMaterialApi::class)
+val BottomSheetScaffoldState.currentfraction3: Float
+    @Composable
+    get() {
+        val fraction by remember {
+            derivedStateOf {
+                val progress = bottomSheetState.progress
+                when {
+                    progress < 0f -> 0f
+                    progress > 1f -> 1f
+                    else -> progress
+                }
+            }
+        }
+        return 1f-fraction
     }
