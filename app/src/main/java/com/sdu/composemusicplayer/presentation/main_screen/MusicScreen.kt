@@ -60,7 +60,6 @@ fun MainScreen(navController: NavController, playerVM: PlayerViewModel) {
     ) {
         Column {
             Spacer(modifier = Modifier.height(Dimens.One))
-            /* TODO */
             TopAppBar(colors = TopAppBarDefaults.largeTopAppBarColors(
                 containerColor = Color.Transparent
             ), title = {
@@ -88,11 +87,11 @@ fun MainScreen(navController: NavController, playerVM: PlayerViewModel) {
     ComposableLifeCycle { _, event ->
         when (event) {
             Lifecycle.Event.ON_CREATE -> {
-
+                Log.d(TAG, "MusicScreen : ON_CREATE")
             }
 
             Lifecycle.Event.ON_START -> {
-
+                Log.d(TAG, "MusicScreen : ON_START")
             }
 
             Lifecycle.Event.ON_RESUME -> {
@@ -104,9 +103,15 @@ fun MainScreen(navController: NavController, playerVM: PlayerViewModel) {
                 Log.d(TAG, "MusicScreen : ON_PAUSE")
             }
 
-            Lifecycle.Event.ON_STOP -> {}
-            Lifecycle.Event.ON_DESTROY -> {}
-            Lifecycle.Event.ON_ANY -> {}
+            Lifecycle.Event.ON_STOP -> {
+                Log.d(TAG, "MusicScreen : ON_STOP")
+            }
+            Lifecycle.Event.ON_DESTROY -> {
+                Log.d(TAG, "MusicScreen : ON_DESTROY")
+            }
+            Lifecycle.Event.ON_ANY -> {
+                Log.d(TAG, "MusicScreen : ON_ANY")
+            }
         }
     }
 }
