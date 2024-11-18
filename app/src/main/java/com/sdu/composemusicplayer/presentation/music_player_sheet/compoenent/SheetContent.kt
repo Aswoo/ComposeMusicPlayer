@@ -36,28 +36,30 @@ import org.burnoutcrew.reorderable.reorderable
 
 @Composable
 fun SheetContent(
-    isExpaned: Boolean, playerVM: PlayerViewModel, onBack: () -> Unit
+    isExpaned: Boolean,
+    playerVM: PlayerViewModel,
+    onBack: () -> Unit
 ) {
     val musicUiState by playerVM.uiState.collectAsState()
     val musicList = remember {
         mutableStateListOf<MusicEntity>()
     }
-    Log.d("HHHI",musicUiState.musicList.toString())
+    Log.d("HHHI", musicUiState.musicList.toString())
 
     val reorderableState = rememberReorderableLazyListState(onMove = { from, to ->
         musicList.swap(
             musicList.move(from.index, to.index)
         )
     }, onDragEnd = { from, to ->
-        playerVM.onEvent(
-            PlayerEvent.UpdateMusicList(
-                musicUiState.musicList.toMutableList().move(from, to)
+            playerVM.onEvent(
+                PlayerEvent.UpdateMusicList(
+                    musicUiState.musicList.toMutableList().move(from, to)
+                )
             )
-        )
-    })
+        })
 
     LaunchedEffect(key1 = musicUiState.musicList) {
-        Log.d("SWAP","${musicUiState.musicList.size}")
+        Log.d("SWAP", "${musicUiState.musicList.size}")
         musicList.swap(musicUiState.musicList)
     }
     BackHandler(isExpaned) {
@@ -91,9 +93,11 @@ fun SheetContent(
         ) {
             items(
                 items = musicUiState.musicList,
-                key = { item: MusicEntity -> item.hashCode() }) { music ->
+                key = { item: MusicEntity -> item.hashCode() }
+            ) { music ->
                 ReorderableItem(
-                    reorderableState = reorderableState, key = music.hashCode()
+                    reorderableState = reorderableState,
+                    key = music.hashCode()
                 ) { isDragging ->
                     val elevation by animateDpAsState(targetValue = if (isDragging) 4.dp else 0.dp)
                     val currentAudioId = musicUiState.currentPlayedMusic.audioId
@@ -106,7 +110,5 @@ fun SheetContent(
                 }
             }
         }
-
     }
-
 }

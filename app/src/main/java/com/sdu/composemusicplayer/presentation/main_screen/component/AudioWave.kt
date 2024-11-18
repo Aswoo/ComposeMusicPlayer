@@ -10,7 +10,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,7 +24,6 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun AudioWave(isMusicPlaying: Boolean) {
-
     val transition1 = rememberInfiniteTransition()
     val transition2 = rememberInfiniteTransition()
     val transition3 = rememberInfiniteTransition()
@@ -36,10 +34,12 @@ fun AudioWave(isMusicPlaying: Boolean) {
         animationSpec = infiniteRepeatable(
             repeatMode = RepeatMode.Reverse,
             animation = tween(
-                durationMillis = 1600, easing = LinearEasing
+                durationMillis = 1600,
+                easing = LinearEasing
 
             )
-        ), label = ""
+        ),
+        label = ""
     )
     val fraction2 by transition2.animateFloat(
         initialValue = 0.3f,
@@ -47,10 +47,12 @@ fun AudioWave(isMusicPlaying: Boolean) {
         animationSpec = infiniteRepeatable(
             repeatMode = RepeatMode.Reverse,
             animation = tween(
-                durationMillis = 800, easing = LinearEasing
+                durationMillis = 800,
+                easing = LinearEasing
 
             )
-        ), label = ""
+        ),
+        label = ""
     )
     val fraction3 by transition3.animateFloat(
         initialValue = 0.3f,
@@ -58,17 +60,18 @@ fun AudioWave(isMusicPlaying: Boolean) {
         animationSpec = infiniteRepeatable(
             repeatMode = RepeatMode.Reverse,
             animation = tween(
-                durationMillis = 1200, easing = LinearEasing
+                durationMillis = 1200,
+                easing = LinearEasing
 
             )
-        ), label = ""
+        ),
+        label = ""
     )
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier.size(width = 24.dp, height = 20.dp)
     ) {
-
         Box(
             modifier = Modifier
                 .width(4.dp)
@@ -78,7 +81,6 @@ fun AudioWave(isMusicPlaying: Boolean) {
                 .clip(RoundedCornerShape(100))
                 .background(MaterialTheme.colorScheme.primary)
         ) {
-
         }
         Box(
             modifier = Modifier
@@ -89,7 +91,6 @@ fun AudioWave(isMusicPlaying: Boolean) {
                 .clip(RoundedCornerShape(100))
                 .background(MaterialTheme.colorScheme.primary)
         ) {
-
         }
         Box(
             modifier = Modifier
@@ -100,9 +101,6 @@ fun AudioWave(isMusicPlaying: Boolean) {
                 .clip(RoundedCornerShape(100))
                 .background(MaterialTheme.colorScheme.primary)
         ) {
-
         }
     }
-
-
 }

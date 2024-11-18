@@ -60,20 +60,22 @@ fun MainScreen(navController: NavController, playerVM: PlayerViewModel) {
     ) {
         Column {
             Spacer(modifier = Modifier.height(Dimens.One))
-            TopAppBar(colors = TopAppBarDefaults.largeTopAppBarColors(
-                containerColor = Color.Transparent
-            ), title = {
-                Text(
-                    text = stringResource(id = R.string.music_player),
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        color = TextDefaultColor
+            TopAppBar(
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = Color.Transparent
+                ),
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.music_player),
+                        style = MaterialTheme.typography.titleSmall.copy(
+                            color = TextDefaultColor
+                        )
                     )
-                )
-            })
+                }
+            )
 
             MusicListContent(musicUiState = musicUiState) { music ->
                 playerVM.onEvent(PlayerEvent.Play(music))
-
             }
         }
         BottomMusicPlayerImpl(
@@ -123,7 +125,6 @@ fun MusicListContent(musicUiState: MusicUiState, onSelectedMusic: (music: MusicE
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-
         val currentAudioId = musicUiState.currentPlayedMusic.audioId
 
         itemsIndexed(musicUiState.musicList) { _, music ->
@@ -140,7 +141,6 @@ fun MusicListContent(musicUiState: MusicUiState, onSelectedMusic: (music: MusicE
     }
 }
 
-
 @Composable
 fun ComposableLifeCycle(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
@@ -154,6 +154,5 @@ fun ComposableLifeCycle(
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
-
     }
 }

@@ -35,7 +35,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.vector.DefaultTintColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -53,10 +52,12 @@ import com.sdu.composemusicplayer.ui.theme.TintDefaultColor
 
 @Composable
 fun BottomMusicPlayer(
-    currentMusic: MusicEntity, currentDuration: Long, isPlaying: Boolean, onClick: () -> Unit,
+    currentMusic: MusicEntity,
+    currentDuration: Long,
+    isPlaying: Boolean,
+    onClick: () -> Unit,
     onPlayPauseClicked: (isPlaying: Boolean) -> Unit
 ) {
-
     val progress = remember(currentDuration, currentMusic.duration) {
         currentDuration.toFloat() / currentMusic.duration.toFloat()
     }
@@ -64,7 +65,8 @@ fun BottomMusicPlayer(
         onClick = onClick,
         colors = CardDefaults.cardColors(
             contentColor = MaterialTheme.colorScheme.primaryContainer
-        ), modifier = Modifier.height(BottomMusicPlayerHeight.value)
+        ),
+        modifier = Modifier.height(BottomMusicPlayerHeight.value)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -81,7 +83,8 @@ fun BottomMusicPlayer(
                     .weight(1f)
             ) {
                 Text(
-                    text = currentMusic.title, maxLines = 2,
+                    text = currentMusic.title,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleSmall.copy(
                         fontWeight = FontWeight.SemiBold,
@@ -91,7 +94,8 @@ fun BottomMusicPlayer(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = currentMusic.artist, maxLines = 2,
+                    text = currentMusic.artist,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.SemiBold,
@@ -113,18 +117,21 @@ fun PlayPauseButton(
     isPlaying: Boolean,
     onClick: () -> Unit
 ) {
-    Box(contentAlignment = Alignment.Center, modifier = Modifier
-        .clip(RoundedCornerShape(100.dp))
-        .clickable { onClick() }) {
-
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .clip(RoundedCornerShape(100.dp))
+            .clickable { onClick() }
+    ) {
         CirCleProgress(progress = progress)
         Icon(
-            painter = painterResource(id = if (isPlaying) R.drawable.ic_pause_filled_rounded else R.drawable.ic_play_filled_rounded),
+            painter = painterResource(
+                id = if (isPlaying) R.drawable.ic_pause_filled_rounded else R.drawable.ic_play_filled_rounded
+            ),
             contentDescription = null,
             tint = TintDefaultColor
         )
     }
-
 }
 
 @Composable
@@ -180,7 +187,6 @@ fun CirCleProgress(@FloatRange(from = 0.0, to = 1.0) progress: Float) {
         val diameterOffset = stroke.width / 2
         val arcDimen = size.width - 2 * diameterOffset
 
-
         // progress bg
         drawArc(
             color = backgroundColor,
@@ -192,7 +198,7 @@ fun CirCleProgress(@FloatRange(from = 0.0, to = 1.0) progress: Float) {
             style = stroke
         )
 
-        //progress
+        // progress
         drawArc(
             color = primaryColor,
             startAngle = startAngle,
@@ -202,7 +208,6 @@ fun CirCleProgress(@FloatRange(from = 0.0, to = 1.0) progress: Float) {
             size = Size(arcDimen, arcDimen),
             style = stroke
         )
-
     }
 }
 

@@ -1,5 +1,6 @@
 @file:OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalMaterialNavigationApi::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterialNavigationApi::class,
     ExperimentalMaterialApi::class
 )
 
@@ -28,12 +29,9 @@ import com.sdu.composemusicplayer.presentation.main_screen.MainScreen
 import com.sdu.composemusicplayer.presentation.music_player_sheet.MusicPlayerSheet
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SetupNavigation(playerVM: PlayerViewModel, modifier: Modifier = Modifier) {
-
-
     val sheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
         animationSpec = SwipeableDefaults.AnimationSpec,

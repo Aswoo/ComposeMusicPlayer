@@ -98,6 +98,5 @@ dependencies {
     implementation(libs.composereorderable)
 
     implementation(libs.media3.exoplayer)
-    implementation ("androidx.compose.material:material:1.2.0")
-
+    implementation("androidx.compose.material:material:1.2.0")
 }

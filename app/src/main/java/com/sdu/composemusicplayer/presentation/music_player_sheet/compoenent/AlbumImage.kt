@@ -16,7 +16,6 @@ import com.sdu.composemusicplayer.R
 
 @Composable
 fun AlbumImage(albumPath: String, modifier: Modifier = Modifier) {
-
     Card(
         shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
@@ -27,8 +26,9 @@ fun AlbumImage(albumPath: String, modifier: Modifier = Modifier) {
                 model = ImageRequest.Builder(LocalContext.current).data(albumPath.toUri()).error(
                     R.drawable.ic_music_unknown
                 ).placeholder(R.drawable.ic_music_unknown).build()
-            ), contentDescription = null,modifier = modifier.fillMaxSize()
+            ),
+            contentDescription = null,
+            modifier = modifier.fillMaxSize()
         )
     }
-
 }

@@ -53,11 +53,9 @@ class PlayerEnvironment @Inject constructor(
     private val _isPaused = MutableStateFlow(false)
     private val isPaused: StateFlow<Boolean> = _isPaused
 
-
     private val playerHandler: Handler = Handler((Looper.getMainLooper()))
 
     private var playingRunnable: Runnable = kotlinx.coroutines.Runnable {
-
     }
     private val playingHandler: Handler = Handler((Looper.getMainLooper()))
 
@@ -92,7 +90,6 @@ class PlayerEnvironment @Inject constructor(
                             _currentPlayedMusic.tryEmit(MusicEntity.default)
                         }
                     }
-
                 }
             }
 
@@ -148,8 +145,7 @@ class PlayerEnvironment @Inject constructor(
                 val duration = if (exoPlayer.duration != -1L) exoPlayer.currentPosition else 0L
                 _currentDuration.tryEmit(duration)
 
-                playingHandler.postDelayed(playingRunnable,1000)
-
+                playingHandler.postDelayed(playingRunnable, 1000)
             }
             playingHandler.post(playingRunnable)
         }
@@ -163,7 +159,9 @@ class PlayerEnvironment @Inject constructor(
     suspend fun resume() {
         if (hasStopped.value && currentPlayedMusic.value != MusicEntity.default) {
             play(currentPlayedMusic.value)
-        } else playerHandler.post { exoPlayer.play() }
+        } else {
+            playerHandler.post { exoPlayer.play() }
+        }
     }
 
     suspend fun previous() {
@@ -229,7 +227,6 @@ class PlayerEnvironment @Inject constructor(
 
         musicRepository.insertMusics(*musicsToInsert.toTypedArray())
         musicRepository.deleteMusics(*musicsToDelete.toTypedArray())
-
     }
 }
 

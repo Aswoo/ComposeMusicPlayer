@@ -13,7 +13,7 @@ object MusicUtil {
     fun fetchMusicFromDevice(
         context: Context,
         isTrackSmallerThan100KBSkipped: Boolean = true,
-        isTrackShorterThan60SecondsSkipped: Boolean = true,
+        isTrackShorterThan60SecondsSkipped: Boolean = true
     ): List<MusicEntity> {
         val musicList = mutableListOf<MusicEntity>()
 
@@ -75,7 +75,11 @@ object MusicUtil {
                             "<unknown>",
                             true
                         )
-                    ) context.getString(R.string.unknown) else artist,
+                    ) {
+                        context.getString(R.string.unknown)
+                    } else {
+                        artist
+                    },
                     duration = duration,
                     albumPath = albumPath.toString(),
                     audioPath = musicPath.toString()
@@ -102,18 +106,17 @@ object MusicUtil {
         }
         return musicList
     }
-
 }
 
 fun <T> Collection<T>.move(from: Int, to: Int): List<T> {
-    if(from == to) return this.toList()
+    if (from == to) return this.toList()
     return ArrayList(this).apply {
         val temp = get(from)
         removeAt(from)
-        add(to,temp)
+        add(to, temp)
     }
 }
-fun <T> SnapshotStateList<T>.swap(newList: List<T>) : SnapshotStateList<T> {
+fun <T> SnapshotStateList<T>.swap(newList: List<T>): SnapshotStateList<T> {
     clear()
     addAll(newList)
 

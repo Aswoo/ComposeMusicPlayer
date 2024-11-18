@@ -37,11 +37,11 @@ import com.sdu.composemusicplayer.R
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
 import com.sdu.composemusicplayer.ui.theme.Inter
 
-
 @Composable
 fun MusicItem(music: MusicEntity, isMusicPlaying: Boolean, selected: Boolean, onClick: () -> Unit) {
     Card(
-        onClick = onClick, colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+        onClick = onClick,
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -80,12 +80,17 @@ fun MusicItem(music: MusicEntity, isMusicPlaying: Boolean, selected: Boolean, on
                     )
                 )
                 Text(
-                    text = music.artist, maxLines = 1,
+                    text = music.artist,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodyMedium.copy(
-                        color = if (selected) MaterialTheme.colorScheme.primary else LocalContentColor.current.copy(
-                            alpha = 0.7f
-                        ),
+                        color = if (selected) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            LocalContentColor.current.copy(
+                                alpha = 0.7f
+                            )
+                        },
                         fontFamily = Inter
                     )
                 )

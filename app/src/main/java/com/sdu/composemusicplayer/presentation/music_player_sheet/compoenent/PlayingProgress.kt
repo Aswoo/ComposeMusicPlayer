@@ -1,6 +1,5 @@
 package com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,8 +21,6 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun PlayingProgress(maxDuration: Long, currentDuration: Long, onChange: (Float) -> Unit) {
-
-
     val progress = remember(maxDuration, currentDuration) {
         currentDuration.toFloat() / maxDuration.toFloat()
     }
@@ -49,7 +46,6 @@ fun PlayingProgress(maxDuration: Long, currentDuration: Long, onChange: (Float) 
             if (maxDurationInSecond < 10) "0$maxDurationInSecond" else maxDurationInSecond.toString()
 
         return@remember "$minute:$second"
-
     }
 
     val currentDurationString = remember(currentDurationInMinute, currentDurationInSecond) {
@@ -92,8 +88,5 @@ fun PlayingProgress(maxDuration: Long, currentDuration: Long, onChange: (Float) 
                 )
             )
         }
-
     }
-
-
 }

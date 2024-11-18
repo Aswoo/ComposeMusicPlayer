@@ -13,12 +13,9 @@ import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -30,7 +27,6 @@ import com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent.Mot
 import com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent.SheetContent
 import com.sdu.composemusicplayer.utils.Constants
 import com.sdu.composemusicplayer.utils.currentfraction
-import com.sdu.composemusicplayer.utils.currentfraction3
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 import kotlinx.coroutines.launch
 
@@ -41,7 +37,7 @@ fun MusicPlayerSheet(navController: NavController, playerVM: PlayerViewModel) {
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(
-           initialValue = BottomSheetValue.Collapsed
+            initialValue = BottomSheetValue.Collapsed
         )
     )
     BackHandler {
@@ -66,7 +62,8 @@ fun MusicPlayerSheet(navController: NavController, playerVM: PlayerViewModel) {
 @Composable
 fun BottomSheet(
     state: BottomSheetScaffoldState,
-    playerVM: PlayerViewModel, motionContent: @Composable () -> Unit
+    playerVM: PlayerViewModel,
+    motionContent: @Composable () -> Unit
 ) {
     val config = LocalConfiguration.current
     val scope = rememberCoroutineScope()
@@ -91,11 +88,9 @@ fun BottomSheet(
                         state.bottomSheetState.collapse()
                     }
                 }
-
             }
-        }) {
+        }
+    ) {
         motionContent.invoke()
-
     }
-
 }

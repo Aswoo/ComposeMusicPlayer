@@ -5,7 +5,6 @@ package com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +22,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -31,7 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.constraintlayout.compose.ExperimentalMotionApi
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionScene
@@ -47,7 +44,7 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
 
     val musicUiState by playerVM.uiState.collectAsState()
 
-    Log.d("Fraction",fraction.toString())
+    Log.d("Fraction", fraction.toString())
 
     val motionScene = remember {
         context.resources.openRawResource(R.raw.motion_scene).readBytes().decodeToString()
@@ -104,7 +101,9 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
             Row(modifier = Modifier.layoutId("top_player_buttons")) {
                 IconButton(onClick = { playerVM.onEvent(PlayerEvent.PlayPause(musicUiState.isPlaying)) }) {
                     Icon(
-                        painter = painterResource(id = if (!musicUiState.isPlaying) R.drawable.ic_play_filled_rounded else R.drawable.ic_pause_filled_rounded),
+                        painter = painterResource(
+                            id = if (!musicUiState.isPlaying) R.drawable.ic_play_filled_rounded else R.drawable.ic_pause_filled_rounded
+                        ),
                         contentDescription = null,
                         tint = TintDefaultColor
                     )
@@ -123,28 +122,30 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
                 modifier = Modifier.layoutId("main_player_control")
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
-                PlayingProgress(maxDuration = musicUiState.currentPlayedMusic.duration,
+                PlayingProgress(
+                    maxDuration = musicUiState.currentPlayedMusic.duration,
                     currentDuration = musicUiState.currentDuration,
                     onChange = { progress ->
                         val duration = progress * musicUiState.currentPlayedMusic.duration
 
                         playerVM.onEvent(PlayerEvent.SnapTo(duration.toLong()))
-                    })
+                    }
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 PlayControlButton(
                     isPlaying = musicUiState.isPlaying,
                     onPrevious = {
                         playerVM.onEvent(PlayerEvent.Previous)
-                    }, onPlayPause = {
+                    },
+                    onPlayPause = {
                         playerVM.onEvent(PlayerEvent.PlayPause(musicUiState.isPlaying))
-                    }, onNext = {
+                    },
+                    onNext = {
                         playerVM.onEvent(PlayerEvent.Next)
                     }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-
             }
-
         }
     }
 }

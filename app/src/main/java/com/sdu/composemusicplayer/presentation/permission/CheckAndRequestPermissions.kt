@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -91,7 +89,6 @@ fun CheckAndRequestPermissions(
                 ) {
                     Text(text = stringResource(id = R.string.enable_permissions))
                 }
-
             }
         },
         permissionsNotAvailableContent = {
@@ -122,11 +119,10 @@ fun CheckAndRequestPermissions(
                     Text(text = stringResource(id = R.string.goto_settings))
                 }
             }
-        }) {
+        }
+    ) {
         appContent.invoke()
-
     }
-
 }
 
 private fun Activity.openAppSettings() {
@@ -138,5 +134,4 @@ private fun Activity.openAppSettings() {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(this)
     }
-
 }

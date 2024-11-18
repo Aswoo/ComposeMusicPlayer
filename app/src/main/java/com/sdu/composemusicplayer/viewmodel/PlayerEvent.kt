@@ -1,7 +1,6 @@
 package com.sdu.composemusicplayer.viewmodel
 
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
-import kotlin.time.Duration
 
 sealed interface PlayerEvent {
     data class Play(val music: MusicEntity) : PlayerEvent

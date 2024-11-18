@@ -47,12 +47,13 @@ fun SheetMusicItem(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-
     Card(
-        onClick = onClick, elevation = CardDefaults.cardElevation(draggedElevation = elevation),
+        onClick = onClick,
+        elevation = CardDefaults.cardElevation(draggedElevation = elevation),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
-        ), modifier = modifier
+        ),
+        modifier = modifier
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -82,7 +83,9 @@ fun SheetMusicItem(
                     .weight(1f)
             ) {
                 Text(
-                    text = music.title, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    text = music.title,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = if (selected) Purple500 else LocalContentColor.current,
                         fontWeight = FontWeight.Bold,
@@ -90,9 +93,11 @@ fun SheetMusicItem(
                     )
                 )
                 Text(
-                    text = music.artist, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    text = music.artist,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodySmall.copy(
-                        color = if (selected) Purple500.copy(alpha =  0.7f) else LocalContentColor.current,
+                        color = if (selected) Purple500.copy(alpha = 0.7f) else LocalContentColor.current,
                         fontWeight = FontWeight.Bold,
                         fontFamily = Inter
                     )

@@ -10,11 +10,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MusicDao {
     @Query("SELECT * FROM MusicEntity")
-    fun getAllMusices() : Flow<List<MusicEntity>>
+    fun getAllMusices(): Flow<List<MusicEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(vararg music : MusicEntity)
+    suspend fun insert(vararg music: MusicEntity)
 
     @Delete
-    suspend fun delete(vararg music : MusicEntity)
+    suspend fun delete(vararg music: MusicEntity)
 }

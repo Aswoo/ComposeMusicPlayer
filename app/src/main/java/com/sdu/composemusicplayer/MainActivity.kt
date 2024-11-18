@@ -14,17 +14,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.sdu.composemusicplayer.navigation.SetupNavigation
-import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 import com.sdu.composemusicplayer.presentation.permission.CheckAndRequestPermissions
 import com.sdu.composemusicplayer.ui.theme.ComposeMusicPlayerTheme
-import dagger.hilt.EntryPoint
+import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val playerVM : PlayerViewModel by viewModels()
+    private val playerVM: PlayerViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +51,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-
 }
 
 @Composable

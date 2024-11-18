@@ -23,12 +23,14 @@ class PlayerViewModel @Inject constructor(
 
         viewModelScope.launch {
             environment.getCurrentPlayedMusic().collect {
-                music -> updateState { copy(currentPlayedMusic = music) }
+                    music ->
+                updateState { copy(currentPlayedMusic = music) }
             }
         }
         viewModelScope.launch {
             environment.isPlaying().collect {
-                isPlaying -> updateState { copy(isPlaying = isPlaying) }
+                    isPlaying ->
+                updateState { copy(isPlaying = isPlaying) }
             }
         }
         viewModelScope.launch {
@@ -39,15 +41,16 @@ class PlayerViewModel @Inject constructor(
 
         viewModelScope.launch {
             environment.getCurrentDuration().collect {
-                duration -> updateState { copy(currentDuration = duration) }
+                    duration ->
+                updateState { copy(currentDuration = duration) }
             }
         }
         viewModelScope.launch {
             environment.isPaused().collect {
-                isPaused -> updateState { copy(isPaused = isPaused) }
+                    isPaused ->
+                updateState { copy(isPaused = isPaused) }
             }
         }
-
     }
 
     fun onEvent(event: PlayerEvent) {
@@ -60,8 +63,11 @@ class PlayerViewModel @Inject constructor(
 
             is PlayerEvent.PlayPause -> {
                 viewModelScope.launch {
-                    if(event.isPlaying) environment.pause()
-                    else environment.resume()
+                    if (event.isPlaying) {
+                        environment.pause()
+                    } else {
+                        environment.resume()
+                    }
                 }
             }
 
@@ -69,7 +75,6 @@ class PlayerViewModel @Inject constructor(
                 viewModelScope.launch {
                     environment.setShowBottomMusicPlayer(event.isShow)
                 }
-
             }
 
             is PlayerEvent.RefreshMusicList -> {
@@ -105,5 +110,4 @@ class PlayerViewModel @Inject constructor(
             }
         }
     }
-
 }
