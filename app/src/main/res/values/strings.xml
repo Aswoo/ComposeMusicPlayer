@@ -8,4 +8,6 @@
     <string name="enable_permissions">Enable permissions</string>
     <string name="goto_settings">Go to Settings!</string>
     <string name="music_player">Music Player</string>
+    <string name="media_notification_channel">media_noti_channel</string>
+    <string name="media_notification_channel_description">media_notification_channel_description</string>
 </resources>

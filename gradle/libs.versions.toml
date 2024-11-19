@@ -21,6 +21,8 @@ hilt = "2.46.1"
 hiltNavigationCompose = "1.0.0"
 
 coil = "2.4.0"
+media3Session = "1.4.1"
+media3Ui = "1.4.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -75,6 +77,8 @@ motion-layout = { group = "androidx.constraintlayout", name = "constraintlayout-
 
 #drag and move
 composereorderable = { group = "org.burnoutcrew.composereorderable", name = "reorderable", version.ref = "composereorderable" }
+androidx-media3-session = { group = "androidx.media3", name = "media3-session", version.ref = "media3Session" }
+androidx-media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3Ui" }
 
 
 

@@ -1,14 +1,20 @@
 package com.sdu.composemusicplayer.viewmodel
 
+import android.app.Notification
+import android.app.PendingIntent
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.session.MediaSession
+import androidx.media3.ui.PlayerNotificationManager
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
 import com.sdu.composemusicplayer.data.roomdb.MusicRepository
+import com.sdu.composemusicplayer.data.service.MediaNotificationManager
 import com.sdu.composemusicplayer.utils.MusicUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,7 +28,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class PlayerEnvironment @Inject constructor(
+class PlayerEnvironment @UnstableApi @Inject constructor(
     @ApplicationContext private val context: Context,
     private val musicRepository: MusicRepository
 ) {
@@ -58,6 +64,28 @@ class PlayerEnvironment @Inject constructor(
     private var playingRunnable: Runnable = kotlinx.coroutines.Runnable {
     }
     private val playingHandler: Handler = Handler((Looper.getMainLooper()))
+
+    private lateinit var notificationManager: MediaNotificationManager
+    protected lateinit var mediaSession: MediaSession
+
+    /**
+     * Listen for notification events.
+     */
+    @UnstableApi private inner class PlayerNotificationListener :
+        PlayerNotificationManager.NotificationListener {
+        override fun onNotificationPosted(
+            notificationId: Int,
+            notification: Notification,
+            ongoing: Boolean
+        ) {
+
+        }
+
+        override fun onNotificationCancelled(notificationId: Int, dismissedByUser: Boolean) {
+
+        }
+    }
+
 
     private val exoPlayer = ExoPlayer.Builder(context).build().apply {
         addListener(object : Player.Listener {
@@ -106,6 +134,33 @@ class PlayerEnvironment @Inject constructor(
                 _allMusics.emit(it)
             }
         }
+
+        // Build a PendingIntent that can be used to launch the UI.
+        val sessionActivityPendingIntent =
+            context.packageManager?.getLaunchIntentForPackage(context.packageName)
+                ?.let { sessionIntent ->
+                    PendingIntent.getActivity(
+                        context,
+                        SESSION_INTENT_REQUEST_CODE,
+                        sessionIntent,
+                        PendingIntent.FLAG_IMMUTABLE
+                    )
+                }
+
+        // Create a new MediaSession.
+        mediaSession = MediaSession.Builder(context, exoPlayer)
+            .setSessionActivity(sessionActivityPendingIntent!!).build()
+
+        notificationManager =
+            MediaNotificationManager(
+                context,
+                mediaSession.token,
+                exoPlayer,
+                PlayerNotificationListener()
+            )
+
+
+        notificationManager.showNotificationForPlayer(exoPlayer)
     }
 
     fun getAllMusics(): Flow<List<MusicEntity>> {
@@ -227,6 +282,17 @@ class PlayerEnvironment @Inject constructor(
 
         musicRepository.insertMusics(*musicsToInsert.toTypedArray())
         musicRepository.deleteMusics(*musicsToDelete.toTypedArray())
+    }
+
+    /***
+     * TODO : 언제 숨겨야 할가
+     */
+    fun hideNotification(){
+        notificationManager.hideNotification()
+    }
+
+    companion object {
+        const val SESSION_INTENT_REQUEST_CODE = 0
     }
 }
 
