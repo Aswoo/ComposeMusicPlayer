@@ -1,7 +1,9 @@
 package com.sdu.composemusicplayer.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.sdu.composemusicplayer.media_player.service.PlayerServiceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -10,7 +12,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val environment: PlayerEnvironment
+    private val environment: PlayerEnvironment,
+    private val serviceManager: PlayerServiceManager
 ) :
     StatefulViewModel<MusicUiState>(MusicUiState()) {
 
@@ -59,6 +62,7 @@ class PlayerViewModel @Inject constructor(
                 viewModelScope.launch {
                     environment.play(event.music)
                 }
+                serviceManager.startMusicService() // 서비스 시작
             }
 
             is PlayerEvent.PlayPause -> {
@@ -69,6 +73,7 @@ class PlayerViewModel @Inject constructor(
                         environment.resume()
                     }
                 }
+                serviceManager.startMusicService() // 서비스 시작 필요하다면
             }
 
             is PlayerEvent.SetShowBottomPlayer -> {
