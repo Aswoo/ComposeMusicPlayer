@@ -34,6 +34,11 @@ class MainActivity : ComponentActivity() {
             } else {
                 add(android.Manifest.permission.READ_EXTERNAL_STORAGE)
             }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                add(android.Manifest.permission.BLUETOOTH_CONNECT)
+            } else {
+                add(android.Manifest.permission.BLUETOOTH)
+            }
         }
         enableEdgeToEdge()
         setContent {
