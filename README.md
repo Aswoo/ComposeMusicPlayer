@@ -37,9 +37,11 @@ BluetoothProfile.ServiceListener 로 연결된 기기 정보 연동
 - Dagger & Hilt
 - Room
 - Media3(exo player)
+- ScreenShotTest(alpha)
 
 
 ### TODO
 
+ScreenShotTest + UI Test + 통합 테스트 적용
 
 
