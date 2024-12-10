@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kapt)
+    alias(libs.plugins.compose.screenshot)
     id("kotlin-parcelize")
 }
 
@@ -43,7 +44,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.4"
     }
     packaging {
         resources {
@@ -53,6 +54,15 @@ android {
     configurations {
         implementation {
             exclude(group = "org.jetbrains", module = "annotations")
+        }
+    }
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
+
+    sourceSets {
+        create("screenshotTest") {
+            java.srcDir("src/screenshotTest/java") // 스크린샷 테스트 코드 경로
+            res.srcDir("src/screenshotTest/res")   // 리소스 경로 (필요 시)
+            manifest.srcFile("src/screenshotTest/AndroidManifest.xml") // 매니페스트 경로
         }
     }
 }
@@ -65,10 +75,16 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.media3.session)
     implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.ui.tooling.preview.android)
+
+    // Screen Compose
+    screenshotTestImplementation(platform(libs.androidx.compose.bom))
+    screenshotTestImplementation(libs.androidx.ui.tooling)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

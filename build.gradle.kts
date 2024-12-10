@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.kapt) apply false
     id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
     id("io.gitlab.arturbosch.detekt") version "1.22.0"
+    alias(libs.plugins.android.library) apply false
+
 }
 
 subprojects {

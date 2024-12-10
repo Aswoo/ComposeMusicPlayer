@@ -1,6 +1,6 @@
 [versions]
 agp = "8.5.0"
-kotlin = "1.9.0"
+kotlin = "1.9.20"
 coreKtx = "1.10.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -14,6 +14,9 @@ room = "2.6.0"
 media3 = "1.0.0-beta01"
 accompanistVersion = '0.30.1'
 constraintMotionLayout = "1.0.1"
+composeScreenshot = "0.0.1-alpha08"
+uiToolingPreviewAndroid = "1.7.5"
+
 
 composeBom = "2023.04.00"
 
@@ -23,6 +26,9 @@ hiltNavigationCompose = "1.0.0"
 coil = "2.4.0"
 media3Session = "1.4.1"
 media3Ui = "1.4.1"
+appcompat = "1.7.0"
+material = "1.12.0"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -79,6 +85,9 @@ motion-layout = { group = "androidx.constraintlayout", name = "constraintlayout-
 composereorderable = { group = "org.burnoutcrew.composereorderable", name = "reorderable", version.ref = "composereorderable" }
 androidx-media3-session = { group = "androidx.media3", name = "media3-session", version.ref = "media3Session" }
 androidx-media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3Ui" }
+androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 
 
@@ -88,4 +97,5 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-
+compose-screenshot = { id = "com.android.compose.screenshot", version.ref = "composeScreenshot"}
+android-library = { id = "com.android.library", version.ref = "agp" }
