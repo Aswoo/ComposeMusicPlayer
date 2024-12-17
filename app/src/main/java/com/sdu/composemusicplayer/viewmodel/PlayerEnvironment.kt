@@ -22,12 +22,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class PlayerEnvironment @UnstableApi @Inject constructor(
+@Singleton
+class PlayerEnvironment @Inject constructor(
     @ApplicationContext private val context: Context,
     private val musicRepository: MusicRepository,
     private val exoPlayer: ExoPlayer // Hilt로 ExoPlayer 주입받기
-) {
+) : IPlayerEnvironment {
 
     val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
@@ -38,19 +40,19 @@ class PlayerEnvironment @UnstableApi @Inject constructor(
     private val currentDuration: StateFlow<Long> = _currentDuration
 
     private val _isPlaying = MutableStateFlow(false)
-    val isPlaying: StateFlow<Boolean> = _isPlaying
+     val isPlaying: StateFlow<Boolean> = _isPlaying
 
     private val _currentPlayedMusic = MutableStateFlow(MusicEntity.default)
-    val currentPlayedMusic: StateFlow<MusicEntity> = _currentPlayedMusic
+     val currentPlayedMusic: StateFlow<MusicEntity> = _currentPlayedMusic
 
     private val _playBackMode = MutableStateFlow(PlayBackMode.REPEAT_ONE)
-    val playbackMode: StateFlow<PlayBackMode> = _playBackMode
+     val playbackMode: StateFlow<PlayBackMode> = _playBackMode
 
     private val _hasStopped = MutableStateFlow(false)
-    val hasStopped: StateFlow<Boolean> = _hasStopped
+     val hasStopped: StateFlow<Boolean> = _hasStopped
 
     private val _isBottomMusicPlayerShowed = MutableStateFlow(false)
-    val isBottomMusicPlayerShowed: StateFlow<Boolean> = _isBottomMusicPlayerShowed
+     val isBottomMusicPlayerShowed: StateFlow<Boolean> = _isBottomMusicPlayerShowed
 
     private val _isPaused = MutableStateFlow(false)
     private val isPaused: StateFlow<Boolean> = _isPaused
@@ -60,7 +62,6 @@ class PlayerEnvironment @UnstableApi @Inject constructor(
     private var playingRunnable: Runnable = kotlinx.coroutines.Runnable {
     }
     private val playingHandler: Handler = Handler((Looper.getMainLooper()))
-
 
 
     init {
@@ -111,29 +112,29 @@ class PlayerEnvironment @UnstableApi @Inject constructor(
         }
     }
 
-    fun getAllMusics(): Flow<List<MusicEntity>> {
+    override fun getAllMusics(): Flow<List<MusicEntity>> {
         return allMusics
     }
 
-    fun getCurrentPlayedMusic(): Flow<MusicEntity> {
+    override fun getCurrentPlayedMusic(): Flow<MusicEntity> {
         return currentPlayedMusic
     }
 
-    fun isPlaying(): Flow<Boolean> = isPlaying
+    override fun isPlaying(): Flow<Boolean> = isPlaying
 
-    fun isBottomMusicPlayerShowed(): Flow<Boolean> {
+    override fun isBottomMusicPlayerShowed(): Flow<Boolean> {
         return isBottomMusicPlayerShowed
     }
 
-    fun getCurrentDuration(): Flow<Long> = currentDuration
+    override fun getCurrentDuration(): Flow<Long> = currentDuration
 
-    fun isPaused(): Flow<Boolean> = isPaused
+    override fun isPaused(): Flow<Boolean> = isPaused
 
-    suspend fun resetIsPaused() {
+    override suspend fun resetIsPaused() {
         _isPaused.emit(false)
     }
 
-    suspend fun play(music: MusicEntity) {
+    override suspend fun play(music: MusicEntity) {
         if (music.audioId != MusicEntity.default.audioId) {
             _hasStopped.emit(false)
             _currentPlayedMusic.emit(music)
@@ -154,12 +155,12 @@ class PlayerEnvironment @UnstableApi @Inject constructor(
         }
     }
 
-    suspend fun pause() {
+    override suspend fun pause() {
         playerHandler.post { exoPlayer.pause() }
         _isPaused.emit(true)
     }
 
-    suspend fun resume() {
+    override suspend fun resume() {
         if (hasStopped.value && currentPlayedMusic.value != MusicEntity.default) {
             play(currentPlayedMusic.value)
         } else {
@@ -167,7 +168,7 @@ class PlayerEnvironment @UnstableApi @Inject constructor(
         }
     }
 
-    suspend fun previous() {
+    override suspend fun previous() {
         val currentIndex =
             allMusics.value.indexOfFirst { it.audioId == currentPlayedMusic.value.audioId }
 
@@ -182,7 +183,7 @@ class PlayerEnvironment @UnstableApi @Inject constructor(
         }
     }
 
-    suspend fun next() {
+    override suspend fun next() {
         val currentIndex = allMusics.value.indexOfFirst {
             it.audioId == currentPlayedMusic.value.audioId
         }
@@ -196,20 +197,20 @@ class PlayerEnvironment @UnstableApi @Inject constructor(
         }
     }
 
-    fun snapTo(duration: Long, fromUser: Boolean = true) {
+    override fun snapTo(duration: Long, fromUser: Boolean) {
         _currentDuration.tryEmit(duration)
         if (fromUser) playerHandler.post { exoPlayer.seekTo(duration) }
     }
 
-    suspend fun setShowBottomMusicPlayer(isShowed: Boolean) {
+    override suspend fun setShowBottomMusicPlayer(isShowed: Boolean) {
         _isBottomMusicPlayerShowed.emit(isShowed)
     }
 
-    suspend fun updateMusicList(musicList: List<MusicEntity>) {
+    override suspend fun updateMusicList(musicList: List<MusicEntity>) {
         _allMusics.emit(musicList)
     }
 
-    suspend fun refreshMusicList() {
+    override suspend fun refreshMusicList() {
         val scannedMusics = MusicUtil.fetchMusicFromDevice(context = context)
         insertAllMusics(scannedMusics)
     }
@@ -231,7 +232,6 @@ class PlayerEnvironment @UnstableApi @Inject constructor(
         musicRepository.insertMusics(*musicsToInsert.toTypedArray())
         musicRepository.deleteMusics(*musicsToDelete.toTypedArray())
     }
-
 }
 
 enum class PlayBackMode {

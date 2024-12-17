@@ -16,6 +16,8 @@ import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -23,10 +25,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.sdu.composemusicplayer.data.roomdb.MusicEntity
 import com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent.MotionContent
 import com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent.SheetContent
 import com.sdu.composemusicplayer.utils.Constants
 import com.sdu.composemusicplayer.utils.currentfraction
+import com.sdu.composemusicplayer.utils.move
+import com.sdu.composemusicplayer.utils.swap
+import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 import kotlinx.coroutines.launch
 
@@ -54,7 +60,7 @@ fun MusicPlayerSheet(navController: NavController, playerVM: PlayerViewModel) {
     ) {
         MotionContent(
             playerVM = playerVM,
-            fraction = scaffoldState.currentfraction
+            fraction = 0.0f
         )
     }
 }
@@ -67,6 +73,8 @@ fun BottomSheet(
 ) {
     val config = LocalConfiguration.current
     val scope = rememberCoroutineScope()
+    val uiState by playerVM.uiState.collectAsState()
+    val musicList = remember { mutableStateListOf<MusicEntity>() }
 
     BottomSheetScaffold(
         scaffoldState = state,
@@ -80,14 +88,24 @@ fun BottomSheet(
                         0.99f.minus(Constants.TOP_MUSIC_PLAYER_HEIGHT.value / config.screenHeightDp)
                     )
             ) {
+//                SheetContent(
+//                    isExpaned = state.bottomSheetState.isExpanded,
+//                    playerVM = playerVM
+//                ) {
+//
+//                }
                 SheetContent(
-                    isExpaned = state.bottomSheetState.isExpanded,
-                    playerVM = playerVM
-                ) {
-                    scope.launch {
+                    isExpanded = state.bottomSheetState.isExpanded,
+                    uiState = uiState,
+                    musicList = musicList,
+                    onMove = { from, to -> musicList.swap(musicList.move(from, to)) },
+                    onDragEnd = { from, to ->
+                        playerVM.onEvent(PlayerEvent.UpdateMusicList(uiState.musicList.toMutableList().move(from, to)))
+                    },
+                    onBack = {  scope.launch {
                         state.bottomSheetState.collapse()
-                    }
-                }
+                    } }
+                )
             }
         }
     ) {

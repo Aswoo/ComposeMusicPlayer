@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import com.sdu.composemusicplayer.navigation.Routes
 import com.sdu.composemusicplayer.viewmodel.MusicUiState
@@ -33,7 +34,8 @@ fun BoxScope.BottomMusicPlayerImpl(
             currentDuration = musicUiState.currentDuration,
             isPlaying = musicUiState.isPlaying,
             onClick = { navController.navigate(Routes.Player.name) },
-            onPlayPauseClicked = onPlayPlauseClicked
+            onPlayPauseClicked = onPlayPlauseClicked,
+            modifier = Modifier.testTag("BottomMusicPlayer")  // testTag 추가
         )
     }
 }

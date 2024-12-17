@@ -48,7 +48,7 @@ android {
     }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/{AL2.0,LGPL2.1,LICENSE.md,LICENSE-notice.md,LICENSE,NOTICE.md,NOTICE}"
         }
     }
     configurations {
@@ -117,4 +117,26 @@ dependencies {
 
     implementation(libs.media3.exoplayer)
     implementation("androidx.compose.material:material:1.2.0")
+
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
+
+    // Hilt testing
+    androidTestImplementation(libs.hilt.android.testing)
+    kaptAndroidTest(libs.hilt.compiler)
+
+    // Compose testing
+    androidTestImplementation (libs.androidx.ui.test.junit4)
+    debugImplementation (libs.androidx.ui.test.manifest)
+
+    // Hilt Compose Testing
+    androidTestImplementation(libs.hilt.navigation.compose)
+    androidTestImplementation(libs.hilt.android)
+
+    androidTestImplementation(libs.mockk.android)
+
+    implementation("org.jetbrains:annotations:23.0.0")
 }

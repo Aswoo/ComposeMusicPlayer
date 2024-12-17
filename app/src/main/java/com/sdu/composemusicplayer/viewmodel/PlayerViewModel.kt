@@ -1,7 +1,6 @@
 package com.sdu.composemusicplayer.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sdu.composemusicplayer.media_player.service.PlayerServiceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,10 +11,9 @@ import javax.inject.Inject
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val environment: PlayerEnvironment,
+    private val environment: IPlayerEnvironment,
     private val serviceManager: PlayerServiceManager
-) :
-    StatefulViewModel<MusicUiState>(MusicUiState()) {
+) : StatefulViewModel<MusicUiState>(MusicUiState()) {
 
     init {
         viewModelScope.launch {
@@ -25,17 +23,17 @@ class PlayerViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            environment.getCurrentPlayedMusic().collect {
-                    music ->
+            environment.getCurrentPlayedMusic().collect { music ->
                 updateState { copy(currentPlayedMusic = music) }
             }
         }
+
         viewModelScope.launch {
-            environment.isPlaying().collect {
-                    isPlaying ->
+            environment.isPlaying().collect { isPlaying ->
                 updateState { copy(isPlaying = isPlaying) }
             }
         }
+
         viewModelScope.launch {
             environment.isBottomMusicPlayerShowed().collect { isShowed ->
                 updateState { copy(isBottomPlayerShow = isShowed) }
@@ -43,14 +41,13 @@ class PlayerViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            environment.getCurrentDuration().collect {
-                    duration ->
+            environment.getCurrentDuration().collect { duration ->
                 updateState { copy(currentDuration = duration) }
             }
         }
+
         viewModelScope.launch {
-            environment.isPaused().collect {
-                    isPaused ->
+            environment.isPaused().collect { isPaused ->
                 updateState { copy(isPaused = isPaused) }
             }
         }
@@ -62,7 +59,7 @@ class PlayerViewModel @Inject constructor(
                 viewModelScope.launch {
                     environment.play(event.music)
                 }
-                serviceManager.startMusicService() // 서비스 시작
+                serviceManager.startMusicService()
             }
 
             is PlayerEvent.PlayPause -> {
@@ -73,7 +70,7 @@ class PlayerViewModel @Inject constructor(
                         environment.resume()
                     }
                 }
-                serviceManager.startMusicService() // 서비스 시작 필요하다면
+                serviceManager.startMusicService()
             }
 
             is PlayerEvent.SetShowBottomPlayer -> {

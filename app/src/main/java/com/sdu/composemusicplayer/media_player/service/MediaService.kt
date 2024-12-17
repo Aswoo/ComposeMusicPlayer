@@ -84,13 +84,11 @@ class MediaService : MediaSessionService() {
 //                        get() = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
                     val isBackground = !isAppInForeground(this@MediaService)
                     if (isBackground) {
-                        Log.d("MediaService", "App is in background")
                         stopForeground(STOP_FOREGROUND_REMOVE)  // 포그라운드 서비스 종료
                         exoPlayer.release()  // ExoPlayer 리소스 해제
                         mediaSession.release()  // MediaSession 해제
                         stopSelf()  // 서비스 종료
                     } else {
-                        Log.d("MediaService", "App is in forground")
                         stopForeground(STOP_FOREGROUND_REMOVE)
                     }
                 }
@@ -113,8 +111,6 @@ class MediaService : MediaSessionService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("MediaService","destroy")
-
         stopForeground(STOP_FOREGROUND_REMOVE)  // 포그라운드 서비스 종료
         exoPlayer.release()  // ExoPlayer 리소스 해제
         stopSelf()  // 서비스 종료

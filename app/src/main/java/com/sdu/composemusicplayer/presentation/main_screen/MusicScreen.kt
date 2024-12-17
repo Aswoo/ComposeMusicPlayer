@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -156,3 +157,18 @@ fun ComposableLifeCycle(
         }
     }
 }
+
+@PreviewScreenSizes
+@Composable
+fun PreviewMusicListContent() {
+    val mockMusicUiState = MusicUiState(
+        musicList = listOf(
+            MusicEntity(1, "Song 1", "Artist 1", 200000L, "/path/album1", "/path/song1"),
+            MusicEntity(2, "Song 2", "Artist 2", 180000L, "/path/album2", "/path/song2")
+        ),
+        currentPlayedMusic = MusicEntity(1, "Song 1", "Artist 1", 200000L, "/path/album1", "/path/song1"),
+        isPlaying = true
+    )
+    MusicListContent(musicUiState = mockMusicUiState, onSelectedMusic = {})
+}
+

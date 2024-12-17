@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -36,8 +37,11 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.sdu.composemusicplayer.R
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
+import com.sdu.composemusicplayer.presentation.main_screen.MusicListContent
+import com.sdu.composemusicplayer.ui.theme.ComposeMusicPlayerTheme
 import com.sdu.composemusicplayer.ui.theme.Inter
 import com.sdu.composemusicplayer.ui.theme.Purple500
+import com.sdu.composemusicplayer.viewmodel.MusicUiState
 
 @Composable
 fun SheetMusicItem(
@@ -110,5 +114,21 @@ fun SheetMusicItem(
                 )
             }
         }
+    }
+}
+
+@PreviewScreenSizes
+@Composable
+fun PreviewMusicListContent() {
+    val sampleMusic = MusicEntity(
+        audioId = 1L,
+        title = "Test Song",
+        artist = "Test Artist",
+        duration = 180000L,
+        albumPath = "/path/to/album",
+        audioPath = "/path/to/test/song.mp3"
+    )
+    ComposeMusicPlayerTheme {
+        SheetMusicItem(music = sampleMusic,selected = true, onClick = {})
     }
 }

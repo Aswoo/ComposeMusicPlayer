@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -56,7 +57,8 @@ fun BottomMusicPlayer(
     currentDuration: Long,
     isPlaying: Boolean,
     onClick: () -> Unit,
-    onPlayPauseClicked: (isPlaying: Boolean) -> Unit
+    onPlayPauseClicked: (isPlaying: Boolean) -> Unit,
+    modifier : Modifier,
 ) {
     val progress = remember(currentDuration, currentMusic.duration) {
         currentDuration.toFloat() / currentMusic.duration.toFloat()
@@ -66,7 +68,7 @@ fun BottomMusicPlayer(
         colors = CardDefaults.cardColors(
             contentColor = MaterialTheme.colorScheme.primaryContainer
         ),
-        modifier = Modifier.height(BottomMusicPlayerHeight.value)
+        modifier = modifier.height(BottomMusicPlayerHeight.value)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -121,6 +123,7 @@ fun PlayPauseButton(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .clip(RoundedCornerShape(100.dp))
+            .testTag("PlayPauseButton")
             .clickable { onClick() }
     ) {
         CirCleProgress(progress = progress)
