@@ -57,12 +57,13 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
             modifier = Modifier.fillMaxWidth()
         ) {
             Spacer(modifier = Modifier.layoutId("top_bar"))
-            AlbumImage(
-                albumPath = musicUiState.currentPlayedMusic.albumPath,
+            AnimatedVinyl(
+                albumImagePath = musicUiState.currentPlayedMusic.albumPath,
                 modifier = Modifier
                     .layoutId("album_image")
                     .fillMaxWidth()
-                    .aspectRatio(1f, true)
+                    .aspectRatio(1f, true),
+                isPlaying = musicUiState.isPlaying
             )
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
