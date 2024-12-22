@@ -19,16 +19,16 @@ fun AlbumImage(albumPath: String, modifier: Modifier = Modifier) {
     Card(
         shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        modifier = modifier
+        modifier = modifier,
     ) {
         Image(
             painter = rememberAsyncImagePainter(
                 model = ImageRequest.Builder(LocalContext.current).data(albumPath.toUri()).error(
-                    R.drawable.ic_music_unknown
-                ).placeholder(R.drawable.ic_music_unknown).build()
+                    R.drawable.ic_music_unknown,
+                ).placeholder(R.drawable.ic_music_unknown).build(),
             ),
             contentDescription = null,
-            modifier = modifier.fillMaxSize()
+            modifier = modifier.fillMaxSize(),
         )
     }
 }

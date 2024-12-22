@@ -33,7 +33,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -85,6 +85,12 @@ ktlint {
     outputToConsole.set(true) // 콘솔에 출력하도록 설정
     outputColorName.set("RED") // 출력 색상 설정
     ignoreFailures.set(false) // 실패 시 빌드 실패하도록 설정
+    // test 코드는 검사에서 제외
+    filter {
+        exclude("**/test/**")
+        exclude("**/androidTest/**")
+        exclude("**/screenshotTest/**")
+    }
 }
 
 dependencies {

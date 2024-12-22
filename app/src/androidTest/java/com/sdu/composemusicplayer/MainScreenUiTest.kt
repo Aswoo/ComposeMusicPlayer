@@ -27,11 +27,11 @@ class MainScreenUiTest {
     fun musicListContent_displaysMusicList_correctly() {
         val mockMusicList = listOf(
             MusicEntity(1, "Song 1", "Artist 1", 200000L, "/path/album1", "/path/song1"),
-            MusicEntity(2, "Song 2", "Artist 2", 180000L, "/path/album2", "/path/song2")
+            MusicEntity(2, "Song 2", "Artist 2", 180000L, "/path/album2", "/path/song2"),
         )
         val mockUiState = MusicUiState(
             musicList = mockMusicList,
-            currentPlayedMusic = mockMusicList[0]
+            currentPlayedMusic = mockMusicList[0],
         )
 
         composeTestRule.setContent {
@@ -58,7 +58,7 @@ class MainScreenUiTest {
             MusicUiState(
                 musicList = listOf(
                     MusicEntity(1, "Song 1", "Artist 1", 200000L, "/path/album1", "/path/song1"),
-                    MusicEntity(2, "Song 2", "Artist 2", 180000L, "/path/album2", "/path/song2")
+                    MusicEntity(2, "Song 2", "Artist 2", 180000L, "/path/album2", "/path/song2"),
                 ),
                 currentPlayedMusic = MusicEntity(
                     1,
@@ -66,10 +66,10 @@ class MainScreenUiTest {
                     "Artist 1",
                     200000L,
                     "/path/album1",
-                    "/path/song1"
+                    "/path/song1",
                 ),
-                isPlaying = true
-            )
+                isPlaying = true,
+            ),
         ).asStateFlow()
 
         composeTestRule.setContent {

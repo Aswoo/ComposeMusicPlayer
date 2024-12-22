@@ -1,11 +1,25 @@
-[**/test/**.kt]
-ktlint_disabled_rules = All
+# KTLint rules for code formatting
+root = true
 
-[**/androidTest/**.kt]
-ktlint_disabled_rules = All
+# Ktlint 공식 코드 스타일 적용
+ktlint_code_style = ktlint_official
 
-[**/screenshotTest/**.kt]
-ktlint_disabled_rules = All
+[*.{kt,kts,java,xml}]
+max_line_length = 140
+indent_size = 4
+continuation_indent_size = 8
 
+# 트레일링 콤마 규칙
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+
+# 와일드카드 임포트 금지
+ij_kotlin_packages_to_use_import_on_demand = true
+
+# Ktlint 표준 규칙
+ktlint_standard_no-empty-first-line-in-class-body = enabled
+ktlint_standard_multiline-expression-wrapping = enabled
+
+# 테스트 파일에 적용할 규칙
 [{**/test/**.kt,**/androidTest/**.kt,**/screenshotTest/**.kt}]
 ktlint_disabled_rules = no-wildcard-imports

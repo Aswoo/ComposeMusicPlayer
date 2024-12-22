@@ -41,34 +41,34 @@ import com.sdu.composemusicplayer.ui.theme.Inter
 fun MusicItem(music: MusicEntity, isMusicPlaying: Boolean, selected: Boolean, onClick: () -> Unit) {
     Card(
         onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
-                .height(72.dp)
+                .height(72.dp),
         ) {
             Image(
                 painter = rememberAsyncImagePainter(
                     ImageRequest.Builder(LocalContext.current).data(music.albumPath.toUri()).error(
-                        R.drawable.ic_music_unknown
-                    ).placeholder(R.drawable.ic_music_unknown).build()
+                        R.drawable.ic_music_unknown,
+                    ).placeholder(R.drawable.ic_music_unknown).build(),
                 ),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxHeight()
                     .aspectRatio(1f)
-                    .clip(MaterialTheme.shapes.medium)
+                    .clip(MaterialTheme.shapes.medium),
             )
 
             Column(
                 verticalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = music.title,
@@ -76,8 +76,8 @@ fun MusicItem(music: MusicEntity, isMusicPlaying: Boolean, selected: Boolean, on
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = if (selected) MaterialTheme.colorScheme.primary else LocalContentColor.current,
-                        fontWeight = FontWeight.Bold
-                    )
+                        fontWeight = FontWeight.Bold,
+                    ),
                 )
                 Text(
                     text = music.artist,
@@ -88,18 +88,18 @@ fun MusicItem(music: MusicEntity, isMusicPlaying: Boolean, selected: Boolean, on
                             MaterialTheme.colorScheme.primary
                         } else {
                             LocalContentColor.current.copy(
-                                alpha = 0.7f
+                                alpha = 0.7f,
                             )
                         },
-                        fontFamily = Inter
-                    )
+                        fontFamily = Inter,
+                    ),
                 )
             }
             AnimatedVisibility(
                 modifier = Modifier.padding(8.dp),
                 visible = selected,
                 enter = scaleIn(),
-                exit = scaleOut()
+                exit = scaleOut(),
             ) {
                 AudioWave(isMusicPlaying = isMusicPlaying)
             }

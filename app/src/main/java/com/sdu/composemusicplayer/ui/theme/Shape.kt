@@ -15,14 +15,14 @@ import androidx.compose.ui.unit.dp
 val Shapes = Shapes(
     small = RoundedCornerShape(4.dp),
     medium = RoundedCornerShape(4.dp),
-    large = RoundedCornerShape(0.dp)
+    large = RoundedCornerShape(0.dp),
 )
 
 val roundedShape = object : Shape {
     override fun createOutline(
         size: Size,
         layoutDirection: LayoutDirection,
-        density: Density
+        density: Density,
     ): Outline {
         val p1 = Path().apply {
             addOval(Rect(4f, 3f, size.width - 1, size.height - 1))
@@ -34,8 +34,8 @@ val roundedShape = object : Shape {
                     thickness,
                     thickness,
                     size.width - thickness,
-                    size.height - thickness
-                )
+                    size.height - thickness,
+                ),
             )
         }
         val p3 = Path()

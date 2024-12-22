@@ -41,8 +41,8 @@ fun MusicPlayerSheet(navController: NavController, playerVM: PlayerViewModel) {
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(
-            initialValue = BottomSheetValue.Collapsed
-        )
+            initialValue = BottomSheetValue.Collapsed,
+        ),
     )
     BackHandler {
         when {
@@ -54,11 +54,11 @@ fun MusicPlayerSheet(navController: NavController, playerVM: PlayerViewModel) {
     }
     BottomSheet(
         state = scaffoldState,
-        playerVM = playerVM
+        playerVM = playerVM,
     ) {
         MotionContent(
             playerVM = playerVM,
-            fraction = 0.0f
+            fraction = 0.0f,
         )
     }
 }
@@ -67,7 +67,7 @@ fun MusicPlayerSheet(navController: NavController, playerVM: PlayerViewModel) {
 fun BottomSheet(
     state: BottomSheetScaffoldState,
     playerVM: PlayerViewModel,
-    motionContent: @Composable () -> Unit
+    motionContent: @Composable () -> Unit,
 ) {
     val config = LocalConfiguration.current
     val scope = rememberCoroutineScope()
@@ -83,8 +83,8 @@ fun BottomSheet(
                     .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                     .fillMaxWidth()
                     .fillMaxHeight(
-                        0.99f.minus(Constants.TOP_MUSIC_PLAYER_HEIGHT.value / config.screenHeightDp)
-                    )
+                        0.99f.minus(Constants.TOP_MUSIC_PLAYER_HEIGHT.value / config.screenHeightDp),
+                    ),
             ) {
 //                SheetContent(
 //                    isExpaned = state.bottomSheetState.isExpanded,
@@ -100,18 +100,18 @@ fun BottomSheet(
                     onDragEnd = { from, to ->
                         playerVM.onEvent(
                             PlayerEvent.UpdateMusicList(
-                                uiState.musicList.toMutableList().move(from, to)
-                            )
+                                uiState.musicList.toMutableList().move(from, to),
+                            ),
                         )
                     },
                     onBack = {
                         scope.launch {
                             state.bottomSheetState.collapse()
                         }
-                    }
+                    },
                 )
             }
-        }
+        },
     ) {
         motionContent.invoke()
     }

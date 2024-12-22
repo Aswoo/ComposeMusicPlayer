@@ -38,13 +38,13 @@ fun SheetContent(
     musicList: MutableList<MusicEntity>,
     onMove: (Int, Int) -> Unit,
     onDragEnd: (Int, Int) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
 ) {
     val reorderableState = rememberReorderableLazyListState(onMove = { from, to ->
         onMove(from.index, to.index)
     }, onDragEnd = { from, to ->
             onDragEnd(from, to)
-        })
+        },)
 
     BackHandler(isExpanded) {
         onBack()
@@ -53,20 +53,20 @@ fun SheetContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.surfaceVariant)
+            .background(color = MaterialTheme.colorScheme.surfaceVariant),
     ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(Constants.BOTTOM_SHEET_PEAK_HEIGHT)
+                .height(Constants.BOTTOM_SHEET_PEAK_HEIGHT),
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.2f)
                     .height(4.dp)
                     .clip(CircleShape)
-                    .background(color = MaterialTheme.colorScheme.primary)
+                    .background(color = MaterialTheme.colorScheme.primary),
             )
         }
 
@@ -74,15 +74,15 @@ fun SheetContent(
             state = reorderableState.listState,
             modifier = Modifier
                 .reorderable(reorderableState)
-                .detectReorderAfterLongPress(reorderableState)
+                .detectReorderAfterLongPress(reorderableState),
         ) {
             items(
                 items = uiState.musicList,
-                key = { item: MusicEntity -> item.hashCode() }
+                key = { item: MusicEntity -> item.hashCode() },
             ) { music ->
                 ReorderableItem(
                     reorderableState = reorderableState,
-                    key = music.hashCode()
+                    key = music.hashCode(),
                 ) { isDragging ->
                     val elevation by animateDpAsState(targetValue = if (isDragging) 4.dp else 0.dp)
                     val currentAudioId = uiState.currentPlayedMusic.audioId
@@ -90,7 +90,7 @@ fun SheetContent(
                         music = music,
                         elevation = elevation,
                         onClick = {},
-                        selected = music.audioId == currentAudioId
+                        selected = music.audioId == currentAudioId,
                     )
                 }
             }
@@ -109,7 +109,7 @@ fun PreviewSheetContent() {
                 artist = "Test Artist",
                 duration = 180000L,
                 albumPath = "/path/to/album",
-                audioPath = "/path/to/test/song.mp3"
+                audioPath = "/path/to/test/song.mp3",
             ),
             MusicEntity(
                 audioId = 2L,
@@ -117,7 +117,7 @@ fun PreviewSheetContent() {
                 artist = "Test Artist",
                 duration = 180000L,
                 albumPath = "/path/to/album",
-                audioPath = "/path/to/test/song.mp3"
+                audioPath = "/path/to/test/song.mp3",
             ),
             MusicEntity(
                 audioId = 3L,
@@ -125,8 +125,8 @@ fun PreviewSheetContent() {
                 artist = "Test Artist",
                 duration = 180000L,
                 albumPath = "/path/to/album",
-                audioPath = "/path/to/test/song.mp3"
-            )
+                audioPath = "/path/to/test/song.mp3",
+            ),
         ),
         currentPlayedMusic = MusicEntity(
             audioId = 1L,
@@ -134,13 +134,13 @@ fun PreviewSheetContent() {
             artist = "Test Artist",
             duration = 180000L,
             albumPath = "/path/to/album",
-            audioPath = "/path/to/test/song.mp3"
-        )
+            audioPath = "/path/to/test/song.mp3",
+        ),
     )
     val musicList = remember {
         mutableStateListOf<MusicEntity>().apply {
             addAll(
-                sampleUiState.musicList
+                sampleUiState.musicList,
             )
         }
     }
@@ -151,6 +151,6 @@ fun PreviewSheetContent() {
         musicList = musicList,
         onMove = { from, to -> musicList.swap(musicList.move(from, to)) },
         onDragEnd = { _, _ -> /* No-op in preview */ },
-        onBack = { /* No-op in preview */ }
+        onBack = { /* No-op in preview */ },
     )
 }

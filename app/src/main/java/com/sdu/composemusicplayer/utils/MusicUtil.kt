@@ -13,7 +13,7 @@ object MusicUtil {
     fun fetchMusicFromDevice(
         context: Context,
         isTrackSmallerThan100KBSkipped: Boolean = true,
-        isTrackShorterThan60SecondsSkipped: Boolean = true
+        isTrackShorterThan60SecondsSkipped: Boolean = true,
     ): List<MusicEntity> {
         val musicList = mutableListOf<MusicEntity>()
 
@@ -25,7 +25,7 @@ object MusicUtil {
             MediaStore.Audio.Media.ARTIST,
             MediaStore.Audio.Media.DURATION,
             MediaStore.Audio.Media.ALBUM_ID,
-            MediaStore.Audio.Media.SIZE
+            MediaStore.Audio.Media.SIZE,
         )
         val cursorIndexSongId: Int
         val cursorIndexSongTitle: Int
@@ -39,7 +39,7 @@ object MusicUtil {
             musicProjection.toTypedArray(),
             null,
             null,
-            null
+            null,
         )
         if (songCursor != null) {
             cursorIndexSongId = songCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
@@ -61,7 +61,7 @@ object MusicUtil {
 
                 val albumPath = Uri.withAppendedPath(
                     Uri.parse("content://media/external/audio/albumart"),
-                    albumId
+                    albumId,
                 )
                 val musicPath = Uri.withAppendedPath(audioUriExternal, "" + audioID)
 
@@ -73,7 +73,7 @@ object MusicUtil {
                     title = title,
                     artist = if (artist.equals(
                             "<unknown>",
-                            true
+                            true,
                         )
                     ) {
                         context.getString(R.string.unknown)
@@ -82,7 +82,7 @@ object MusicUtil {
                     },
                     duration = duration,
                     albumPath = albumPath.toString(),
-                    audioPath = musicPath.toString()
+                    audioPath = musicPath.toString(),
                 )
                 when {
                     isTrackSmallerThan100KBSkipped and isTrackShorterThan60SecondsSkipped -> {

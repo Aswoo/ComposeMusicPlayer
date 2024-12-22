@@ -13,13 +13,13 @@ import androidx.compose.ui.platform.LocalContext
 private val DarkColorScheme = darkColorScheme(
     primary = Purple200,
     secondary = Purple700,
-    tertiary = Teal200
+    tertiary = Teal200,
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Purple500,
     secondary = Purple700,
-    tertiary = Teal200
+    tertiary = Teal200,
 
     /* Other default colors to override
     background = Color.White,
@@ -36,7 +36,7 @@ fun ComposeMusicPlayerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
@@ -51,6 +51,6 @@ fun ComposeMusicPlayerTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        content = content,
     )
 }

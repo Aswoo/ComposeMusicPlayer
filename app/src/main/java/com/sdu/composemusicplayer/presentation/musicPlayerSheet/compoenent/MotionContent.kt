@@ -57,7 +57,7 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
         MotionLayout(
             motionScene = MotionScene(content = motionScene),
             progress = fraction,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Spacer(modifier = Modifier.layoutId("top_bar"))
             AnimatedVinyl(
@@ -66,12 +66,12 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
                     .layoutId("album_image")
                     .fillMaxWidth()
                     .aspectRatio(1f, true),
-                isPlaying = musicUiState.isPlaying
+                isPlaying = musicUiState.isPlaying,
             )
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.layoutId("column_title_artist")
+                modifier = Modifier.layoutId("column_title_artist"),
             ) {
                 AnimatedVisibility(visible = fraction < 0.8f) {
                     Spacer(modifier = Modifier.height(16.dp))
@@ -89,11 +89,11 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
                             MaterialTheme.typography.titleLarge.fontSize
                         } else {
                             MaterialTheme.typography.titleMedium.fontSize
-                        }
+                        },
                     ),
                     modifier = Modifier.fillMaxWidth(
-                        if (fraction > 0.8f) 1f else 0.7f
-                    )
+                        if (fraction > 0.8f) 1f else 0.7f,
+                    ),
                 )
                 Text(
                     text = musicUiState.currentPlayedMusic.artist,
@@ -106,17 +106,17 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
                             MaterialTheme.typography.titleSmall.fontSize
                         } else {
                             MaterialTheme.typography.titleMedium.fontSize
-                        }
+                        },
                     ),
                     modifier = Modifier.fillMaxWidth(
-                        if (fraction > 0.8f) 1f else 0.7f
-                    )
+                        if (fraction > 0.8f) 1f else 0.7f,
+                    ),
                 )
             }
 
             Row(modifier = Modifier.layoutId("top_player_buttons")) {
                 IconButton(
-                    onClick = { playerVM.onEvent(PlayerEvent.PlayPause(musicUiState.isPlaying)) }
+                    onClick = { playerVM.onEvent(PlayerEvent.PlayPause(musicUiState.isPlaying)) },
                 ) {
                     Icon(
                         painter = painterResource(
@@ -124,10 +124,10 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
                                 R.drawable.ic_play_filled_rounded
                             } else {
                                 R.drawable.ic_pause_filled_rounded
-                            }
+                            },
                         ),
                         contentDescription = null,
-                        tint = TintDefaultColor
+                        tint = TintDefaultColor,
                     )
                 }
 
@@ -135,13 +135,13 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
                     Icon(
                         painter = painterResource(id = R.drawable.ic_next_filled_rounded),
                         contentDescription = null,
-                        tint = TintDefaultColor
+                        tint = TintDefaultColor,
                     )
                 }
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.layoutId("main_player_control")
+                modifier = Modifier.layoutId("main_player_control"),
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
                 PlayingProgress(
@@ -150,7 +150,7 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
                     onChange = { progress ->
                         val duration = progress * musicUiState.currentPlayedMusic.duration
                         playerVM.onEvent(PlayerEvent.SnapTo(duration.toLong()))
-                    }
+                    },
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 PlayControlButton(
@@ -160,12 +160,12 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
                     },
                     onPlayPause = {
                         playerVM.onEvent(
-                            PlayerEvent.PlayPause(musicUiState.isPlaying)
+                            PlayerEvent.PlayPause(musicUiState.isPlaying),
                         )
                     },
                     onNext = {
                         playerVM.onEvent(PlayerEvent.Next)
-                    }
+                    },
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }

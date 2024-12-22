@@ -31,7 +31,7 @@ import com.sdu.composemusicplayer.ui.theme.roundedShape
 fun AnimatedVinyl(
     modifier: Modifier = Modifier,
     isPlaying: Boolean = true,
-    albumImagePath: String
+    albumImagePath: String,
 ) {
     var currentRotation by remember {
         mutableFloatStateOf(0f)
@@ -47,8 +47,8 @@ fun AnimatedVinyl(
                 targetValue = currentRotation + 360f,
                 animationSpec = infiniteRepeatable(
                     animation = tween(3000, easing = LinearEasing),
-                    repeatMode = RepeatMode.Restart
-                )
+                    repeatMode = RepeatMode.Restart,
+                ),
             ) {
                 currentRotation = value
             }
@@ -58,8 +58,8 @@ fun AnimatedVinyl(
                     targetValue = currentRotation + 50,
                     animationSpec = tween(
                         1250,
-                        easing = LinearOutSlowInEasing
-                    )
+                        easing = LinearOutSlowInEasing,
+                    ),
                 ) {
                     currentRotation = value
                 }
@@ -74,12 +74,12 @@ fun AnimatedVinyl(
 fun Vinyl(
     modifier: Modifier = Modifier,
     rotationDegrees: Float = 0f,
-    albumImagePath: String
+    albumImagePath: String,
 ) {
     Box(
         modifier = modifier
             .aspectRatio(1.0f)
-            .clip(roundedShape)
+            .clip(roundedShape),
     ) {
         // Vinyl background
         Image(
@@ -87,7 +87,7 @@ fun Vinyl(
                 .fillMaxSize()
                 .rotate(rotationDegrees),
             painter = painterResource(id = R.drawable.vinyl_background),
-            contentDescription = "Vinyl Background"
+            contentDescription = "Vinyl Background",
         )
 
         // Vinyl song cover
@@ -103,9 +103,9 @@ fun Vinyl(
                     .data(albumImagePath)
                     .placeholder(R.drawable.ic_music_unknown)
                     .error(R.drawable.ic_music_unknown)
-                    .build()
+                    .build(),
             ),
-            contentDescription = "Song cover"
+            contentDescription = "Song cover",
         )
     }
 }

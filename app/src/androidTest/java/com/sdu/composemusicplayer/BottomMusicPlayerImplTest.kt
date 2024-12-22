@@ -35,7 +35,7 @@ class BottomMusicPlayerImplTest {
             currentDuration = 0L,
             isPlaying = false,
             isBottomPlayerShow = true,
-            musicList = emptyList()
+            musicList = emptyList(),
         )
     }
 
@@ -46,7 +46,7 @@ class BottomMusicPlayerImplTest {
                 BottomMusicPlayerImpl(
                     navController = mockNavController,
                     musicUiState = mockMusicUiState,
-                    onPlayPlauseClicked = {}
+                    onPlayPlauseClicked = {},
                 )
             }
         }
@@ -64,7 +64,7 @@ class BottomMusicPlayerImplTest {
                 BottomMusicPlayerImpl(
                     navController = mockNavController,
                     musicUiState = mockMusicUiState,
-                    onPlayPlauseClicked = {}
+                    onPlayPlauseClicked = {},
                 )
             }
         }
@@ -86,7 +86,7 @@ class BottomMusicPlayerImplTest {
                 BottomMusicPlayerImpl(
                     navController = mockNavController,
                     musicUiState = mockMusicUiState,
-                    onPlayPlauseClicked = { isPlaying = true }
+                    onPlayPlauseClicked = { isPlaying = true },
                 )
             }
         }

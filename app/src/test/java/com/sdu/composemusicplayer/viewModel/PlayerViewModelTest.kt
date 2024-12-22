@@ -51,13 +51,13 @@ class PlayerViewModelTest {
             artist = "Test Artist",
             duration = 180000L,
             albumPath = "/path/to/album",
-            audioPath = "/path/to/test/song.mp3"
+            audioPath = "/path/to/test/song.mp3",
         )
 
         // 모든 Flow 메서드에 대한 기본 mock 설정
         every { mockEnvironment.getAllMusics() } returns flowOf(emptyList())
         every { mockEnvironment.getCurrentPlayedMusic() } returns flowOf(
-            sampleMusic
+            sampleMusic,
         )
         every { mockEnvironment.isPlaying() } returns flowOf(false)
         every { mockEnvironment.isBottomMusicPlayerShowed() } returns flowOf(false)
@@ -81,7 +81,7 @@ class PlayerViewModelTest {
             artist = "Test Artist",
             duration = 180000L,
             albumPath = "/path/to/album",
-            audioPath = "/path/to/test/song.mp3"
+            audioPath = "/path/to/test/song.mp3",
         )
         coEvery { mockEnvironment.play(testMusic) } returns Unit
 
@@ -163,7 +163,7 @@ class PlayerViewModelTest {
                 artist = "Test Artist",
                 duration = 180000L,
                 albumPath = "/path/to/album",
-                audioPath = "/path/to/test/song.mp3"
+                audioPath = "/path/to/test/song.mp3",
             ),
             MusicEntity(
                 audioId = 2L,
@@ -171,8 +171,8 @@ class PlayerViewModelTest {
                 artist = "Test Artist 2",
                 duration = 180000L,
                 albumPath = "/path/to/album",
-                audioPath = "/path/to/test/song.mp3"
-            )
+                audioPath = "/path/to/test/song.mp3",
+            ),
         )
         coEvery { mockEnvironment.updateMusicList(testMusicList) } returns Unit
 

@@ -26,7 +26,7 @@ import kotlinx.coroutines.withContext
 class DescriptionAdapter(
     private val context: Context,
     private val controller: ListenableFuture<MediaController>,
-    private val onChange: () -> Unit
+    private val onChange: () -> Unit,
 ) :
     PlayerNotificationManager.MediaDescriptionAdapter {
 
@@ -66,7 +66,7 @@ class DescriptionAdapter(
 
     override fun getCurrentLargeIcon(
         player: Player,
-        callback: PlayerNotificationManager.BitmapCallback
+        callback: PlayerNotificationManager.BitmapCallback,
     ): Bitmap? {
         val iconUri = controller.get().mediaMetadata.artworkUri
         return if (currentIconUri != iconUri || currentBitmap == null) {
@@ -118,7 +118,7 @@ class DescriptionAdapter(
                     android.bluetooth.BluetoothDevice.ACTION_ACL_CONNECTED -> {
                         val device: android.bluetooth.BluetoothDevice? =
                             intent.getParcelableExtra(
-                                android.bluetooth.BluetoothDevice.EXTRA_DEVICE
+                                android.bluetooth.BluetoothDevice.EXTRA_DEVICE,
                             )
                         println(device?.name)
                         currentBluetoothDeviceName = device?.name

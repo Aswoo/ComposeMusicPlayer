@@ -27,7 +27,7 @@ class MediaNotificationManager(
     private val context: Context,
     private val sessionToken: SessionToken,
     private val player: Player,
-    private val notificationListener: PlayerNotificationManager.NotificationListener
+    private val notificationListener: PlayerNotificationManager.NotificationListener,
 ) {
     lateinit var notificationManager: PlayerNotificationManager
     private var descriptionAdapter: DescriptionAdapter? = null
@@ -35,7 +35,7 @@ class MediaNotificationManager(
     @UnstableApi
     fun startMusicNotificationService(
         mediaSessionService: MediaSessionService,
-        mediaSession: MediaSession
+        mediaSession: MediaSession,
     ) {
         buildMusicNotification(mediaSession)
         startForegroundMusicService(mediaSessionService)
@@ -51,7 +51,7 @@ class MediaNotificationManager(
         notificationManager = PlayerNotificationManager.Builder(
             context,
             NOW_PLAYING_NOTIFICATION_ID,
-            NOW_PLAYING_CHANNEL_ID
+            NOW_PLAYING_CHANNEL_ID,
         )
             .setChannelNameResourceId(R.string.media_notification_channel)
             .setChannelDescriptionResourceId(R.string.media_notification_channel_description)

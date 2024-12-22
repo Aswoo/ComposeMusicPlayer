@@ -16,7 +16,8 @@ import com.sdu.composemusicplayer.utils.AppStateUtil.isAppInForeground
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-@UnstableApi @AndroidEntryPoint
+@UnstableApi
+@AndroidEntryPoint
 class MediaService : MediaSessionService() {
 
     lateinit var mediaSession: MediaSession
@@ -37,7 +38,7 @@ class MediaService : MediaSessionService() {
                         this,
                         SESSION_INTENT_REQUEST_CODE,
                         sessionIntent,
-                        PendingIntent.FLAG_IMMUTABLE
+                        PendingIntent.FLAG_IMMUTABLE,
                     )
                 }
 
@@ -55,7 +56,7 @@ class MediaService : MediaSessionService() {
                 override fun onNotificationPosted(
                     notificationId: Int,
                     notification: Notification,
-                    ongoing: Boolean
+                    ongoing: Boolean,
                 ) {
                 }
 
@@ -73,7 +74,10 @@ class MediaService : MediaSessionService() {
                  * @throws SecurityException 필요한 권한이 없는 경우 발생
                  * @see isAppInForeground 앱 상태 확인 메서드
                  */
-                override fun onNotificationCancelled(notificationId: Int, dismissedByUser: Boolean) {
+                override fun onNotificationCancelled(
+                    notificationId: Int,
+                    dismissedByUser: Boolean,
+                ) {
                     // 완전 종료: 사용자가 앱을 명시적으로 닫는 경우  onTaskRemoved 호출
 //                    val isAppInForeground: Boolean
 //                        get() = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
@@ -87,7 +91,7 @@ class MediaService : MediaSessionService() {
                         stopForeground(STOP_FOREGROUND_REMOVE)
                     }
                 }
-            }
+            },
         )
     }
 
@@ -96,13 +100,14 @@ class MediaService : MediaSessionService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             musicNotificationManager.startMusicNotificationService(
                 mediaSession = mediaSession,
-                mediaSessionService = this
+                mediaSessionService = this,
             )
         }
         return super.onStartCommand(intent, flags, startId)
     }
 
-    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession = mediaSession
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession =
+        mediaSession
 
     override fun onDestroy() {
         super.onDestroy()

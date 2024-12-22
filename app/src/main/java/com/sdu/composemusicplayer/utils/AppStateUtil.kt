@@ -9,6 +9,9 @@ object AppStateUtil {
         val appProcesses = activityManager.runningAppProcesses ?: return false
         val packageName = context.packageName
 
-        return appProcesses.any { appProcess -> appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && appProcess.processName == packageName }
+        return appProcesses.any { appProcess ->
+            appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND &&
+                appProcess.processName == packageName
+        }
     }
 }

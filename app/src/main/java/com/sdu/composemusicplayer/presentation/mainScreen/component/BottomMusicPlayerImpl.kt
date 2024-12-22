@@ -18,7 +18,7 @@ import com.sdu.composemusicplayer.viewmodel.MusicUiState
 fun BoxScope.BottomMusicPlayerImpl(
     navController: NavController,
     musicUiState: MusicUiState,
-    onPlayPlauseClicked: (isPlaying: Boolean) -> Unit
+    onPlayPlauseClicked: (isPlaying: Boolean) -> Unit,
 ) {
     AnimatedVisibility(
         visible = musicUiState.isBottomPlayerShow,
@@ -27,7 +27,7 @@ fun BoxScope.BottomMusicPlayerImpl(
         modifier = Modifier
             .navigationBarsPadding()
             .fillMaxWidth()
-            .align(Alignment.BottomCenter)
+            .align(Alignment.BottomCenter),
     ) {
         BottomMusicPlayer(
             currentMusic = musicUiState.currentPlayedMusic,
@@ -35,7 +35,7 @@ fun BoxScope.BottomMusicPlayerImpl(
             isPlaying = musicUiState.isPlaying,
             onClick = { navController.navigate(Routes.Player.name) },
             onPlayPauseClicked = onPlayPlauseClicked,
-            modifier = Modifier.testTag("BottomMusicPlayer") // testTag 추가
+            modifier = Modifier.testTag("BottomMusicPlayer"), // testTag 추가
         )
     }
 }

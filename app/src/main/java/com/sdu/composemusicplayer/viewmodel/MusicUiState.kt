@@ -8,5 +8,5 @@ data class MusicUiState(
     val currentDuration: Long = 0L,
     val isPlaying: Boolean = false,
     val isBottomPlayerShow: Boolean = false,
-    val isPaused: Boolean = false
+    val isPaused: Boolean = false,
 )

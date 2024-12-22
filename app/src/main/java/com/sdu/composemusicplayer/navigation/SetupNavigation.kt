@@ -1,9 +1,3 @@
-@file:OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalMaterialNavigationApi::class,
-    ExperimentalMaterialApi::class
-)
-
 package com.sdu.composemusicplayer.navigation
 
 import androidx.compose.foundation.shape.CornerSize
@@ -11,7 +5,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.SwipeableDefaults
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -29,13 +22,13 @@ import com.sdu.composemusicplayer.presentation.mainScreen.MainScreen
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.MusicPlayerSheet
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
 @Composable
 fun SetupNavigation(playerVM: PlayerViewModel, modifier: Modifier = Modifier) {
     val sheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
         animationSpec = SwipeableDefaults.AnimationSpec,
-        skipHalfExpanded = true
+        skipHalfExpanded = true,
     )
 
     val bottomSheetNavigator = remember(sheetState) {
@@ -48,18 +41,18 @@ fun SetupNavigation(playerVM: PlayerViewModel, modifier: Modifier = Modifier) {
         sheetBackgroundColor = Color.Transparent,
         sheetShape = MaterialTheme.shapes.large.copy(
             bottomStart = CornerSize(0.dp),
-            bottomEnd = CornerSize(0.dp)
+            bottomEnd = CornerSize(0.dp),
         ),
-        modifier = modifier
+        modifier = modifier,
     ) {
         NavHost(
             navController = navController,
-            startDestination = Routes.Main.name
+            startDestination = Routes.Main.name,
         ) {
             composable(Routes.Main.name) {
                 MainScreen(
                     navController = navController,
-                    playerVM = playerVM
+                    playerVM = playerVM,
                 )
             }
             bottomSheet(Routes.Player.name) {
@@ -67,48 +60,4 @@ fun SetupNavigation(playerVM: PlayerViewModel, modifier: Modifier = Modifier) {
             }
         }
     }
-//
-//    val sheetState = rememberModalBottomSheetState(
-//        skipPartiallyExpanded = true
-//    )
-//
-//    val navController = rememberNavController()
-//
-//    ModalBottomSheet(
-//        onDismissRequest = { },
-//        sheetState = sheetState,
-//        containerColor = Color.Transparent,
-//        shape = MaterialTheme.shapes.large.copy(
-//            bottomStart = CornerSize(0.dp),
-//            bottomEnd = CornerSize(0.dp)
-//        )
-//    ) {
-//        NavHost(
-//            navController = navController,
-//            startDestination = Routes.Main.name
-//        ) {
-//            composable(Routes.Main.name) {
-//                MainScreen(
-//                    navController = navController,
-//                    playerVM = playerVM
-//                )
-//            }
-//            bottomSheet(Routes.Player.name) {
-//                MusicPlayerSheet(navController = navController, playerVM = playerVM)
-//            }
-//        }
-//    }
-
-//    ModalBottomSheetLayout(
-//        bottomSheetNavigator = ,
-//        sheetBackgroundColor = Color.Transparent,
-//        sheetShape = MaterialTheme.shapes.large.copy(
-//            bottomEnd = CornerSize(0),
-//            bottomStart = CornerSize(0)
-//        ),
-//        modifier = modifier
-//    ) {
-//
-//
-//    }
 }

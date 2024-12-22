@@ -13,8 +13,8 @@ val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
-    )
+        fontSize = 16.sp,
+    ),
     /* Other default text styles to override
     button = TextStyle(
         fontFamily = FontFamily.Default,
@@ -37,5 +37,5 @@ val Inter = FontFamily(
     Font(R.font.inter_medium, FontWeight.Medium),
     Font(R.font.inter_semi_bold, FontWeight.SemiBold),
     Font(R.font.inter_bold, FontWeight.Bold),
-    Font(R.font.inter_extra_bold, FontWeight.ExtraBold)
+    Font(R.font.inter_extra_bold, FontWeight.ExtraBold),
 )

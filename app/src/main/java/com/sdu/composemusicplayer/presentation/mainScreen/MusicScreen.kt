@@ -57,22 +57,22 @@ fun MainScreen(navController: NavController, playerVM: PlayerViewModel) {
 
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Column {
             Spacer(modifier = Modifier.height(Dimens.One))
             TopAppBar(
                 colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = Color.Transparent
+                    containerColor = Color.Transparent,
                 ),
                 title = {
                     Text(
                         text = stringResource(id = R.string.music_player),
                         style = MaterialTheme.typography.titleSmall.copy(
-                            color = TextDefaultColor
-                        )
+                            color = TextDefaultColor,
+                        ),
                     )
-                }
+                },
             )
 
             MusicListContent(musicUiState = musicUiState) { music ->
@@ -81,7 +81,7 @@ fun MainScreen(navController: NavController, playerVM: PlayerViewModel) {
         }
         BottomMusicPlayerImpl(
             navController = navController,
-            musicUiState = musicUiState
+            musicUiState = musicUiState,
         ) { isPlaying ->
             playerVM.onEvent(PlayerEvent.PlayPause(isPlaying))
         }
@@ -124,7 +124,7 @@ fun MusicListContent(musicUiState: MusicUiState, onSelectedMusic: (music: MusicE
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.background),
     ) {
         val currentAudioId = musicUiState.currentPlayedMusic.audioId
 
@@ -133,7 +133,7 @@ fun MusicListContent(musicUiState: MusicUiState, onSelectedMusic: (music: MusicE
                 music = music,
                 selected = (music.audioId == currentAudioId),
                 isMusicPlaying = musicUiState.isPlaying,
-                onClick = { onSelectedMusic.invoke(music) }
+                onClick = { onSelectedMusic.invoke(music) },
             )
         }
         item {
@@ -145,7 +145,7 @@ fun MusicListContent(musicUiState: MusicUiState, onSelectedMusic: (music: MusicE
 @Composable
 fun ComposableLifeCycle(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    onEvent: (LifecycleOwner, Lifecycle.Event) -> Unit
+    onEvent: (LifecycleOwner, Lifecycle.Event) -> Unit,
 ) {
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { source, event ->
@@ -164,7 +164,7 @@ fun PreviewMusicListContent() {
     val mockMusicUiState = MusicUiState(
         musicList = listOf(
             MusicEntity(1, "Song 1", "Artist 1", 200000L, "/path/album1", "/path/song1"),
-            MusicEntity(2, "Song 2", "Artist 2", 180000L, "/path/album2", "/path/song2")
+            MusicEntity(2, "Song 2", "Artist 2", 180000L, "/path/album2", "/path/song2"),
         ),
         currentPlayedMusic = MusicEntity(
             1,
@@ -172,9 +172,9 @@ fun PreviewMusicListContent() {
             "Artist 1",
             200000L,
             "/path/album1",
-            "/path/song1"
+            "/path/song1",
         ),
-        isPlaying = true
+        isPlaying = true,
     )
     MusicListContent(musicUiState = mockMusicUiState, onSelectedMusic = {})
 }

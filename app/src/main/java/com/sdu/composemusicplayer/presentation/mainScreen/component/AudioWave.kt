@@ -35,11 +35,11 @@ fun AudioWave(isMusicPlaying: Boolean) {
             repeatMode = RepeatMode.Reverse,
             animation = tween(
                 durationMillis = 1600,
-                easing = LinearEasing
+                easing = LinearEasing,
 
-            )
+            ),
         ),
-        label = ""
+        label = "",
     )
     val fraction2 by transition2.animateFloat(
         initialValue = 0.3f,
@@ -48,11 +48,11 @@ fun AudioWave(isMusicPlaying: Boolean) {
             repeatMode = RepeatMode.Reverse,
             animation = tween(
                 durationMillis = 800,
-                easing = LinearEasing
+                easing = LinearEasing,
 
-            )
+            ),
         ),
-        label = ""
+        label = "",
     )
     val fraction3 by transition3.animateFloat(
         initialValue = 0.3f,
@@ -61,45 +61,45 @@ fun AudioWave(isMusicPlaying: Boolean) {
             repeatMode = RepeatMode.Reverse,
             animation = tween(
                 durationMillis = 1200,
-                easing = LinearEasing
+                easing = LinearEasing,
 
-            )
+            ),
         ),
-        label = ""
+        label = "",
     )
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier.size(width = 24.dp, height = 20.dp)
+        modifier = Modifier.size(width = 24.dp, height = 20.dp),
     ) {
         Box(
             modifier = Modifier
                 .width(4.dp)
                 .fillMaxHeight(
-                    if (!isMusicPlaying) 0.3f else fraction1
+                    if (!isMusicPlaying) 0.3f else fraction1,
                 )
                 .clip(RoundedCornerShape(100))
-                .background(MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.primary),
         ) {
         }
         Box(
             modifier = Modifier
                 .width(4.dp)
                 .fillMaxHeight(
-                    if (!isMusicPlaying) 0.5f else fraction2
+                    if (!isMusicPlaying) 0.5f else fraction2,
                 )
                 .clip(RoundedCornerShape(100))
-                .background(MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.primary),
         ) {
         }
         Box(
             modifier = Modifier
                 .width(4.dp)
                 .fillMaxHeight(
-                    if (!isMusicPlaying) 0.5f else fraction3
+                    if (!isMusicPlaying) 0.5f else fraction3,
                 )
                 .clip(RoundedCornerShape(100))
-                .background(MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.primary),
         ) {
         }
     }

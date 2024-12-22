@@ -14,7 +14,7 @@ data class MusicEntity(
     val artist: String,
     val duration: Long,
     val albumPath: String,
-    val audioPath: String
+    val audioPath: String,
 ) : Parcelable {
     companion object {
         val default = MusicEntity(
@@ -23,7 +23,7 @@ data class MusicEntity(
             artist = "<unknown>",
             duration = 0L,
             albumPath = "",
-            audioPath = ""
+            audioPath = "",
         )
     }
 }

@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 class PlayerEnvironment @Inject constructor(
     @ApplicationContext private val context: Context,
     private val musicRepository: MusicRepository,
-    private val exoPlayer: ExoPlayer // Hilt로 ExoPlayer 주입받기
+    private val exoPlayer: ExoPlayer, // Hilt로 ExoPlayer 주입받기
 ) : IPlayerEnvironment {
 
     val dispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -69,44 +69,46 @@ class PlayerEnvironment @Inject constructor(
             }
         }
         exoPlayer.apply {
-            addListener(object : Player.Listener {
-                override fun onPlaybackStateChanged(playbackState: Int) {
-                    super.onPlaybackStateChanged(playbackState)
-                    if (playbackState == ExoPlayer.STATE_ENDED) {
-                        when (playbackMode.value) {
-                            PlayBackMode.REPEAT_ONE -> {
-                                CoroutineScope(dispatcher).launch {
-                                    play(currentPlayedMusic.value)
+            addListener(
+                object : Player.Listener {
+                    override fun onPlaybackStateChanged(playbackState: Int) {
+                        super.onPlaybackStateChanged(playbackState)
+                        if (playbackState == ExoPlayer.STATE_ENDED) {
+                            when (playbackMode.value) {
+                                PlayBackMode.REPEAT_ONE -> {
+                                    CoroutineScope(dispatcher).launch {
+                                        play(currentPlayedMusic.value)
+                                    }
                                 }
-                            }
 
-                            PlayBackMode.REPEAT_ALL -> {
-                                val currentIndex = allMusics.value.indexOfFirst {
-                                    it.audioId == currentPlayedMusic.value.audioId
+                                PlayBackMode.REPEAT_ALL -> {
+                                    val currentIndex = allMusics.value.indexOfFirst {
+                                        it.audioId == currentPlayedMusic.value.audioId
+                                    }
+                                    val nextSong = when {
+                                        currentIndex == allMusics.value.lastIndex -> allMusics.value[0]
+                                        currentIndex != -1 -> allMusics.value[currentIndex + 1]
+                                        else -> allMusics.value[0]
+                                    }
+                                    CoroutineScope(dispatcher).launch {
+                                        play(nextSong)
+                                    }
                                 }
-                                val nextSong = when {
-                                    currentIndex == allMusics.value.lastIndex -> allMusics.value[0]
-                                    currentIndex != -1 -> allMusics.value[currentIndex + 1]
-                                    else -> allMusics.value[0]
-                                }
-                                CoroutineScope(dispatcher).launch {
-                                    play(nextSong)
-                                }
-                            }
 
-                            PlayBackMode.REPEAT_OFF -> {
-                                this@apply.stop()
-                                _currentPlayedMusic.tryEmit(MusicEntity.default)
+                                PlayBackMode.REPEAT_OFF -> {
+                                    this@apply.stop()
+                                    _currentPlayedMusic.tryEmit(MusicEntity.default)
+                                }
                             }
                         }
                     }
-                }
 
-                override fun onIsPlayingChanged(isPlaying: Boolean) {
-                    super.onIsPlayingChanged(isPlaying)
-                    _isPlaying.tryEmit(isPlaying)
-                }
-            })
+                    override fun onIsPlayingChanged(isPlaying: Boolean) {
+                        super.onIsPlayingChanged(isPlaying)
+                        _isPlaying.tryEmit(isPlaying)
+                    }
+                },
+            )
         }
     }
 
@@ -235,5 +237,5 @@ class PlayerEnvironment @Inject constructor(
 enum class PlayBackMode {
     REPEAT_ONE,
     REPEAT_ALL,
-    REPEAT_OFF
+    REPEAT_OFF,
 }

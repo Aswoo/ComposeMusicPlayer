@@ -15,7 +15,7 @@ object EnvironmentModule {
     @Provides
     @Singleton
     fun bindPlayerEnvironment(
-        playerEnvironment: PlayerEnvironment
+        playerEnvironment: PlayerEnvironment,
     ): IPlayerEnvironment {
         return playerEnvironment
     }

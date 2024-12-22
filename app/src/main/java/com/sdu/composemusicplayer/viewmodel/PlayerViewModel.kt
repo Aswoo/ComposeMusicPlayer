@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class PlayerViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val environment: IPlayerEnvironment,
-    private val serviceManager: PlayerServiceManager
+    private val serviceManager: PlayerServiceManager,
 ) : StatefulViewModel<MusicUiState>(MusicUiState()) {
 
     init {

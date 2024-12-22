@@ -47,42 +47,42 @@ fun SheetMusicItem(
     selected: Boolean,
     elevation: Dp = 0.dp,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Card(
         onClick = onClick,
         elevation = CardDefaults.cardElevation(draggedElevation = elevation),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
-        modifier = modifier
+        modifier = modifier,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
-                .height(72.dp)
+                .height(72.dp),
         ) {
             Image(
                 painter = rememberAsyncImagePainter(
                     model = ImageRequest.Builder(LocalContext.current).data(music.albumPath.toUri())
                         .error(R.drawable.ic_music_unknown).placeholder(R.drawable.ic_music_unknown)
-                        .build()
+                        .build(),
                 ),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxHeight()
                     .padding(4.dp)
                     .aspectRatio(1f)
-                    .clip(MaterialTheme.shapes.medium)
+                    .clip(MaterialTheme.shapes.medium),
             )
 
             Column(
                 verticalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = music.title,
@@ -91,8 +91,8 @@ fun SheetMusicItem(
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = if (selected) Purple500 else LocalContentColor.current,
                         fontWeight = FontWeight.Bold,
-                        fontFamily = Inter
-                    )
+                        fontFamily = Inter,
+                    ),
                 )
                 Text(
                     text = music.artist,
@@ -101,14 +101,14 @@ fun SheetMusicItem(
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = if (selected) Purple500.copy(alpha = 0.7f) else LocalContentColor.current,
                         fontWeight = FontWeight.Bold,
-                        fontFamily = Inter
-                    )
+                        fontFamily = Inter,
+                    ),
                 )
             }
             Box(contentAlignment = Alignment.Center, modifier = Modifier.size(56.dp)) {
                 Icon(
                     imageVector = Icons.Rounded.DragHandle,
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
         }
@@ -124,7 +124,7 @@ fun PreviewMusicListContent() {
         artist = "Test Artist",
         duration = 180000L,
         albumPath = "/path/to/album",
-        audioPath = "/path/to/test/song.mp3"
+        audioPath = "/path/to/test/song.mp3",
     )
     ComposeMusicPlayerTheme {
         SheetMusicItem(music = sampleMusic, selected = true, onClick = {})

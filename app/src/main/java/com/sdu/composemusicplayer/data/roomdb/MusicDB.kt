@@ -24,7 +24,7 @@ abstract class MusicDB : RoomDatabase() {
             return Room.databaseBuilder(
                 context,
                 MusicDB::class.java,
-                "music_db_0903"
+                "music_db_0903",
             ).allowMainThreadQueries().build()
         }
     }

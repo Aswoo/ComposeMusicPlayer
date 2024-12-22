@@ -4,7 +4,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
 class MusicRepository @Inject constructor(
-    db: MusicDB
+    db: MusicDB,
 ) {
     private val musicDao = db.musicDao()
 

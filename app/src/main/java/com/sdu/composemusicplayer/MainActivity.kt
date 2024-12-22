@@ -45,10 +45,10 @@ class MainActivity : ComponentActivity() {
             ComposeMusicPlayerTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
                 ) {
                     CheckAndRequestPermissions(
-                        permissions = listOfPermissions
+                        permissions = listOfPermissions,
                     ) {
                         SetupNavigation(playerVM = playerVM)
                     }
@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
         text = "Hello $name!",
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
