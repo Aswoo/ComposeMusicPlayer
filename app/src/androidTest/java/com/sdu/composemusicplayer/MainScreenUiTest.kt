@@ -29,7 +29,10 @@ class MainScreenUiTest {
             MusicEntity(1, "Song 1", "Artist 1", 200000L, "/path/album1", "/path/song1"),
             MusicEntity(2, "Song 2", "Artist 2", 180000L, "/path/album2", "/path/song2")
         )
-        val mockUiState = MusicUiState(musicList = mockMusicList, currentPlayedMusic = mockMusicList[0])
+        val mockUiState = MusicUiState(
+            musicList = mockMusicList,
+            currentPlayedMusic = mockMusicList[0]
+        )
 
         composeTestRule.setContent {
             MusicListContent(musicUiState = mockUiState, onSelectedMusic = {})
@@ -57,7 +60,14 @@ class MainScreenUiTest {
                     MusicEntity(1, "Song 1", "Artist 1", 200000L, "/path/album1", "/path/song1"),
                     MusicEntity(2, "Song 2", "Artist 2", 180000L, "/path/album2", "/path/song2")
                 ),
-                currentPlayedMusic = MusicEntity(1, "Song 1", "Artist 1", 200000L, "/path/album1", "/path/song1"),
+                currentPlayedMusic = MusicEntity(
+                    1,
+                    "Song 1",
+                    "Artist 1",
+                    200000L,
+                    "/path/album1",
+                    "/path/song1"
+                ),
                 isPlaying = true
             )
         ).asStateFlow()

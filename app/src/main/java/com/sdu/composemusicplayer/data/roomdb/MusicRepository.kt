@@ -1,7 +1,7 @@
 package com.sdu.composemusicplayer.data.roomdb
 
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
 class MusicRepository @Inject constructor(
     db: MusicDB

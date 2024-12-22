@@ -11,6 +11,8 @@ import com.sdu.composemusicplayer.data.roomdb.MusicEntity
 import com.sdu.composemusicplayer.data.roomdb.MusicRepository
 import com.sdu.composemusicplayer.utils.MusicUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,8 +22,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class PlayerEnvironment @Inject constructor(

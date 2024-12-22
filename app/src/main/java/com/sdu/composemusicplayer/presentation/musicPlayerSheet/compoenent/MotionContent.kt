@@ -47,7 +47,10 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
     Log.d("Fraction", fraction.toString())
 
     val motionScene = remember {
-        context.resources.openRawResource(R.raw.motion_scene).readBytes().decodeToString()
+        context.resources
+            .openRawResource(R.raw.motion_scene)
+            .readBytes()
+            .decodeToString()
     }
 
     Row(modifier = Modifier.fillMaxSize()) {
@@ -82,9 +85,15 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
                     style = MaterialTheme.typography.titleMedium.copy(
                         color = TextDefaultColor,
                         fontWeight = FontWeight.Bold,
-                        fontSize = if (fraction > 0.8f) MaterialTheme.typography.titleLarge.fontSize else MaterialTheme.typography.titleMedium.fontSize
+                        fontSize = if (fraction > 0.8f) {
+                            MaterialTheme.typography.titleLarge.fontSize
+                        } else {
+                            MaterialTheme.typography.titleMedium.fontSize
+                        }
                     ),
-                    modifier = Modifier.fillMaxWidth(if (fraction > 0.8f) 1f else 0.7f)
+                    modifier = Modifier.fillMaxWidth(
+                        if (fraction > 0.8f) 1f else 0.7f
+                    )
                 )
                 Text(
                     text = musicUiState.currentPlayedMusic.artist,
@@ -93,17 +102,29 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
                     textAlign = if (fraction > 0.8f) TextAlign.Start else TextAlign.Center,
                     style = MaterialTheme.typography.titleMedium.copy(
                         color = TextDefaultColor,
-                        fontSize = if (fraction > 0.8f) MaterialTheme.typography.titleSmall.fontSize else MaterialTheme.typography.titleMedium.fontSize
+                        fontSize = if (fraction > 0.8f) {
+                            MaterialTheme.typography.titleSmall.fontSize
+                        } else {
+                            MaterialTheme.typography.titleMedium.fontSize
+                        }
                     ),
-                    modifier = Modifier.fillMaxWidth(if (fraction > 0.8f) 1f else 0.7f)
+                    modifier = Modifier.fillMaxWidth(
+                        if (fraction > 0.8f) 1f else 0.7f
+                    )
                 )
             }
 
             Row(modifier = Modifier.layoutId("top_player_buttons")) {
-                IconButton(onClick = { playerVM.onEvent(PlayerEvent.PlayPause(musicUiState.isPlaying)) }) {
+                IconButton(
+                    onClick = { playerVM.onEvent(PlayerEvent.PlayPause(musicUiState.isPlaying)) }
+                ) {
                     Icon(
                         painter = painterResource(
-                            id = if (!musicUiState.isPlaying) R.drawable.ic_play_filled_rounded else R.drawable.ic_pause_filled_rounded
+                            id = if (!musicUiState.isPlaying) {
+                                R.drawable.ic_play_filled_rounded
+                            } else {
+                                R.drawable.ic_pause_filled_rounded
+                            }
                         ),
                         contentDescription = null,
                         tint = TintDefaultColor
@@ -128,7 +149,6 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
                     currentDuration = musicUiState.currentDuration,
                     onChange = { progress ->
                         val duration = progress * musicUiState.currentPlayedMusic.duration
-
                         playerVM.onEvent(PlayerEvent.SnapTo(duration.toLong()))
                     }
                 )
@@ -139,7 +159,9 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
                         playerVM.onEvent(PlayerEvent.Previous)
                     },
                     onPlayPause = {
-                        playerVM.onEvent(PlayerEvent.PlayPause(musicUiState.isPlaying))
+                        playerVM.onEvent(
+                            PlayerEvent.PlayPause(musicUiState.isPlaying)
+                        )
                     },
                     onNext = {
                         playerVM.onEvent(PlayerEvent.Next)

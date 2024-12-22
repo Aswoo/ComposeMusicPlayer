@@ -137,7 +137,13 @@ fun PreviewSheetContent() {
             audioPath = "/path/to/test/song.mp3"
         )
     )
-    val musicList = remember { mutableStateListOf<MusicEntity>().apply { addAll(sampleUiState.musicList) } }
+    val musicList = remember {
+        mutableStateListOf<MusicEntity>().apply {
+            addAll(
+                sampleUiState.musicList
+            )
+        }
+    }
 
     SheetContent(
         isExpanded = true,

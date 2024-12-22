@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.sdu.composemusicplayer.mediaPlayer.service.PlayerServiceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class PlayerViewModel @Inject constructor(

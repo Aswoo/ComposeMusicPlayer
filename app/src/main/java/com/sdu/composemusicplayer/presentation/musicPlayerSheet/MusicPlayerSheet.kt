@@ -98,7 +98,11 @@ fun BottomSheet(
                     musicList = musicList,
                     onMove = { from, to -> musicList.swap(musicList.move(from, to)) },
                     onDragEnd = { from, to ->
-                        playerVM.onEvent(PlayerEvent.UpdateMusicList(uiState.musicList.toMutableList().move(from, to)))
+                        playerVM.onEvent(
+                            PlayerEvent.UpdateMusicList(
+                                uiState.musicList.toMutableList().move(from, to)
+                            )
+                        )
                     },
                     onBack = {
                         scope.launch {

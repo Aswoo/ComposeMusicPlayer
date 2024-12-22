@@ -23,7 +23,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @UnstableApi
-class DescriptionAdapter(private val context: Context, private val controller: ListenableFuture<MediaController>, private val onChange: () -> Unit) :
+class DescriptionAdapter(
+    private val context: Context,
+    private val controller: ListenableFuture<MediaController>,
+    private val onChange: () -> Unit
+) :
     PlayerNotificationManager.MediaDescriptionAdapter {
 
     var currentIconUri: Uri? = null
@@ -113,7 +117,9 @@ class DescriptionAdapter(private val context: Context, private val controller: L
                 when (intent.action) {
                     android.bluetooth.BluetoothDevice.ACTION_ACL_CONNECTED -> {
                         val device: android.bluetooth.BluetoothDevice? =
-                            intent.getParcelableExtra(android.bluetooth.BluetoothDevice.EXTRA_DEVICE)
+                            intent.getParcelableExtra(
+                                android.bluetooth.BluetoothDevice.EXTRA_DEVICE
+                            )
                         println(device?.name)
                         currentBluetoothDeviceName = device?.name
                         updateNotification()

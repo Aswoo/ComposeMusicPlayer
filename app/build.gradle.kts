@@ -4,7 +4,11 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.kapt)
     alias(libs.plugins.compose.screenshot)
+
     id("kotlin-parcelize")
+
+    // ktlint 플러그인 추가
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 android {
@@ -33,6 +37,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -48,9 +53,16 @@ android {
     }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1,LICENSE.md,LICENSE-notice.md,LICENSE,NOTICE.md,NOTICE}"
+            excludes += "/META-INF/AL2.0"
+            excludes += "/META-INF/LGPL2.1"
+            excludes += "/META-INF/LICENSE.md"
+            excludes += "/META-INF/LICENSE-notice.md"
+            excludes += "/META-INF/LICENSE"
+            excludes += "/META-INF/NOTICE.md"
+            excludes += "/META-INF/NOTICE"
         }
     }
+
     configurations {
         implementation {
             exclude(group = "org.jetbrains", module = "annotations")
@@ -67,8 +79,15 @@ android {
     }
 }
 
-dependencies {
+// ktlint 설정 추가
+ktlint {
+    android.set(true) // Android 코드에 대해 실행하도록 설정 (필요시)
+    outputToConsole.set(true) // 콘솔에 출력하도록 설정
+    outputColorName.set("RED") // 출력 색상 설정
+    ignoreFailures.set(false) // 실패 시 빌드 실패하도록 설정
+}
 
+dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
