@@ -9,7 +9,7 @@ import androidx.compose.ui.test.performClick
 import androidx.navigation.NavController
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
 import com.sdu.composemusicplayer.navigation.Routes
-import com.sdu.composemusicplayer.presentation.main_screen.component.BottomMusicPlayerImpl
+import com.sdu.composemusicplayer.presentation.mainScreen.component.BottomMusicPlayerImpl
 import com.sdu.composemusicplayer.viewmodel.MusicUiState
 import io.mockk.mockk
 import io.mockk.verify

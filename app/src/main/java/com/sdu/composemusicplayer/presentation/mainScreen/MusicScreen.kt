@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.presentation.main_screen
+package com.sdu.composemusicplayer.presentation.mainScreen
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -33,9 +33,9 @@ import androidx.navigation.NavController
 import com.kolee.composemusicexoplayer.ui.theme.Dimens
 import com.sdu.composemusicplayer.R
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
-import com.sdu.composemusicplayer.presentation.main_screen.component.BottomMusicPlayerHeight
-import com.sdu.composemusicplayer.presentation.main_screen.component.BottomMusicPlayerImpl
-import com.sdu.composemusicplayer.presentation.main_screen.component.MusicItem
+import com.sdu.composemusicplayer.presentation.mainScreen.component.BottomMusicPlayerHeight
+import com.sdu.composemusicplayer.presentation.mainScreen.component.BottomMusicPlayerImpl
+import com.sdu.composemusicplayer.presentation.mainScreen.component.MusicItem
 import com.sdu.composemusicplayer.ui.theme.TextDefaultColor
 import com.sdu.composemusicplayer.viewmodel.MusicUiState
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
@@ -171,4 +171,3 @@ fun PreviewMusicListContent() {
     )
     MusicListContent(musicUiState = mockMusicUiState, onSelectedMusic = {})
 }
-

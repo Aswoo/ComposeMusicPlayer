@@ -1,9 +1,8 @@
 package com.sdu.composemusicplayer.viewModel
 
 import android.content.Context
-
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
-import com.sdu.composemusicplayer.media_player.service.PlayerServiceManager
+import com.sdu.composemusicplayer.mediaPlayer.service.PlayerServiceManager
 import com.sdu.composemusicplayer.viewmodel.IPlayerEnvironment
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
@@ -14,14 +13,12 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -56,7 +53,6 @@ class PlayerViewModelTest {
             albumPath = "/path/to/album",
             audioPath = "/path/to/test/song.mp3"
         )
-
 
         // 모든 Flow 메서드에 대한 기본 mock 설정
         every { mockEnvironment.getAllMusics() } returns flowOf(emptyList())
@@ -125,7 +121,6 @@ class PlayerViewModelTest {
 
     @Test
     fun `onEvent Previous should call environment previous`() = runTest {
-
         // Act
         viewModel.onEvent(PlayerEvent.Previous)
 
@@ -162,18 +157,22 @@ class PlayerViewModelTest {
     fun `onEvent UpdateMusicList should call environment updateMusicList`() = runTest {
         // Arrange
         val testMusicList = listOf(
-            MusicEntity(  audioId = 1L,
+            MusicEntity(
+                audioId = 1L,
                 title = "Test Music",
                 artist = "Test Artist",
                 duration = 180000L,
                 albumPath = "/path/to/album",
-                audioPath = "/path/to/test/song.mp3"),
-            MusicEntity(  audioId = 2L,
+                audioPath = "/path/to/test/song.mp3"
+            ),
+            MusicEntity(
+                audioId = 2L,
                 title = "Test Music 2",
                 artist = "Test Artist 2",
                 duration = 180000L,
                 albumPath = "/path/to/album",
-                audioPath = "/path/to/test/song.mp3")
+                audioPath = "/path/to/test/song.mp3"
+            )
         )
         coEvery { mockEnvironment.updateMusicList(testMusicList) } returns Unit
 
@@ -184,4 +183,3 @@ class PlayerViewModelTest {
         coVerify { mockEnvironment.updateMusicList(testMusicList) }
     }
 }
-

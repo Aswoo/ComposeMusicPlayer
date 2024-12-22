@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.sdu.composemusicplayer.presentation.music_player_sheet
+package com.sdu.composemusicplayer.presentation.musicPlayerSheet
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
@@ -19,17 +19,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
-import com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent.MotionContent
-import com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent.SheetContent
+import com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent.MotionContent
+import com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent.SheetContent
 import com.sdu.composemusicplayer.utils.Constants
-import com.sdu.composemusicplayer.utils.currentfraction
 import com.sdu.composemusicplayer.utils.move
 import com.sdu.composemusicplayer.utils.swap
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
@@ -102,9 +100,11 @@ fun BottomSheet(
                     onDragEnd = { from, to ->
                         playerVM.onEvent(PlayerEvent.UpdateMusicList(uiState.musicList.toMutableList().move(from, to)))
                     },
-                    onBack = {  scope.launch {
-                        state.bottomSheetState.collapse()
-                    } }
+                    onBack = {
+                        scope.launch {
+                            state.bottomSheetState.collapse()
+                        }
+                    }
                 )
             }
         }

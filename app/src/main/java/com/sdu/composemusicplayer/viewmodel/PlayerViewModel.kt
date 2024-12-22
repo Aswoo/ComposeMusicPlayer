@@ -2,7 +2,7 @@ package com.sdu.composemusicplayer.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.viewModelScope
-import com.sdu.composemusicplayer.media_player.service.PlayerServiceManager
+import com.sdu.composemusicplayer.mediaPlayer.service.PlayerServiceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch

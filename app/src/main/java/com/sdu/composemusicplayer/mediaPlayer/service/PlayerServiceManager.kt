@@ -1,9 +1,8 @@
-package com.sdu.composemusicplayer.media_player.service
+package com.sdu.composemusicplayer.mediaPlayer.service
 
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

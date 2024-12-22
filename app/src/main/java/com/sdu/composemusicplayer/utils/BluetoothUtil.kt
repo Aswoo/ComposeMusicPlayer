@@ -2,13 +2,10 @@ package com.sdu.composemusicplayer.utils
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothClass
-import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothProfile
 import android.content.Context
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 object BluetoothUtil {
 

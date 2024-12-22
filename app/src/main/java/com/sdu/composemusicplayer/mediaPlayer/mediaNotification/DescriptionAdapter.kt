@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.media_player.media_notification
+package com.sdu.composemusicplayer.mediaPlayer.mediaNotification
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
@@ -22,9 +22,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 @UnstableApi
-class DescriptionAdapter(private val context: Context, private val controller: ListenableFuture<MediaController>, private val onChange : () -> Unit) :
+class DescriptionAdapter(private val context: Context, private val controller: ListenableFuture<MediaController>, private val onChange: () -> Unit) :
     PlayerNotificationManager.MediaDescriptionAdapter {
 
     var currentIconUri: Uri? = null
@@ -34,7 +33,7 @@ class DescriptionAdapter(private val context: Context, private val controller: L
     private var bluetoothJob: Job? = null
 
     init {
-        //Bluetooth 상태를 감지하기 위한 BroadcastReceiver 등록
+        // Bluetooth 상태를 감지하기 위한 BroadcastReceiver 등록
         registerBluetoothReceiver(context)
     }
 
@@ -67,7 +66,6 @@ class DescriptionAdapter(private val context: Context, private val controller: L
     ): Bitmap? {
         val iconUri = controller.get().mediaMetadata.artworkUri
         return if (currentIconUri != iconUri || currentBitmap == null) {
-
             // Cache the bitmap for the current song so that successive calls to
             // `getCurrentLargeIcon` don't cause the bitmap to be recreated.
             currentIconUri = iconUri
@@ -111,7 +109,7 @@ class DescriptionAdapter(private val context: Context, private val controller: L
         bluetoothReceiver = object : android.content.BroadcastReceiver() {
             @SuppressLint("MissingPermission")
             override fun onReceive(context: Context, intent: android.content.Intent) {
-                Log.d("OnReceive","blutooth")
+                Log.d("OnReceive", "blutooth")
                 when (intent.action) {
                     android.bluetooth.BluetoothDevice.ACTION_ACL_CONNECTED -> {
                         val device: android.bluetooth.BluetoothDevice? =

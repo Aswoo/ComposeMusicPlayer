@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.sdu.composemusicplayer.presentation.main_screen.component
+package com.sdu.composemusicplayer.presentation.mainScreen.component
 
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.BorderStroke
@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
@@ -58,7 +57,7 @@ fun BottomMusicPlayer(
     isPlaying: Boolean,
     onClick: () -> Unit,
     onPlayPauseClicked: (isPlaying: Boolean) -> Unit,
-    modifier : Modifier,
+    modifier: Modifier
 ) {
     val progress = remember(currentDuration, currentMusic.duration) {
         currentDuration.toFloat() / currentMusic.duration.toFloat()

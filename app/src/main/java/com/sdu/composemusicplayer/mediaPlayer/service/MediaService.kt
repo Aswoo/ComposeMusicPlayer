@@ -1,19 +1,17 @@
-package com.sdu.composemusicplayer.media_player.service
+package com.sdu.composemusicplayer.mediaPlayer.service
 
-import android.app.ActivityManager
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.annotation.OptIn
-import androidx.media3.session.MediaSession
-import androidx.media3.session.MediaSessionService
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.session.MediaSession
+import androidx.media3.session.MediaSessionService
 import androidx.media3.ui.PlayerNotificationManager
-import com.sdu.composemusicplayer.media_player.media_notification.MediaNotificationManager
+import com.sdu.composemusicplayer.mediaPlayer.mediaNotification.MediaNotificationManager
 import com.sdu.composemusicplayer.utils.AppStateUtil.isAppInForeground
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -59,9 +57,7 @@ class MediaService : MediaSessionService() {
                     notification: Notification,
                     ongoing: Boolean
                 ) {
-
                 }
-
 
                 /**
                  * 사용자 액션이나 [stopForeground]에 의해 알림이 취소되었을 때 호출됨
@@ -78,16 +74,15 @@ class MediaService : MediaSessionService() {
                  * @see isAppInForeground 앱 상태 확인 메서드
                  */
                 override fun onNotificationCancelled(notificationId: Int, dismissedByUser: Boolean) {
-
                     // 완전 종료: 사용자가 앱을 명시적으로 닫는 경우  onTaskRemoved 호출
 //                    val isAppInForeground: Boolean
 //                        get() = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
                     val isBackground = !isAppInForeground(this@MediaService)
                     if (isBackground) {
-                        stopForeground(STOP_FOREGROUND_REMOVE)  // 포그라운드 서비스 종료
-                        exoPlayer.release()  // ExoPlayer 리소스 해제
-                        mediaSession.release()  // MediaSession 해제
-                        stopSelf()  // 서비스 종료
+                        stopForeground(STOP_FOREGROUND_REMOVE) // 포그라운드 서비스 종료
+                        exoPlayer.release() // ExoPlayer 리소스 해제
+                        mediaSession.release() // MediaSession 해제
+                        stopSelf() // 서비스 종료
                     } else {
                         stopForeground(STOP_FOREGROUND_REMOVE)
                     }
@@ -111,9 +106,9 @@ class MediaService : MediaSessionService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        stopForeground(STOP_FOREGROUND_REMOVE)  // 포그라운드 서비스 종료
-        exoPlayer.release()  // ExoPlayer 리소스 해제
-        stopSelf()  // 서비스 종료
+        stopForeground(STOP_FOREGROUND_REMOVE) // 포그라운드 서비스 종료
+        exoPlayer.release() // ExoPlayer 리소스 해제
+        stopSelf() // 서비스 종료
         musicNotificationManager.unregisterBluetoothReceiver()
         mediaSession.apply {
             release()

@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent
+package com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
@@ -44,8 +44,10 @@ fun AnimatedVinyl(
     LaunchedEffect(isPlaying) {
         if (isPlaying) {
             rotation.animateTo(
-                targetValue = currentRotation + 360f, animationSpec = infiniteRepeatable(
-                    animation = tween(3000, easing = LinearEasing), repeatMode = RepeatMode.Restart
+                targetValue = currentRotation + 360f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(3000, easing = LinearEasing),
+                    repeatMode = RepeatMode.Restart
                 )
             ) {
                 currentRotation = value
@@ -53,8 +55,10 @@ fun AnimatedVinyl(
         } else {
             if (currentRotation > 0f) {
                 rotation.animateTo(
-                    targetValue = currentRotation + 50, animationSpec = tween(
-                        1250, easing = LinearOutSlowInEasing
+                    targetValue = currentRotation + 50,
+                    animationSpec = tween(
+                        1250,
+                        easing = LinearOutSlowInEasing
                     )
                 ) {
                     currentRotation = value

@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.presentation.main_screen.component
+package com.sdu.composemusicplayer.presentation.mainScreen.component
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode

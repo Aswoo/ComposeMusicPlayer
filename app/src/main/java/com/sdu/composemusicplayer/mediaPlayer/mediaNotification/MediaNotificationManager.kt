@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.media_player.media_notification
+package com.sdu.composemusicplayer.mediaPlayer.mediaNotification
 
 import android.app.Notification
 import android.content.Context
@@ -23,7 +23,6 @@ import com.sdu.composemusicplayer.R
  * @param notificationListener The listener for notification events.
  */
 @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
-
 class MediaNotificationManager(
     private val context: Context,
     private val sessionToken: SessionToken,
@@ -68,7 +67,6 @@ class MediaNotificationManager(
                 setUseFastForwardActionInCompactView(true)
                 setUseRewindActionInCompactView(true)
             }
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -79,11 +77,10 @@ class MediaNotificationManager(
 
         mediaSessionService.startForeground(NOW_PLAYING_NOTIFICATION_ID, musicNotification)
     }
-    fun unregisterBluetoothReceiver(){
+    fun unregisterBluetoothReceiver() {
         descriptionAdapter?.unregisterBluetoothReceiver(context)
     }
 }
-
 
 /**
  * The size of the large icon for the notification in pixels.

@@ -1,10 +1,10 @@
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
-import com.sdu.composemusicplayer.media_player.service.MediaService
+import com.sdu.composemusicplayer.mediaPlayer.service.MediaService
 import io.mockk.*
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.junit.Assert.*
 
 class MediaServiceTest {
 

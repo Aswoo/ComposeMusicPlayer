@@ -5,13 +5,13 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
-import com.sdu.composemusicplayer.presentation.main_screen.ComposableLifeCycle
-import com.sdu.composemusicplayer.presentation.main_screen.MainScreen
-import com.sdu.composemusicplayer.presentation.main_screen.MusicListContent
+import com.sdu.composemusicplayer.presentation.mainScreen.ComposableLifeCycle
+import com.sdu.composemusicplayer.presentation.mainScreen.MainScreen
+import com.sdu.composemusicplayer.presentation.mainScreen.MusicListContent
 import com.sdu.composemusicplayer.viewmodel.MusicUiState
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
-import io.mockk.mockk
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

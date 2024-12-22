@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.presentation.main_screen.component
+package com.sdu.composemusicplayer.presentation.mainScreen.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -35,7 +35,7 @@ fun BoxScope.BottomMusicPlayerImpl(
             isPlaying = musicUiState.isPlaying,
             onClick = { navController.navigate(Routes.Player.name) },
             onPlayPauseClicked = onPlayPlauseClicked,
-            modifier = Modifier.testTag("BottomMusicPlayer")  // testTag 추가
+            modifier = Modifier.testTag("BottomMusicPlayer") // testTag 추가
         )
     }
 }

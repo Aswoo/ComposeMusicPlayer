@@ -61,7 +61,7 @@ android {
     sourceSets {
         create("screenshotTest") {
             java.srcDir("src/screenshotTest/java") // 스크린샷 테스트 코드 경로
-            res.srcDir("src/screenshotTest/res")   // 리소스 경로 (필요 시)
+            res.srcDir("src/screenshotTest/res") // 리소스 경로 (필요 시)
             manifest.srcFile("src/screenshotTest/AndroidManifest.xml") // 매니페스트 경로
         }
     }
@@ -118,7 +118,6 @@ dependencies {
     implementation(libs.media3.exoplayer)
     implementation("androidx.compose.material:material:1.2.0")
 
-
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk)
@@ -129,8 +128,8 @@ dependencies {
     kaptAndroidTest(libs.hilt.compiler)
 
     // Compose testing
-    androidTestImplementation (libs.androidx.ui.test.junit4)
-    debugImplementation (libs.androidx.ui.test.manifest)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.test.manifest)
 
     // Hilt Compose Testing
     androidTestImplementation(libs.hilt.navigation.compose)

@@ -1,0 +1,11 @@
+[**/test/**.kt]
+ktlint_disabled_rules = All
+
+[**/androidTest/**.kt]
+ktlint_disabled_rules = All
+
+[**/screenshotTest/**.kt]
+ktlint_disabled_rules = All
+
+[{**/test/**.kt,**/androidTest/**.kt,**/screenshotTest/**.kt}]
+ktlint_disabled_rules = no-wildcard-imports

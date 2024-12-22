@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent
+package com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

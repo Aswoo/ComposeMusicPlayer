@@ -6,7 +6,6 @@ import android.os.Looper
 import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
-import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
 import com.sdu.composemusicplayer.data.roomdb.MusicRepository
@@ -40,19 +39,19 @@ class PlayerEnvironment @Inject constructor(
     private val currentDuration: StateFlow<Long> = _currentDuration
 
     private val _isPlaying = MutableStateFlow(false)
-     val isPlaying: StateFlow<Boolean> = _isPlaying
+    val isPlaying: StateFlow<Boolean> = _isPlaying
 
     private val _currentPlayedMusic = MutableStateFlow(MusicEntity.default)
-     val currentPlayedMusic: StateFlow<MusicEntity> = _currentPlayedMusic
+    val currentPlayedMusic: StateFlow<MusicEntity> = _currentPlayedMusic
 
     private val _playBackMode = MutableStateFlow(PlayBackMode.REPEAT_ONE)
-     val playbackMode: StateFlow<PlayBackMode> = _playBackMode
+    val playbackMode: StateFlow<PlayBackMode> = _playBackMode
 
     private val _hasStopped = MutableStateFlow(false)
-     val hasStopped: StateFlow<Boolean> = _hasStopped
+    val hasStopped: StateFlow<Boolean> = _hasStopped
 
     private val _isBottomMusicPlayerShowed = MutableStateFlow(false)
-     val isBottomMusicPlayerShowed: StateFlow<Boolean> = _isBottomMusicPlayerShowed
+    val isBottomMusicPlayerShowed: StateFlow<Boolean> = _isBottomMusicPlayerShowed
 
     private val _isPaused = MutableStateFlow(false)
     private val isPaused: StateFlow<Boolean> = _isPaused
@@ -62,7 +61,6 @@ class PlayerEnvironment @Inject constructor(
     private var playingRunnable: Runnable = kotlinx.coroutines.Runnable {
     }
     private val playingHandler: Handler = Handler((Looper.getMainLooper()))
-
 
     init {
         CoroutineScope(dispatcher).launch {

@@ -1,6 +1,5 @@
-package com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent
+package com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -14,8 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -29,8 +26,6 @@ import com.sdu.composemusicplayer.utils.Constants
 import com.sdu.composemusicplayer.utils.move
 import com.sdu.composemusicplayer.utils.swap
 import com.sdu.composemusicplayer.viewmodel.MusicUiState
-import com.sdu.composemusicplayer.viewmodel.PlayerEvent
-import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
@@ -48,8 +43,8 @@ fun SheetContent(
     val reorderableState = rememberReorderableLazyListState(onMove = { from, to ->
         onMove(from.index, to.index)
     }, onDragEnd = { from, to ->
-        onDragEnd(from, to)
-    })
+            onDragEnd(from, to)
+        })
 
     BackHandler(isExpanded) {
         onBack()

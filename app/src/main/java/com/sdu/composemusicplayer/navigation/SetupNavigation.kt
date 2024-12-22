@@ -25,8 +25,8 @@ import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.bottomSheet
-import com.sdu.composemusicplayer.presentation.main_screen.MainScreen
-import com.sdu.composemusicplayer.presentation.music_player_sheet.MusicPlayerSheet
+import com.sdu.composemusicplayer.presentation.mainScreen.MainScreen
+import com.sdu.composemusicplayer.presentation.musicPlayerSheet.MusicPlayerSheet
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
