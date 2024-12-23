@@ -81,8 +81,7 @@ fun AudioWave(isMusicPlaying: Boolean) {
                     .width(4.dp)
                     .fillMaxHeight(
                         if (!isMusicPlaying) 0.3f else fraction1,
-                    )
-                    .clip(RoundedCornerShape(100))
+                    ).clip(RoundedCornerShape(100))
                     .background(MaterialTheme.colorScheme.primary),
         ) {
         }
@@ -92,8 +91,7 @@ fun AudioWave(isMusicPlaying: Boolean) {
                     .width(4.dp)
                     .fillMaxHeight(
                         if (!isMusicPlaying) 0.5f else fraction2,
-                    )
-                    .clip(RoundedCornerShape(100))
+                    ).clip(RoundedCornerShape(100))
                     .background(MaterialTheme.colorScheme.primary),
         ) {
         }
@@ -103,8 +101,7 @@ fun AudioWave(isMusicPlaying: Boolean) {
                     .width(4.dp)
                     .fillMaxHeight(
                         if (!isMusicPlaying) 0.5f else fraction3,
-                    )
-                    .clip(RoundedCornerShape(100))
+                    ).clip(RoundedCornerShape(100))
                     .background(MaterialTheme.colorScheme.primary),
         ) {
         }

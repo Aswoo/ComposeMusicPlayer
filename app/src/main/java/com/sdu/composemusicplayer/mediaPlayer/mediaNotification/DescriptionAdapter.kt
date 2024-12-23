@@ -60,7 +60,11 @@ class DescriptionAdapter(
     override fun getCurrentContentText(player: Player) = ""
 
     override fun getCurrentContentTitle(player: Player): String {
-        return controller.get().mediaMetadata.title.toString()
+        return controller
+            .get()
+            .mediaMetadata
+            .title
+            .toString()
     }
 
     override fun getCurrentLargeIcon(
@@ -89,7 +93,8 @@ class DescriptionAdapter(
         return withContext(Dispatchers.IO) {
             // Create an ImageRequest
             val request =
-                ImageRequest.Builder(context)
+                ImageRequest
+                    .Builder(context)
                     .data(uri)
                     .size(NOTIFICATION_LARGE_ICON_SIZE, NOTIFICATION_LARGE_ICON_SIZE)
                     .build()

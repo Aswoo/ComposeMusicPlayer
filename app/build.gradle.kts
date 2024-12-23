@@ -82,6 +82,7 @@ android {
 // ktlint 설정 추가
 ktlint {
     android.set(true) // Android 코드에 대해 실행하도록 설정 (필요시)
+    debug.set(true) // 디버그 모드 활성화 (옵션)
     outputToConsole.set(true) // 콘솔에 출력하도록 설정
     outputColorName.set("RED") // 출력 색상 설정
     ignoreFailures.set(false) // 실패 시 빌드 실패하도록 설정
@@ -95,17 +96,36 @@ ktlint {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(
+        libs
+            .androidx
+            .lifecycle
+            .runtime
+            .ktx,
+    )
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling)
-    implementation(libs.androidx.ui.tooling.preview)
+    implementation(
+        libs
+            .androidx
+            .ui
+            .tooling
+            .preview,
+    )
     implementation(libs.androidx.material3)
     implementation(libs.androidx.media3.session)
     implementation(libs.androidx.media3.ui)
-    implementation(libs.androidx.ui.tooling.preview.android)
+    implementation(
+        libs
+            .androidx
+            .ui
+            .tooling
+            .preview
+            .android,
+    )
 
     // Screen Compose
     screenshotTestImplementation(platform(libs.androidx.compose.bom))
@@ -115,10 +135,22 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(
+        libs
+            .androidx
+            .ui
+            .test
+            .junit4,
+    )
 
     debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    debugImplementation(
+        libs
+            .androidx
+            .ui
+            .test
+            .manifest,
+    )
 
     implementation(libs.androidx.room.ktx)
     implementation(libs.room.runtime)
@@ -153,8 +185,20 @@ dependencies {
     kaptAndroidTest(libs.hilt.compiler)
 
     // Compose testing
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(
+        libs
+            .androidx
+            .ui
+            .test
+            .junit4,
+    )
+    debugImplementation(
+        libs
+            .androidx
+            .ui
+            .test
+            .manifest,
+    )
 
     // Hilt Compose Testing
     androidTestImplementation(libs.hilt.navigation.compose)

@@ -59,9 +59,13 @@ fun MusicItem(
             Image(
                 painter =
                     rememberAsyncImagePainter(
-                        ImageRequest.Builder(LocalContext.current).data(music.albumPath.toUri()).error(
-                            R.drawable.ic_music_unknown,
-                        ).placeholder(R.drawable.ic_music_unknown).build(),
+                        ImageRequest
+                            .Builder(LocalContext.current)
+                            .data(music.albumPath.toUri())
+                            .error(
+                                R.drawable.ic_music_unknown,
+                            ).placeholder(R.drawable.ic_music_unknown)
+                            .build(),
                     ),
                 contentDescription = null,
                 modifier =

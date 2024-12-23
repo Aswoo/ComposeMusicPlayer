@@ -163,16 +163,18 @@ fun AlbumImage(albumPath: String) {
                             width = 2.dp,
                             color = MaterialTheme.colorScheme.onSurface,
                             shape = RoundedCornerShape(100.dp),
-                        )
-                        .align(Alignment.Center)
+                        ).align(Alignment.Center)
                         .zIndex(2f),
             )
             Image(
                 painter =
                     rememberAsyncImagePainter(
-                        ImageRequest.Builder(LocalContext.current).data(albumPath.toUri())
+                        ImageRequest
+                            .Builder(LocalContext.current)
+                            .data(albumPath.toUri())
                             .error(R.drawable.ic_music_unknown)
-                            .placeholder(R.drawable.ic_music_unknown).build(),
+                            .placeholder(R.drawable.ic_music_unknown)
+                            .build(),
                     ),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),

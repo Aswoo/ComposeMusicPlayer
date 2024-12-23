@@ -31,7 +31,9 @@ class MediaService : MediaSessionService() {
 
         // Build a PendingIntent that can be used to launch the UI.
         val sessionActivityPendingIntent =
-            this.packageManager?.getLaunchIntentForPackage(this.packageName)
+            this
+                .packageManager
+                ?.getLaunchIntentForPackage(this.packageName)
                 ?.let { sessionIntent ->
                     PendingIntent.getActivity(
                         this,
@@ -43,7 +45,8 @@ class MediaService : MediaSessionService() {
 
         // MediaSession 초기화
         mediaSession =
-            MediaSession.Builder(this, exoPlayer)
+            MediaSession
+                .Builder(this, exoPlayer)
                 .setSessionActivity(sessionActivityPendingIntent!!) // Session activity 설정
                 .build()
 
@@ -97,7 +100,13 @@ class MediaService : MediaSessionService() {
             )
     }
 
-    @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+    @androidx.annotation.OptIn(
+        androidx
+            .media3
+            .common
+            .util
+            .UnstableApi::class,
+    )
     override fun onStartCommand(
         intent: Intent?,
         flags: Int,

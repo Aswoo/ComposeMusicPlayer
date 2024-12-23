@@ -22,7 +22,13 @@ import com.sdu.composemusicplayer.R
  * @param player The ExoPlayer instance.
  * @param notificationListener The listener for notification events.
  */
-@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+@androidx.annotation.OptIn(
+    androidx
+        .media3
+        .common
+        .util
+        .UnstableApi::class,
+)
 class MediaNotificationManager(
     private val context: Context,
     private val sessionToken: SessionToken,
@@ -50,12 +56,12 @@ class MediaNotificationManager(
             }
 
         notificationManager =
-            PlayerNotificationManager.Builder(
-                context,
-                NOW_PLAYING_NOTIFICATION_ID,
-                NOW_PLAYING_CHANNEL_ID,
-            )
-                .setChannelNameResourceId(R.string.media_notification_channel)
+            PlayerNotificationManager
+                .Builder(
+                    context,
+                    NOW_PLAYING_NOTIFICATION_ID,
+                    NOW_PLAYING_CHANNEL_ID,
+                ).setChannelNameResourceId(R.string.media_notification_channel)
                 .setChannelDescriptionResourceId(R.string.media_notification_channel_description)
                 .setMediaDescriptionAdapter(descriptionAdapter!!)
                 .setNotificationListener(notificationListener)
@@ -74,7 +80,8 @@ class MediaNotificationManager(
     @RequiresApi(Build.VERSION_CODES.O)
     private fun startForegroundMusicService(mediaSessionService: MediaSessionService) {
         val musicNotification =
-            Notification.Builder(context, NOW_PLAYING_CHANNEL_ID)
+            Notification
+                .Builder(context, NOW_PLAYING_CHANNEL_ID)
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .build()
 

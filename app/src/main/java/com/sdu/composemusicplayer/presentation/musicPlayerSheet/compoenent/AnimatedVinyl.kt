@@ -107,7 +107,8 @@ fun Vinyl(
             painter =
                 rememberAsyncImagePainter(
                     model =
-                        ImageRequest.Builder(LocalContext.current)
+                        ImageRequest
+                            .Builder(LocalContext.current)
                             .data(albumImagePath)
                             .placeholder(R.drawable.ic_music_unknown)
                             .error(R.drawable.ic_music_unknown)

@@ -20,11 +20,13 @@ abstract class MusicDB : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context): MusicDB {
-            return Room.databaseBuilder(
-                context,
-                MusicDB::class.java,
-                "music_db_0903",
-            ).allowMainThreadQueries().build()
+            return Room
+                .databaseBuilder(
+                    context,
+                    MusicDB::class.java,
+                    "music_db_0903",
+                ).allowMainThreadQueries()
+                .build()
         }
     }
 }

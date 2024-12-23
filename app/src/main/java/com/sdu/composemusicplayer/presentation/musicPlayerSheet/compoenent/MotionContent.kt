@@ -52,7 +52,8 @@ fun MotionContent(
 
     val motionScene =
         remember {
-            context.resources
+            context
+                .resources
                 .openRawResource(R.raw.motion_scene)
                 .readBytes()
                 .decodeToString()
