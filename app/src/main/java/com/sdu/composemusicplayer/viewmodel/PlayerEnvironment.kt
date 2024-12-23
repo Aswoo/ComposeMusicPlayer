@@ -29,7 +29,7 @@ class PlayerEnvironment
     constructor(
         @ApplicationContext private val context: Context,
         private val musicRepository: MusicRepository,
-        private val exoPlayer: ExoPlayer, //klint test
+        private val exoPlayer: ExoPlayer,
     ) : IPlayerEnvironment {
         val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
