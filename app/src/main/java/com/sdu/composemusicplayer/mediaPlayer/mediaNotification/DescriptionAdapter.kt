@@ -29,7 +29,6 @@ class DescriptionAdapter(
     private val onChange: () -> Unit,
 ) :
     PlayerNotificationManager.MediaDescriptionAdapter {
-
     var currentIconUri: Uri? = null
     var currentBitmap: Bitmap? = null
     private var currentBluetoothDeviceName: String? = null
@@ -44,16 +43,16 @@ class DescriptionAdapter(
     private val serviceJob = SupervisorJob()
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
-    override fun createCurrentContentIntent(player: Player): PendingIntent? =
-        controller.get().sessionActivity
+    override fun createCurrentContentIntent(player: Player): PendingIntent? = controller.get().sessionActivity
 
     override fun getCurrentSubText(player: Player): CharSequence? {
         if (currentBluetoothDeviceName == null && bluetoothJob == null) {
-            bluetoothJob = serviceScope.launch {
-                // 비동기 작업 시작
-                currentBluetoothDeviceName = getBluetoothConnectedDeviceAsync(context)
-                updateNotification()
-            }
+            bluetoothJob =
+                serviceScope.launch {
+                    // 비동기 작업 시작
+                    currentBluetoothDeviceName = getBluetoothConnectedDeviceAsync(context)
+                    updateNotification()
+                }
         }
         return currentBluetoothDeviceName
     }
@@ -74,9 +73,10 @@ class DescriptionAdapter(
             // `getCurrentLargeIcon` don't cause the bitmap to be recreated.
             currentIconUri = iconUri
             serviceScope.launch {
-                currentBitmap = iconUri?.let {
-                    resolveUriAsBitmap(it)
-                }
+                currentBitmap =
+                    iconUri?.let {
+                        resolveUriAsBitmap(it)
+                    }
                 currentBitmap?.let { callback.onBitmap(it) }
             }
             null
@@ -88,10 +88,11 @@ class DescriptionAdapter(
     private suspend fun resolveUriAsBitmap(uri: Uri): Bitmap? {
         return withContext(Dispatchers.IO) {
             // Create an ImageRequest
-            val request = ImageRequest.Builder(context)
-                .data(uri)
-                .size(NOTIFICATION_LARGE_ICON_SIZE, NOTIFICATION_LARGE_ICON_SIZE)
-                .build()
+            val request =
+                ImageRequest.Builder(context)
+                    .data(uri)
+                    .size(NOTIFICATION_LARGE_ICON_SIZE, NOTIFICATION_LARGE_ICON_SIZE)
+                    .build()
 
             // Execute the request using the Coil image loader
             val drawable = context.imageLoader.execute(request).drawable
@@ -105,33 +106,38 @@ class DescriptionAdapter(
      * Bluetooth 상태 변화를 감지하는 BroadcastReceiver 등록
      */
     private fun registerBluetoothReceiver(context: Context) {
-        val filter = android.content.IntentFilter().apply {
-            addAction(android.bluetooth.BluetoothDevice.ACTION_ACL_CONNECTED)
-            addAction(android.bluetooth.BluetoothDevice.ACTION_ACL_DISCONNECTED)
-        }
+        val filter =
+            android.content.IntentFilter().apply {
+                addAction(android.bluetooth.BluetoothDevice.ACTION_ACL_CONNECTED)
+                addAction(android.bluetooth.BluetoothDevice.ACTION_ACL_DISCONNECTED)
+            }
 
-        bluetoothReceiver = object : android.content.BroadcastReceiver() {
-            @SuppressLint("MissingPermission")
-            override fun onReceive(context: Context, intent: android.content.Intent) {
-                Log.d("OnReceive", "blutooth")
-                when (intent.action) {
-                    android.bluetooth.BluetoothDevice.ACTION_ACL_CONNECTED -> {
-                        val device: android.bluetooth.BluetoothDevice? =
-                            intent.getParcelableExtra(
-                                android.bluetooth.BluetoothDevice.EXTRA_DEVICE,
-                            )
-                        println(device?.name)
-                        currentBluetoothDeviceName = device?.name
-                        updateNotification()
-                    }
+        bluetoothReceiver =
+            object : android.content.BroadcastReceiver() {
+                @SuppressLint("MissingPermission")
+                override fun onReceive(
+                    context: Context,
+                    intent: android.content.Intent,
+                ) {
+                    Log.d("OnReceive", "blutooth")
+                    when (intent.action) {
+                        android.bluetooth.BluetoothDevice.ACTION_ACL_CONNECTED -> {
+                            val device: android.bluetooth.BluetoothDevice? =
+                                intent.getParcelableExtra(
+                                    android.bluetooth.BluetoothDevice.EXTRA_DEVICE,
+                                )
+                            println(device?.name)
+                            currentBluetoothDeviceName = device?.name
+                            updateNotification()
+                        }
 
-                    android.bluetooth.BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
-                        currentBluetoothDeviceName = null
-                        updateNotification()
+                        android.bluetooth.BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
+                            currentBluetoothDeviceName = null
+                            updateNotification()
+                        }
                     }
                 }
             }
-        }
         bluetoothReceiver?.let {
             context.registerReceiver(it, filter)
         }
@@ -143,6 +149,7 @@ class DescriptionAdapter(
     private fun updateNotification() {
         onChange()
     }
+
     fun unregisterBluetoothReceiver(context: Context) {
         bluetoothReceiver?.let {
             context.unregisterReceiver(it)

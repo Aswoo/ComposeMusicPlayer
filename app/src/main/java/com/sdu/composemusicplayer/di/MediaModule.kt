@@ -16,12 +16,11 @@ import dagger.hilt.android.scopes.ServiceScoped
 @Module
 @InstallIn(ServiceComponent::class) // ServiceScoped로 설정하여 MediaService에서 사용
 class MediaModule {
-
     @Provides
     @ServiceScoped
     fun provideMediaSession(
         @ApplicationContext context: Context,
-        player: Player, // 이미 Player가 주입 가능한 상태라고 가정
+        player: Player,
     ): MediaSession {
         return MediaSession.Builder(context, player).build()
     }

@@ -40,41 +40,46 @@ fun SheetContent(
     onDragEnd: (Int, Int) -> Unit,
     onBack: () -> Unit,
 ) {
-    val reorderableState = rememberReorderableLazyListState(onMove = { from, to ->
-        onMove(from.index, to.index)
-    }, onDragEnd = { from, to ->
+    val reorderableState =
+        rememberReorderableLazyListState(onMove = { from, to ->
+            onMove(from.index, to.index)
+        }, onDragEnd = { from, to ->
             onDragEnd(from, to)
-        },)
+        })
 
     BackHandler(isExpanded) {
         onBack()
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.surfaceVariant),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.surfaceVariant),
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(Constants.BOTTOM_SHEET_PEAK_HEIGHT),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(Constants.BOTTOM_SHEET_PEAK_HEIGHT),
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth(0.2f)
-                    .height(4.dp)
-                    .clip(CircleShape)
-                    .background(color = MaterialTheme.colorScheme.primary),
+                modifier =
+                    Modifier
+                        .fillMaxWidth(0.2f)
+                        .height(4.dp)
+                        .clip(CircleShape)
+                        .background(color = MaterialTheme.colorScheme.primary),
             )
         }
 
         LazyColumn(
             state = reorderableState.listState,
-            modifier = Modifier
-                .reorderable(reorderableState)
-                .detectReorderAfterLongPress(reorderableState),
+            modifier =
+                Modifier
+                    .reorderable(reorderableState)
+                    .detectReorderAfterLongPress(reorderableState),
         ) {
             items(
                 items = uiState.musicList,
@@ -101,56 +106,60 @@ fun SheetContent(
 @PreviewScreenSizes
 @Composable
 fun PreviewSheetContent() {
-    val sampleUiState = MusicUiState(
-        musicList = listOf(
-            MusicEntity(
-                audioId = 1L,
-                title = "Test Song",
-                artist = "Test Artist",
-                duration = 180000L,
-                albumPath = "/path/to/album",
-                audioPath = "/path/to/test/song.mp3",
-            ),
-            MusicEntity(
-                audioId = 2L,
-                title = "Test Song",
-                artist = "Test Artist",
-                duration = 180000L,
-                albumPath = "/path/to/album",
-                audioPath = "/path/to/test/song.mp3",
-            ),
-            MusicEntity(
-                audioId = 3L,
-                title = "Test Song",
-                artist = "Test Artist",
-                duration = 180000L,
-                albumPath = "/path/to/album",
-                audioPath = "/path/to/test/song.mp3",
-            ),
-        ),
-        currentPlayedMusic = MusicEntity(
-            audioId = 1L,
-            title = "Test Song",
-            artist = "Test Artist",
-            duration = 180000L,
-            albumPath = "/path/to/album",
-            audioPath = "/path/to/test/song.mp3",
-        ),
-    )
-    val musicList = remember {
-        mutableStateListOf<MusicEntity>().apply {
-            addAll(
-                sampleUiState.musicList,
-            )
+    val sampleUiState =
+        MusicUiState(
+            musicList =
+                listOf(
+                    MusicEntity(
+                        audioId = 1L,
+                        title = "Test Song",
+                        artist = "Test Artist",
+                        duration = 180000L,
+                        albumPath = "/path/to/album",
+                        audioPath = "/path/to/test/song.mp3",
+                    ),
+                    MusicEntity(
+                        audioId = 2L,
+                        title = "Test Song",
+                        artist = "Test Artist",
+                        duration = 180000L,
+                        albumPath = "/path/to/album",
+                        audioPath = "/path/to/test/song.mp3",
+                    ),
+                    MusicEntity(
+                        audioId = 3L,
+                        title = "Test Song",
+                        artist = "Test Artist",
+                        duration = 180000L,
+                        albumPath = "/path/to/album",
+                        audioPath = "/path/to/test/song.mp3",
+                    ),
+                ),
+            currentPlayedMusic =
+                MusicEntity(
+                    audioId = 1L,
+                    title = "Test Song",
+                    artist = "Test Artist",
+                    duration = 180000L,
+                    albumPath = "/path/to/album",
+                    audioPath = "/path/to/test/song.mp3",
+                ),
+        )
+    val musicList =
+        remember {
+            mutableStateListOf<MusicEntity>().apply {
+                addAll(
+                    sampleUiState.musicList,
+                )
+            }
         }
-    }
 
     SheetContent(
         isExpanded = true,
         uiState = sampleUiState,
         musicList = musicList,
         onMove = { from, to -> musicList.swap(musicList.move(from, to)) },
-        onDragEnd = { _, _ -> /* No-op in preview */ },
-        onBack = { /* No-op in preview */ },
+        onDragEnd = { _, _ -> },
+        onBack = { },
     )
 }

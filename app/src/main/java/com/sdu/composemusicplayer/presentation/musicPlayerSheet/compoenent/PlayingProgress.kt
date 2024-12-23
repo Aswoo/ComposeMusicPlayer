@@ -20,11 +20,16 @@ import com.sdu.composemusicplayer.ui.theme.TextDefaultColor
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
-fun PlayingProgress(maxDuration: Long, currentDuration: Long, onChange: (Float) -> Unit) {
+fun PlayingProgress(
+    maxDuration: Long,
+    currentDuration: Long,
+    onChange: (Float) -> Unit,
+) {
     // Calculate progress
-    val progress = remember(maxDuration, currentDuration) {
-        currentDuration.toFloat() / maxDuration.toFloat()
-    }
+    val progress =
+        remember(maxDuration, currentDuration) {
+            currentDuration.toFloat() / maxDuration.toFloat()
+        }
 
     // Helper function to format time
     fun formatTime(duration: Long): String {
@@ -41,10 +46,11 @@ fun PlayingProgress(maxDuration: Long, currentDuration: Long, onChange: (Float) 
         Slider(
             value = progress,
             onValueChange = onChange,
-            colors = SliderDefaults.colors(
-                thumbColor = Purple200,
-                activeTrackColor = Purple200,
-            ),
+            colors =
+                SliderDefaults.colors(
+                    thumbColor = Purple200,
+                    activeTrackColor = Purple200,
+                ),
         )
         Spacer(modifier = Modifier.height(8.dp))
         Row(
@@ -53,17 +59,19 @@ fun PlayingProgress(maxDuration: Long, currentDuration: Long, onChange: (Float) 
         ) {
             Text(
                 text = currentDurationString,
-                style = MaterialTheme.typography.titleMedium.copy(
-                    color = TextDefaultColor,
-                    fontFamily = Inter,
-                ),
+                style =
+                    MaterialTheme.typography.titleMedium.copy(
+                        color = TextDefaultColor,
+                        fontFamily = Inter,
+                    ),
             )
             Text(
                 text = maxDurationString,
-                style = MaterialTheme.typography.titleMedium.copy(
-                    color = TextDefaultColor,
-                    fontFamily = Inter,
-                ),
+                style =
+                    MaterialTheme.typography.titleMedium.copy(
+                        color = TextDefaultColor,
+                        fontFamily = Inter,
+                    ),
             )
         }
     }

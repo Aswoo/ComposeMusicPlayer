@@ -21,25 +21,25 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     private val playerVM: PlayerViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val listOfPermissions = mutableListOf<String>().apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                add(android.Manifest.permission.READ_MEDIA_AUDIO)
-                add(android.Manifest.permission.POST_NOTIFICATIONS)
-            } else {
-                add(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+        val listOfPermissions =
+            mutableListOf<String>().apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    add(android.Manifest.permission.READ_MEDIA_AUDIO)
+                    add(android.Manifest.permission.POST_NOTIFICATIONS)
+                } else {
+                    add(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    add(android.Manifest.permission.BLUETOOTH_CONNECT)
+                } else {
+                    add(android.Manifest.permission.BLUETOOTH)
+                }
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                add(android.Manifest.permission.BLUETOOTH_CONNECT)
-            } else {
-                add(android.Manifest.permission.BLUETOOTH)
-            }
-        }
         enableEdgeToEdge()
         setContent {
             ComposeMusicPlayerTheme {
@@ -59,7 +59,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun Greeting(
+    name: String,
+    modifier: Modifier = Modifier,
+) {
     Text(
         text = "Hello $name!",
         modifier = modifier,

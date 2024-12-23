@@ -19,7 +19,6 @@ import javax.inject.Inject
 @UnstableApi
 @AndroidEntryPoint
 class MediaService : MediaSessionService() {
-
     lateinit var mediaSession: MediaSession
     lateinit var musicNotificationManager: MediaNotificationManager
 
@@ -43,60 +42,67 @@ class MediaService : MediaSessionService() {
                 }
 
         // MediaSession 초기화
-        mediaSession = MediaSession.Builder(this, exoPlayer)
-            .setSessionActivity(sessionActivityPendingIntent!!) // Session activity 설정
-            .build()
+        mediaSession =
+            MediaSession.Builder(this, exoPlayer)
+                .setSessionActivity(sessionActivityPendingIntent!!) // Session activity 설정
+                .build()
 
         // 미디어 세션에서 미디어 세션 서비스와 연동된 notification 설정
-        musicNotificationManager = MediaNotificationManager(
-            context = this,
-            sessionToken = mediaSession.token,
-            player = exoPlayer,
-            notificationListener = object : PlayerNotificationManager.NotificationListener {
-                override fun onNotificationPosted(
-                    notificationId: Int,
-                    notification: Notification,
-                    ongoing: Boolean,
-                ) {
-                }
+        musicNotificationManager =
+            MediaNotificationManager(
+                context = this,
+                sessionToken = mediaSession.token,
+                player = exoPlayer,
+                notificationListener =
+                    object : PlayerNotificationManager.NotificationListener {
+                        override fun onNotificationPosted(
+                            notificationId: Int,
+                            notification: Notification,
+                            ongoing: Boolean,
+                        ) {
+                        }
 
-                /**
-                 * 사용자 액션이나 [stopForeground]에 의해 알림이 취소되었을 때 호출됨
-                 *
-                 * 동작 과정:
-                 * 1. 앱의 현재 상태(백그라운드/포그라운드) 확인
-                 * 2. 포그라운드 취소 -> 재생 정지
-                 * 3. 백그라운드 취소 -> 서비스 종료
-                 *
-                 * @param notificationId 취소된 알림의 고유 식별자
-                 * @param dismissedByUser true: 사용자가 직접 알림을 닫음, false: 시스템이나 앱에 의해 알림이 닫힘
-                 *
-                 * @throws SecurityException 필요한 권한이 없는 경우 발생
-                 * @see isAppInForeground 앱 상태 확인 메서드
-                 */
-                override fun onNotificationCancelled(
-                    notificationId: Int,
-                    dismissedByUser: Boolean,
-                ) {
-                    // 완전 종료: 사용자가 앱을 명시적으로 닫는 경우  onTaskRemoved 호출
+                        /**
+                         * 사용자 액션이나 [stopForeground]에 의해 알림이 취소되었을 때 호출됨
+                         *
+                         * 동작 과정:
+                         * 1. 앱의 현재 상태(백그라운드/포그라운드) 확인
+                         * 2. 포그라운드 취소 -> 재생 정지
+                         * 3. 백그라운드 취소 -> 서비스 종료
+                         *
+                         * @param notificationId 취소된 알림의 고유 식별자
+                         * @param dismissedByUser true: 사용자가 직접 알림을 닫음, false: 시스템이나 앱에 의해 알림이 닫힘
+                         *
+                         * @throws SecurityException 필요한 권한이 없는 경우 발생
+                         * @see isAppInForeground 앱 상태 확인 메서드
+                         */
+                        override fun onNotificationCancelled(
+                            notificationId: Int,
+                            dismissedByUser: Boolean,
+                        ) {
+                            // 완전 종료: 사용자가 앱을 명시적으로 닫는 경우  onTaskRemoved 호출
 //                    val isAppInForeground: Boolean
 //                        get() = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
-                    val isBackground = !isAppInForeground(this@MediaService)
-                    if (isBackground) {
-                        stopForeground(STOP_FOREGROUND_REMOVE) // 포그라운드 서비스 종료
-                        exoPlayer.release() // ExoPlayer 리소스 해제
-                        mediaSession.release() // MediaSession 해제
-                        stopSelf() // 서비스 종료
-                    } else {
-                        stopForeground(STOP_FOREGROUND_REMOVE)
-                    }
-                }
-            },
-        )
+                            val isBackground = !isAppInForeground(this@MediaService)
+                            if (isBackground) {
+                                stopForeground(STOP_FOREGROUND_REMOVE) // 포그라운드 서비스 종료
+                                exoPlayer.release() // ExoPlayer 리소스 해제
+                                mediaSession.release() // MediaSession 해제
+                                stopSelf() // 서비스 종료
+                            } else {
+                                stopForeground(STOP_FOREGROUND_REMOVE)
+                            }
+                        }
+                    },
+            )
     }
 
     @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onStartCommand(
+        intent: Intent?,
+        flags: Int,
+        startId: Int,
+    ): Int {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             musicNotificationManager.startMusicNotificationService(
                 mediaSession = mediaSession,
@@ -106,8 +112,7 @@ class MediaService : MediaSessionService() {
         return super.onStartCommand(intent, flags, startId)
     }
 
-    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession =
-        mediaSession
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession = mediaSession
 
     override fun onDestroy() {
         super.onDestroy()

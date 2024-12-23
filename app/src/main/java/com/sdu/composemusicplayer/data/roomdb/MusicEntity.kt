@@ -17,13 +17,14 @@ data class MusicEntity(
     val audioPath: String,
 ) : Parcelable {
     companion object {
-        val default = MusicEntity(
-            audioId = -1,
-            title = "",
-            artist = "<unknown>",
-            duration = 0L,
-            albumPath = "",
-            audioPath = "",
-        )
+        val default =
+            MusicEntity(
+                audioId = -1,
+                title = "",
+                artist = "<unknown>",
+                duration = 0L,
+                albumPath = "",
+                audioPath = "",
+            )
     }
 }

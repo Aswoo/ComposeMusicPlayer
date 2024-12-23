@@ -19,7 +19,6 @@ import org.junit.Test
 
 @OptIn(ExperimentalTestApi::class) // Compose 테스트를 위한 실험적 API 사용
 class BottomMusicPlayerImplTest {
-
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -30,13 +29,14 @@ class BottomMusicPlayerImplTest {
     fun setup() {
         // Mock NavController 및 MusicUiState 초기화
         mockNavController = mockk(relaxed = true)
-        mockMusicUiState = MusicUiState(
-            currentPlayedMusic = MusicEntity.default,
-            currentDuration = 0L,
-            isPlaying = false,
-            isBottomPlayerShow = true,
-            musicList = emptyList(),
-        )
+        mockMusicUiState =
+            MusicUiState(
+                currentPlayedMusic = MusicEntity.default,
+                currentDuration = 0L,
+                isPlaying = false,
+                isBottomPlayerShow = true,
+                musicList = emptyList(),
+            )
     }
 
     @Test

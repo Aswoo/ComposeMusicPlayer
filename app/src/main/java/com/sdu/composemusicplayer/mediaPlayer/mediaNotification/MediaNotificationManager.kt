@@ -44,39 +44,43 @@ class MediaNotificationManager(
     fun buildMusicNotification(mediaSession: MediaSession) {
         val mediaController = MediaController.Builder(context, mediaSession.token).buildAsync()
 
-        descriptionAdapter = DescriptionAdapter(context, mediaController) {
-            notificationManager.invalidate()
-        }
-
-        notificationManager = PlayerNotificationManager.Builder(
-            context,
-            NOW_PLAYING_NOTIFICATION_ID,
-            NOW_PLAYING_CHANNEL_ID,
-        )
-            .setChannelNameResourceId(R.string.media_notification_channel)
-            .setChannelDescriptionResourceId(R.string.media_notification_channel_description)
-            .setMediaDescriptionAdapter(descriptionAdapter!!)
-            .setNotificationListener(notificationListener)
-            .setSmallIconResourceId(R.drawable.music_player_icon)
-            .build()
-            .apply {
-                setPlayer(player)
-                setUseRewindAction(true)
-                setUseFastForwardAction(true)
-                setUseRewindActionInCompactView(true)
-                setUseFastForwardActionInCompactView(true)
-                setUseRewindActionInCompactView(true)
+        descriptionAdapter =
+            DescriptionAdapter(context, mediaController) {
+                notificationManager.invalidate()
             }
+
+        notificationManager =
+            PlayerNotificationManager.Builder(
+                context,
+                NOW_PLAYING_NOTIFICATION_ID,
+                NOW_PLAYING_CHANNEL_ID,
+            )
+                .setChannelNameResourceId(R.string.media_notification_channel)
+                .setChannelDescriptionResourceId(R.string.media_notification_channel_description)
+                .setMediaDescriptionAdapter(descriptionAdapter!!)
+                .setNotificationListener(notificationListener)
+                .setSmallIconResourceId(R.drawable.music_player_icon)
+                .build()
+                .apply {
+                    setPlayer(player)
+                    setUseRewindAction(true)
+                    setUseFastForwardAction(true)
+                    setUseRewindActionInCompactView(true)
+                    setUseFastForwardActionInCompactView(true)
+                    setUseRewindActionInCompactView(true)
+                }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun startForegroundMusicService(mediaSessionService: MediaSessionService) {
-        val musicNotification = Notification.Builder(context, NOW_PLAYING_CHANNEL_ID)
-            .setCategory(Notification.CATEGORY_SERVICE)
-            .build()
+        val musicNotification =
+            Notification.Builder(context, NOW_PLAYING_CHANNEL_ID)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .build()
 
         mediaSessionService.startForeground(NOW_PLAYING_NOTIFICATION_ID, musicNotification)
     }
+
     fun unregisterBluetoothReceiver() {
         descriptionAdapter?.unregisterBluetoothReceiver(context)
     }

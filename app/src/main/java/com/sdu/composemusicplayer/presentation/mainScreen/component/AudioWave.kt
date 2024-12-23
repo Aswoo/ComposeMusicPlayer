@@ -31,40 +31,43 @@ fun AudioWave(isMusicPlaying: Boolean) {
     val fraction1 by transition1.animateFloat(
         initialValue = 0.3f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            repeatMode = RepeatMode.Reverse,
-            animation = tween(
-                durationMillis = 1600,
-                easing = LinearEasing,
-
+        animationSpec =
+            infiniteRepeatable(
+                repeatMode = RepeatMode.Reverse,
+                animation =
+                    tween(
+                        durationMillis = 1600,
+                        easing = LinearEasing,
+                    ),
             ),
-        ),
         label = "",
     )
     val fraction2 by transition2.animateFloat(
         initialValue = 0.3f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            repeatMode = RepeatMode.Reverse,
-            animation = tween(
-                durationMillis = 800,
-                easing = LinearEasing,
-
+        animationSpec =
+            infiniteRepeatable(
+                repeatMode = RepeatMode.Reverse,
+                animation =
+                    tween(
+                        durationMillis = 800,
+                        easing = LinearEasing,
+                    ),
             ),
-        ),
         label = "",
     )
     val fraction3 by transition3.animateFloat(
         initialValue = 0.3f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            repeatMode = RepeatMode.Reverse,
-            animation = tween(
-                durationMillis = 1200,
-                easing = LinearEasing,
-
+        animationSpec =
+            infiniteRepeatable(
+                repeatMode = RepeatMode.Reverse,
+                animation =
+                    tween(
+                        durationMillis = 1200,
+                        easing = LinearEasing,
+                    ),
             ),
-        ),
         label = "",
     )
     Row(
@@ -73,33 +76,36 @@ fun AudioWave(isMusicPlaying: Boolean) {
         modifier = Modifier.size(width = 24.dp, height = 20.dp),
     ) {
         Box(
-            modifier = Modifier
-                .width(4.dp)
-                .fillMaxHeight(
-                    if (!isMusicPlaying) 0.3f else fraction1,
-                )
-                .clip(RoundedCornerShape(100))
-                .background(MaterialTheme.colorScheme.primary),
+            modifier =
+                Modifier
+                    .width(4.dp)
+                    .fillMaxHeight(
+                        if (!isMusicPlaying) 0.3f else fraction1,
+                    )
+                    .clip(RoundedCornerShape(100))
+                    .background(MaterialTheme.colorScheme.primary),
         ) {
         }
         Box(
-            modifier = Modifier
-                .width(4.dp)
-                .fillMaxHeight(
-                    if (!isMusicPlaying) 0.5f else fraction2,
-                )
-                .clip(RoundedCornerShape(100))
-                .background(MaterialTheme.colorScheme.primary),
+            modifier =
+                Modifier
+                    .width(4.dp)
+                    .fillMaxHeight(
+                        if (!isMusicPlaying) 0.5f else fraction2,
+                    )
+                    .clip(RoundedCornerShape(100))
+                    .background(MaterialTheme.colorScheme.primary),
         ) {
         }
         Box(
-            modifier = Modifier
-                .width(4.dp)
-                .fillMaxHeight(
-                    if (!isMusicPlaying) 0.5f else fraction3,
-                )
-                .clip(RoundedCornerShape(100))
-                .background(MaterialTheme.colorScheme.primary),
+            modifier =
+                Modifier
+                    .width(4.dp)
+                    .fillMaxHeight(
+                        if (!isMusicPlaying) 0.5f else fraction3,
+                    )
+                    .clip(RoundedCornerShape(100))
+                    .background(MaterialTheme.colorScheme.primary),
         ) {
         }
     }

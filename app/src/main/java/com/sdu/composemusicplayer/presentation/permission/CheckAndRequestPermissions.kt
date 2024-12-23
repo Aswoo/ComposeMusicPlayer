@@ -59,17 +59,19 @@ fun CheckAndRequestPermissions(
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(Dimens.Six),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(Dimens.Six),
             ) {
                 Image(
                     painter = rememberAsyncImagePainter(R.drawable.music_player_icon),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(200.dp)
-                        .background(color = Color.Yellow),
+                    modifier =
+                        Modifier
+                            .size(200.dp)
+                            .background(color = Color.Yellow),
                 )
                 Spacer(modifier = Modifier.height(Dimens.Six))
                 Text(
@@ -81,10 +83,11 @@ fun CheckAndRequestPermissions(
                 TextButton(
                     onClick = { permissionState.launchMultiplePermissionRequest() },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Blue,
-                        contentColor = Color.White,
-                    ),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = Color.Blue,
+                            contentColor = Color.White,
+                        ),
                     shape = RoundedCornerShape(Dimens.Three),
                 ) {
                     Text(text = stringResource(id = R.string.enable_permissions))
@@ -96,9 +99,10 @@ fun CheckAndRequestPermissions(
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(Dimens.Six),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(Dimens.Six),
             ) {
                 Text(
                     text = stringResource(id = R.string.permissions_rationale),
@@ -110,10 +114,11 @@ fun CheckAndRequestPermissions(
                 TextButton(
                     onClick = { activity.openAppSettings() },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Blue,
-                        contentColor = Color.White,
-                    ),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = Color.Blue,
+                            contentColor = Color.White,
+                        ),
                     shape = RoundedCornerShape(Dimens.Three),
                 ) {
                     Text(text = stringResource(id = R.string.goto_settings))

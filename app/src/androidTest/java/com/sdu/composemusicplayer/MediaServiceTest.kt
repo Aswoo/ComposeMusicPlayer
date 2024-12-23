@@ -7,7 +7,6 @@ import org.junit.Before
 import org.junit.Test
 
 class MediaServiceTest {
-
     private lateinit var exoPlayer: ExoPlayer
     private lateinit var mediaSession: MediaSession
     private lateinit var mediaService: MediaService
@@ -19,10 +18,11 @@ class MediaServiceTest {
         mediaSession = mockk(relaxed = true)
 
         // MediaService 인스턴스 생성 시 의존성 주입
-        mediaService = MediaService().apply {
-            this.exoPlayer = exoPlayer // Hilt 없이 직접 주입
-            this.mediaSession = mediaSession
-        }
+        mediaService =
+            MediaService().apply {
+                this.exoPlayer = exoPlayer // Hilt 없이 직접 주입
+                this.mediaSession = mediaSession
+            }
     }
 
     @Test

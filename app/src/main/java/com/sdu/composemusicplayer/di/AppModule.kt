@@ -12,9 +12,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
     @Provides
     @Singleton
-    fun provideMusicDB(@ApplicationContext context: Context): MusicDB =
-        MusicDB.getInstance(context)
+    fun provideMusicDB(
+        @ApplicationContext context: Context,
+    ): MusicDB = MusicDB.getInstance(context)
 }

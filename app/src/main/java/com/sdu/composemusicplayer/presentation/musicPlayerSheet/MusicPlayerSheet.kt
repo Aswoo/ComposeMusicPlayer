@@ -36,19 +36,25 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MusicPlayerSheet(navController: NavController, playerVM: PlayerViewModel) {
+fun MusicPlayerSheet(
+    navController: NavController,
+    playerVM: PlayerViewModel,
+) {
     val musicUiState by playerVM.uiState.collectAsState()
     val scope = rememberCoroutineScope()
-    val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberBottomSheetState(
-            initialValue = BottomSheetValue.Collapsed,
-        ),
-    )
+    val scaffoldState =
+        rememberBottomSheetScaffoldState(
+            bottomSheetState =
+                rememberBottomSheetState(
+                    initialValue = BottomSheetValue.Collapsed,
+                ),
+        )
     BackHandler {
         when {
-            scaffoldState.bottomSheetState.isExpanded -> scope.launch {
-                scaffoldState.bottomSheetState.collapse()
-            }
+            scaffoldState.bottomSheetState.isExpanded ->
+                scope.launch {
+                    scaffoldState.bottomSheetState.collapse()
+                }
             else -> navController.popBackStack()
         }
     }
@@ -79,12 +85,13 @@ fun BottomSheet(
         sheetPeekHeight = Constants.BOTTOM_SHEET_PEAK_HEIGHT,
         sheetContent = {
             Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                    .fillMaxWidth()
-                    .fillMaxHeight(
-                        0.99f.minus(Constants.TOP_MUSIC_PLAYER_HEIGHT.value / config.screenHeightDp),
-                    ),
+                modifier =
+                    Modifier
+                        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                        .fillMaxWidth()
+                        .fillMaxHeight(
+                            0.99f.minus(Constants.TOP_MUSIC_PLAYER_HEIGHT.value / config.screenHeightDp),
+                        ),
             ) {
 //                SheetContent(
 //                    isExpaned = state.bottomSheetState.isExpanded,

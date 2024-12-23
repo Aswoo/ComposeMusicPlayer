@@ -9,7 +9,6 @@ import com.sdu.composemusicplayer.data.roomdb.MusicEntity
 import kotlin.time.Duration.Companion.milliseconds
 
 object MusicUtil {
-
     fun fetchMusicFromDevice(
         context: Context,
         isTrackSmallerThan100KBSkipped: Boolean = true,
@@ -19,14 +18,15 @@ object MusicUtil {
 
         val audioUriExternal = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
 
-        val musicProjection = listOf(
-            MediaStore.Audio.Media._ID,
-            MediaStore.Audio.Media.TITLE,
-            MediaStore.Audio.Media.ARTIST,
-            MediaStore.Audio.Media.DURATION,
-            MediaStore.Audio.Media.ALBUM_ID,
-            MediaStore.Audio.Media.SIZE,
-        )
+        val musicProjection =
+            listOf(
+                MediaStore.Audio.Media._ID,
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media.DURATION,
+                MediaStore.Audio.Media.ALBUM_ID,
+                MediaStore.Audio.Media.SIZE,
+            )
         val cursorIndexSongId: Int
         val cursorIndexSongTitle: Int
         val cursorIndexSongArtist: Int
@@ -34,13 +34,14 @@ object MusicUtil {
         val cursorIndexSongAlbumId: Int
         val cursorIndexSongSize: Int
 
-        val songCursor = context.contentResolver.query(
-            audioUriExternal,
-            musicProjection.toTypedArray(),
-            null,
-            null,
-            null,
-        )
+        val songCursor =
+            context.contentResolver.query(
+                audioUriExternal,
+                musicProjection.toTypedArray(),
+                null,
+                null,
+                null,
+            )
         if (songCursor != null) {
             cursorIndexSongId = songCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
             cursorIndexSongTitle = songCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
@@ -59,31 +60,34 @@ object MusicUtil {
                 val albumId = songCursor.getString(cursorIndexSongAlbumId)
                 val size = songCursor.getInt(cursorIndexSongSize)
 
-                val albumPath = Uri.withAppendedPath(
-                    Uri.parse("content://media/external/audio/albumart"),
-                    albumId,
-                )
+                val albumPath =
+                    Uri.withAppendedPath(
+                        Uri.parse("content://media/external/audio/albumart"),
+                        albumId,
+                    )
                 val musicPath = Uri.withAppendedPath(audioUriExternal, "" + audioID)
 
                 val durationGreaterThan60Sec = duration.milliseconds.inWholeSeconds > 60
                 val sizeGreaterThan100KB = (size / 1024) > 100
 
-                val music = MusicEntity(
-                    audioId = audioID,
-                    title = title,
-                    artist = if (artist.equals(
-                            "<unknown>",
-                            true,
-                        )
-                    ) {
-                        context.getString(R.string.unknown)
-                    } else {
-                        artist
-                    },
-                    duration = duration,
-                    albumPath = albumPath.toString(),
-                    audioPath = musicPath.toString(),
-                )
+                val music =
+                    MusicEntity(
+                        audioId = audioID,
+                        title = title,
+                        artist =
+                            if (artist.equals(
+                                    "<unknown>",
+                                    true,
+                                )
+                            ) {
+                                context.getString(R.string.unknown)
+                            } else {
+                                artist
+                            },
+                        duration = duration,
+                        albumPath = albumPath.toString(),
+                        audioPath = musicPath.toString(),
+                    )
                 when {
                     isTrackSmallerThan100KBSkipped and isTrackShorterThan60SecondsSkipped -> {
                         if (sizeGreaterThan100KB and durationGreaterThan60Sec) musicList.add(music)
@@ -108,7 +112,10 @@ object MusicUtil {
     }
 }
 
-fun <T> Collection<T>.move(from: Int, to: Int): List<T> {
+fun <T> Collection<T>.move(
+    from: Int,
+    to: Int,
+): List<T> {
     if (from == to) return this.toList()
     return ArrayList(this).apply {
         val temp = get(from)
@@ -116,6 +123,7 @@ fun <T> Collection<T>.move(from: Int, to: Int): List<T> {
         add(to, temp)
     }
 }
+
 fun <T> SnapshotStateList<T>.swap(newList: List<T>): SnapshotStateList<T> {
     clear()
     addAll(newList)

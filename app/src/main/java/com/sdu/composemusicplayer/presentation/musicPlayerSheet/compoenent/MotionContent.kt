@@ -39,19 +39,24 @@ import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 
 @Composable
-fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier = Modifier) {
+fun MotionContent(
+    playerVM: PlayerViewModel,
+    fraction: Float,
+    modifier: Modifier = Modifier,
+) {
     val context = LocalContext.current
 
     val musicUiState by playerVM.uiState.collectAsState()
 
     Log.d("Fraction", fraction.toString())
 
-    val motionScene = remember {
-        context.resources
-            .openRawResource(R.raw.motion_scene)
-            .readBytes()
-            .decodeToString()
-    }
+    val motionScene =
+        remember {
+            context.resources
+                .openRawResource(R.raw.motion_scene)
+                .readBytes()
+                .decodeToString()
+        }
 
     Row(modifier = Modifier.fillMaxSize()) {
         MotionLayout(
@@ -62,10 +67,11 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
             Spacer(modifier = Modifier.layoutId("top_bar"))
             AnimatedVinyl(
                 albumImagePath = musicUiState.currentPlayedMusic.albumPath,
-                modifier = Modifier
-                    .layoutId("album_image")
-                    .fillMaxWidth()
-                    .aspectRatio(1f, true),
+                modifier =
+                    Modifier
+                        .layoutId("album_image")
+                        .fillMaxWidth()
+                        .aspectRatio(1f, true),
                 isPlaying = musicUiState.isPlaying,
             )
             Column(
@@ -82,35 +88,41 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = if (fraction > 0.8f) TextAlign.Start else TextAlign.Center,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = TextDefaultColor,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = if (fraction > 0.8f) {
-                            MaterialTheme.typography.titleLarge.fontSize
-                        } else {
-                            MaterialTheme.typography.titleMedium.fontSize
-                        },
-                    ),
-                    modifier = Modifier.fillMaxWidth(
-                        if (fraction > 0.8f) 1f else 0.7f,
-                    ),
+                    style =
+                        MaterialTheme.typography.titleMedium.copy(
+                            color = TextDefaultColor,
+                            fontWeight = FontWeight.Bold,
+                            fontSize =
+                                if (fraction > 0.8f) {
+                                    MaterialTheme.typography.titleLarge.fontSize
+                                } else {
+                                    MaterialTheme.typography.titleMedium.fontSize
+                                },
+                        ),
+                    modifier =
+                        Modifier.fillMaxWidth(
+                            if (fraction > 0.8f) 1f else 0.7f,
+                        ),
                 )
                 Text(
                     text = musicUiState.currentPlayedMusic.artist,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = if (fraction > 0.8f) TextAlign.Start else TextAlign.Center,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = TextDefaultColor,
-                        fontSize = if (fraction > 0.8f) {
-                            MaterialTheme.typography.titleSmall.fontSize
-                        } else {
-                            MaterialTheme.typography.titleMedium.fontSize
-                        },
-                    ),
-                    modifier = Modifier.fillMaxWidth(
-                        if (fraction > 0.8f) 1f else 0.7f,
-                    ),
+                    style =
+                        MaterialTheme.typography.titleMedium.copy(
+                            color = TextDefaultColor,
+                            fontSize =
+                                if (fraction > 0.8f) {
+                                    MaterialTheme.typography.titleSmall.fontSize
+                                } else {
+                                    MaterialTheme.typography.titleMedium.fontSize
+                                },
+                        ),
+                    modifier =
+                        Modifier.fillMaxWidth(
+                            if (fraction > 0.8f) 1f else 0.7f,
+                        ),
                 )
             }
 
@@ -119,13 +131,15 @@ fun MotionContent(playerVM: PlayerViewModel, fraction: Float, modifier: Modifier
                     onClick = { playerVM.onEvent(PlayerEvent.PlayPause(musicUiState.isPlaying)) },
                 ) {
                     Icon(
-                        painter = painterResource(
-                            id = if (!musicUiState.isPlaying) {
-                                R.drawable.ic_play_filled_rounded
-                            } else {
-                                R.drawable.ic_pause_filled_rounded
-                            },
-                        ),
+                        painter =
+                            painterResource(
+                                id =
+                                    if (!musicUiState.isPlaying) {
+                                        R.drawable.ic_play_filled_rounded
+                                    } else {
+                                        R.drawable.ic_pause_filled_rounded
+                                    },
+                            ),
                         contentDescription = null,
                         tint = TintDefaultColor,
                     )

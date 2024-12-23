@@ -1,10 +1,10 @@
 # KTLint rules for code formatting
 root = true
 
+[*.{kt,kts,java,xml}]
 # Ktlint 공식 코드 스타일 적용
 ktlint_code_style = ktlint_official
 
-[*.{kt,kts,java,xml}]
 max_line_length = 140
 indent_size = 4
 continuation_indent_size = 8
@@ -18,8 +18,12 @@ ij_kotlin_packages_to_use_import_on_demand = true
 
 # Ktlint 표준 규칙
 ktlint_standard_no-empty-first-line-in-class-body = enabled
-ktlint_standard_multiline-expression-wrapping = enabled
+ktlint_standard_multiline-expression-wrapping = true
+
+# 함수 이름이 소문자로 시작해야 한다는 규칙 컴포즈 제외
+ktlint_function_naming_ignore_when_annotated_with = Composable
 
 # 테스트 파일에 적용할 규칙
 [{**/test/**.kt,**/androidTest/**.kt,**/screenshotTest/**.kt}]
-ktlint_disabled_rules = no-wildcard-imports
+ij_kotlin_packages_to_use_import_on_demand = false
+ktlint_standard_no-wildcard-imports = disabled

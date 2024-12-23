@@ -37,18 +37,20 @@ fun AnimatedVinyl(
         mutableFloatStateOf(0f)
     }
 
-    val rotation = remember {
-        Animatable(currentRotation)
-    }
+    val rotation =
+        remember {
+            Animatable(currentRotation)
+        }
 
     LaunchedEffect(isPlaying) {
         if (isPlaying) {
             rotation.animateTo(
                 targetValue = currentRotation + 360f,
-                animationSpec = infiniteRepeatable(
-                    animation = tween(3000, easing = LinearEasing),
-                    repeatMode = RepeatMode.Restart,
-                ),
+                animationSpec =
+                    infiniteRepeatable(
+                        animation = tween(3000, easing = LinearEasing),
+                        repeatMode = RepeatMode.Restart,
+                    ),
             ) {
                 currentRotation = value
             }
@@ -56,10 +58,11 @@ fun AnimatedVinyl(
             if (currentRotation > 0f) {
                 rotation.animateTo(
                     targetValue = currentRotation + 50,
-                    animationSpec = tween(
-                        1250,
-                        easing = LinearOutSlowInEasing,
-                    ),
+                    animationSpec =
+                        tween(
+                            1250,
+                            easing = LinearOutSlowInEasing,
+                        ),
                 ) {
                     currentRotation = value
                 }
@@ -77,34 +80,39 @@ fun Vinyl(
     albumImagePath: String,
 ) {
     Box(
-        modifier = modifier
-            .aspectRatio(1.0f)
-            .clip(roundedShape),
+        modifier =
+            modifier
+                .aspectRatio(1.0f)
+                .clip(roundedShape),
     ) {
         // Vinyl background
         Image(
-            modifier = Modifier
-                .fillMaxSize()
-                .rotate(rotationDegrees),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .rotate(rotationDegrees),
             painter = painterResource(id = R.drawable.vinyl_background),
             contentDescription = "Vinyl Background",
         )
 
         // Vinyl song cover
         Image(
-            modifier = Modifier
-                .fillMaxSize(0.5f)
-                .rotate(rotationDegrees)
-                .aspectRatio(1.0f)
-                .align(Alignment.Center)
-                .clip(roundedShape),
-            painter = rememberAsyncImagePainter(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(albumImagePath)
-                    .placeholder(R.drawable.ic_music_unknown)
-                    .error(R.drawable.ic_music_unknown)
-                    .build(),
-            ),
+            modifier =
+                Modifier
+                    .fillMaxSize(0.5f)
+                    .rotate(rotationDegrees)
+                    .aspectRatio(1.0f)
+                    .align(Alignment.Center)
+                    .clip(roundedShape),
+            painter =
+                rememberAsyncImagePainter(
+                    model =
+                        ImageRequest.Builder(LocalContext.current)
+                            .data(albumImagePath)
+                            .placeholder(R.drawable.ic_music_unknown)
+                            .error(R.drawable.ic_music_unknown)
+                            .build(),
+                ),
             contentDescription = "Song cover",
         )
     }

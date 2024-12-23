@@ -14,13 +14,16 @@ jobs:
     name: AOS-ktlint
     runs-on: ubuntu-latest
     steps:
-      - name: checkout mindsync
+      - name: Checkout mindsync
         uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
-      - name: ktlint
+      - name: Run ktlint with debug
+        run: ./ktlint --debug
+
+      - name: Run ktlint
         uses: ScaCap/action-ktlint@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }} # 자동 제공
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-check

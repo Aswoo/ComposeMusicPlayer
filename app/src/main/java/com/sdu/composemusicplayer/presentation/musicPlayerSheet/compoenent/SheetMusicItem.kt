@@ -52,57 +52,65 @@ fun SheetMusicItem(
     Card(
         onClick = onClick,
         elevation = CardDefaults.cardElevation(draggedElevation = elevation),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        ),
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            ),
         modifier = modifier,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .height(72.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .height(72.dp),
         ) {
             Image(
-                painter = rememberAsyncImagePainter(
-                    model = ImageRequest.Builder(LocalContext.current).data(music.albumPath.toUri())
-                        .error(R.drawable.ic_music_unknown).placeholder(R.drawable.ic_music_unknown)
-                        .build(),
-                ),
+                painter =
+                    rememberAsyncImagePainter(
+                        model =
+                            ImageRequest.Builder(LocalContext.current).data(music.albumPath.toUri())
+                                .error(R.drawable.ic_music_unknown).placeholder(R.drawable.ic_music_unknown)
+                                .build(),
+                    ),
                 contentDescription = null,
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(4.dp)
-                    .aspectRatio(1f)
-                    .clip(MaterialTheme.shapes.medium),
+                modifier =
+                    Modifier
+                        .fillMaxHeight()
+                        .padding(4.dp)
+                        .aspectRatio(1f)
+                        .clip(MaterialTheme.shapes.medium),
             )
 
             Column(
                 verticalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .weight(1f),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 8.dp)
+                        .weight(1f),
             ) {
                 Text(
                     text = music.title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = if (selected) Purple500 else LocalContentColor.current,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = Inter,
-                    ),
+                    style =
+                        MaterialTheme.typography.bodyMedium.copy(
+                            color = if (selected) Purple500 else LocalContentColor.current,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = Inter,
+                        ),
                 )
                 Text(
                     text = music.artist,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        color = if (selected) Purple500.copy(alpha = 0.7f) else LocalContentColor.current,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = Inter,
-                    ),
+                    style =
+                        MaterialTheme.typography.bodySmall.copy(
+                            color = if (selected) Purple500.copy(alpha = 0.7f) else LocalContentColor.current,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = Inter,
+                        ),
                 )
             }
             Box(contentAlignment = Alignment.Center, modifier = Modifier.size(56.dp)) {
@@ -118,14 +126,15 @@ fun SheetMusicItem(
 @PreviewScreenSizes
 @Composable
 fun PreviewMusicListContent() {
-    val sampleMusic = MusicEntity(
-        audioId = 1L,
-        title = "Test Song",
-        artist = "Test Artist",
-        duration = 180000L,
-        albumPath = "/path/to/album",
-        audioPath = "/path/to/test/song.mp3",
-    )
+    val sampleMusic =
+        MusicEntity(
+            audioId = 1L,
+            title = "Test Song",
+            artist = "Test Artist",
+            duration = 180000L,
+            albumPath = "/path/to/album",
+            audioPath = "/path/to/test/song.mp3",
+        )
     ComposeMusicPlayerTheme {
         SheetMusicItem(music = sampleMusic, selected = true, onClick = {})
     }

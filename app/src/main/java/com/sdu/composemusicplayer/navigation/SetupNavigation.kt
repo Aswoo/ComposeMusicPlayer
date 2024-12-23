@@ -24,25 +24,31 @@ import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
 @Composable
-fun SetupNavigation(playerVM: PlayerViewModel, modifier: Modifier = Modifier) {
-    val sheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-        animationSpec = SwipeableDefaults.AnimationSpec,
-        skipHalfExpanded = true,
-    )
+fun SetupNavigation(
+    playerVM: PlayerViewModel,
+    modifier: Modifier = Modifier,
+) {
+    val sheetState =
+        rememberModalBottomSheetState(
+            initialValue = ModalBottomSheetValue.Hidden,
+            animationSpec = SwipeableDefaults.AnimationSpec,
+            skipHalfExpanded = true,
+        )
 
-    val bottomSheetNavigator = remember(sheetState) {
-        BottomSheetNavigator(sheetState = sheetState)
-    }
+    val bottomSheetNavigator =
+        remember(sheetState) {
+            BottomSheetNavigator(sheetState = sheetState)
+        }
     val navController = rememberNavController(bottomSheetNavigator)
 
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator,
         sheetBackgroundColor = Color.Transparent,
-        sheetShape = MaterialTheme.shapes.large.copy(
-            bottomStart = CornerSize(0.dp),
-            bottomEnd = CornerSize(0.dp),
-        ),
+        sheetShape =
+            MaterialTheme.shapes.large.copy(
+                bottomStart = CornerSize(0.dp),
+                bottomEnd = CornerSize(0.dp),
+            ),
         modifier = modifier,
     ) {
         NavHost(
