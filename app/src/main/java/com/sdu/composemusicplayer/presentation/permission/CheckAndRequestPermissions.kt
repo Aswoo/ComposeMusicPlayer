@@ -45,7 +45,7 @@ import com.sdu.composemusicplayer.ui.theme.TextDefaultColor
 @Composable
 fun CheckAndRequestPermissions(
     permissions: MutableList<String>,
-    appContent: @Composable () -> Unit
+    appContent: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
@@ -59,33 +59,36 @@ fun CheckAndRequestPermissions(
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(Dimens.Six)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(Dimens.Six),
             ) {
                 Image(
                     painter = rememberAsyncImagePainter(R.drawable.music_player_icon),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(200.dp)
-                        .background(color = Color.Yellow)
+                    modifier =
+                        Modifier
+                            .size(200.dp)
+                            .background(color = Color.Yellow),
                 )
                 Spacer(modifier = Modifier.height(Dimens.Six))
                 Text(
                     text = stringResource(id = R.string.permission_prompt),
                     textAlign = TextAlign.Center,
-                    color = TextDefaultColor
+                    color = TextDefaultColor,
                 )
                 Spacer(modifier = Modifier.height(Dimens.Six))
                 TextButton(
                     onClick = { permissionState.launchMultiplePermissionRequest() },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Blue,
-                        contentColor = Color.White
-                    ),
-                    shape = RoundedCornerShape(Dimens.Three)
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = Color.Blue,
+                            contentColor = Color.White,
+                        ),
+                    shape = RoundedCornerShape(Dimens.Three),
                 ) {
                     Text(text = stringResource(id = R.string.enable_permissions))
                 }
@@ -96,30 +99,32 @@ fun CheckAndRequestPermissions(
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(Dimens.Six)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(Dimens.Six),
             ) {
                 Text(
                     text = stringResource(id = R.string.permissions_rationale),
                     textAlign = TextAlign.Center,
                     color = Color.Red,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
                 )
                 Spacer(modifier = Modifier.height(Dimens.Six))
                 TextButton(
                     onClick = { activity.openAppSettings() },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Blue,
-                        contentColor = Color.White
-                    ),
-                    shape = RoundedCornerShape(Dimens.Three)
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = Color.Blue,
+                            contentColor = Color.White,
+                        ),
+                    shape = RoundedCornerShape(Dimens.Three),
                 ) {
                     Text(text = stringResource(id = R.string.goto_settings))
                 }
             }
-        }
+        },
     ) {
         appContent.invoke()
     }
@@ -128,7 +133,7 @@ fun CheckAndRequestPermissions(
 private fun Activity.openAppSettings() {
     Intent(
         Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-        Uri.parse("package:$packageName")
+        Uri.parse("package:$packageName"),
     ).apply {
         addCategory(Intent.CATEGORY_DEFAULT)
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

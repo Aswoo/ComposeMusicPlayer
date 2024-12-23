@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.sdu.composemusicplayer.presentation.main_screen.component
+package com.sdu.composemusicplayer.presentation.mainScreen.component
 
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.BorderStroke
@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
@@ -58,40 +57,45 @@ fun BottomMusicPlayer(
     isPlaying: Boolean,
     onClick: () -> Unit,
     onPlayPauseClicked: (isPlaying: Boolean) -> Unit,
-    modifier : Modifier,
+    modifier: Modifier,
 ) {
-    val progress = remember(currentDuration, currentMusic.duration) {
-        currentDuration.toFloat() / currentMusic.duration.toFloat()
-    }
+    val progress =
+        remember(currentDuration, currentMusic.duration) {
+            currentDuration.toFloat() / currentMusic.duration.toFloat()
+        }
     Card(
         onClick = onClick,
-        colors = CardDefaults.cardColors(
-            contentColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-        modifier = modifier.height(BottomMusicPlayerHeight.value)
+        colors =
+            CardDefaults.cardColors(
+                contentColor = MaterialTheme.colorScheme.primaryContainer,
+            ),
+        modifier = modifier.height(BottomMusicPlayerHeight.value),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
+            modifier =
+                Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
         ) {
             AlbumImage(albumPath = currentMusic.albumPath)
 
             Column(
                 verticalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .weight(1f)
+                modifier =
+                    Modifier
+                        .padding(horizontal = 8.dp)
+                        .weight(1f),
             ) {
                 Text(
                     text = currentMusic.title,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        color = TextDefaultColor
-                    )
+                    style =
+                        MaterialTheme.typography.titleSmall.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = TextDefaultColor,
+                        ),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -99,10 +103,11 @@ fun BottomMusicPlayer(
                     text = currentMusic.artist,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        color = TextDefaultColor
-                    )
+                    style =
+                        MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = TextDefaultColor,
+                        ),
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
@@ -117,22 +122,24 @@ fun BottomMusicPlayer(
 fun PlayPauseButton(
     progress: Float,
     isPlaying: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .clip(RoundedCornerShape(100.dp))
-            .testTag("PlayPauseButton")
-            .clickable { onClick() }
+        modifier =
+            Modifier
+                .clip(RoundedCornerShape(100.dp))
+                .testTag("PlayPauseButton")
+                .clickable { onClick() },
     ) {
         CirCleProgress(progress = progress)
         Icon(
-            painter = painterResource(
-                id = if (isPlaying) R.drawable.ic_pause_filled_rounded else R.drawable.ic_play_filled_rounded
-            ),
+            painter =
+                painterResource(
+                    id = if (isPlaying) R.drawable.ic_pause_filled_rounded else R.drawable.ic_play_filled_rounded,
+                ),
             contentDescription = null,
-            tint = TintDefaultColor
+            tint = TintDefaultColor,
         )
     }
 }
@@ -143,46 +150,53 @@ fun AlbumImage(albumPath: String) {
         shape = RoundedCornerShape(100.dp),
         border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.onSurface),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        modifier = Modifier.size(56.dp)
+        modifier = Modifier.size(56.dp),
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Box(
-                modifier = Modifier
-                    .size(12.dp)
-                    .clip(RoundedCornerShape(100.dp))
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-                    .border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        shape = RoundedCornerShape(100.dp)
-                    )
-                    .align(Alignment.Center)
-                    .zIndex(2f)
+                modifier =
+                    Modifier
+                        .size(12.dp)
+                        .clip(RoundedCornerShape(100.dp))
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .border(
+                            width = 2.dp,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            shape = RoundedCornerShape(100.dp),
+                        ).align(Alignment.Center)
+                        .zIndex(2f),
             )
             Image(
-                painter = rememberAsyncImagePainter(
-                    ImageRequest.Builder(LocalContext.current).data(albumPath.toUri())
-                        .error(R.drawable.ic_music_unknown)
-                        .placeholder(R.drawable.ic_music_unknown).build()
-                ),
+                painter =
+                    rememberAsyncImagePainter(
+                        ImageRequest
+                            .Builder(LocalContext.current)
+                            .data(albumPath.toUri())
+                            .error(R.drawable.ic_music_unknown)
+                            .placeholder(R.drawable.ic_music_unknown)
+                            .build(),
+                    ),
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }
 }
 
 @Composable
-fun CirCleProgress(@FloatRange(from = 0.0, to = 1.0) progress: Float) {
+fun CirCleProgress(
+    @FloatRange(from = 0.0, to = 1.0) progress: Float,
+) {
     val backgroundColor = MaterialTheme.colorScheme.background
     val primaryColor = MaterialTheme.colorScheme.primary
 
-    val stroke = with(LocalDensity.current) {
-        Stroke(
-            width = 4.dp.toPx(),
-            cap = StrokeCap.Round
-        )
-    }
+    val stroke =
+        with(LocalDensity.current) {
+            Stroke(
+                width = 4.dp.toPx(),
+                cap = StrokeCap.Round,
+            )
+        }
     androidx.compose.foundation.Canvas(modifier = Modifier.size(56.dp)) {
         val startAngle = 270f
         val sweepAngle = progress * 360f
@@ -198,7 +212,7 @@ fun CirCleProgress(@FloatRange(from = 0.0, to = 1.0) progress: Float) {
             useCenter = false,
             topLeft = Offset(diameterOffset, diameterOffset),
             size = Size(arcDimen, arcDimen),
-            style = stroke
+            style = stroke,
         )
 
         // progress
@@ -209,7 +223,7 @@ fun CirCleProgress(@FloatRange(from = 0.0, to = 1.0) progress: Float) {
             useCenter = false,
             topLeft = Offset(diameterOffset, diameterOffset),
             size = Size(arcDimen, arcDimen),
-            style = stroke
+            style = stroke,
         )
     }
 }

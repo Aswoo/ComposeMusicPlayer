@@ -1,0 +1,46 @@
+# KTLint rules for code formatting
+root = true
+
+[*]
+max_line_length = 140
+indent_size = 4
+continuation_indent_size = 8
+
+[*.{kt,kts,java,xml}]
+# Ktlint 공식 코드 스타일 적용
+
+
+# 트레일링 콤마 규칙
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+
+# 와일드카드 임포트 금지
+ij_kotlin_packages_to_use_import_on_demand = true
+
+# Ktlint 표준 규칙
+ktlint_standard_no-empty-first-line-in-class-body = enabled
+ktlint_standard_multiline-expression-wrapping = true
+
+# 함수 이름이 소문자로 시작해야 한다는 규칙 컴포즈 제외
+ktlint_function_naming_ignore_when_annotated_with = Composable
+
+# Chain method continuation 규칙
+ktlint_standard_chain-method-continuation = enabled
+
+# Function expression body rule
+ktlint_standard_function-expression-body = disabled
+
+# Backing property naming rule
+ktlint_standard_backing-property-naming = disabled
+
+# Class signature rule 비활성화
+ktlint_standard_class-signature = disabled
+
+# 테스트 파일에 적용할 규칙
+[{**/test/**.kt,**/androidTest/**.kt,**/screenshotTest/**.kt}]
+ij_kotlin_packages_to_use_import_on_demand = false
+ktlint_standard_no-wildcard-imports = disabled
+
+# build.kts 파일에서는 이 규칙 비활성화
+[build.gradle.kts]
+ktlint_standard_chain-method-continuation = disabled

@@ -7,7 +7,6 @@ import androidx.room.RoomDatabase
 
 @Database(entities = [MusicEntity::class], version = 1)
 abstract class MusicDB : RoomDatabase() {
-
     abstract fun musicDao(): MusicDao
 
     companion object {
@@ -21,11 +20,13 @@ abstract class MusicDB : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context): MusicDB {
-            return Room.databaseBuilder(
-                context,
-                MusicDB::class.java,
-                "music_db_0903"
-            ).allowMainThreadQueries().build()
+            return Room
+                .databaseBuilder(
+                    context,
+                    MusicDB::class.java,
+                    "music_db_0903",
+                ).allowMainThreadQueries()
+                .build()
         }
     }
 }

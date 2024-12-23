@@ -11,12 +11,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object EnvironmentModule {
-
     @Provides
     @Singleton
-    fun bindPlayerEnvironment(
-        playerEnvironment: PlayerEnvironment
-    ): IPlayerEnvironment {
+    fun bindPlayerEnvironment(playerEnvironment: PlayerEnvironment): IPlayerEnvironment {
         return playerEnvironment
     }
 }

@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.presentation.main_screen.component
+package com.sdu.composemusicplayer.presentation.mainScreen.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -18,16 +18,17 @@ import com.sdu.composemusicplayer.viewmodel.MusicUiState
 fun BoxScope.BottomMusicPlayerImpl(
     navController: NavController,
     musicUiState: MusicUiState,
-    onPlayPlauseClicked: (isPlaying: Boolean) -> Unit
+    onPlayPlauseClicked: (isPlaying: Boolean) -> Unit,
 ) {
     AnimatedVisibility(
         visible = musicUiState.isBottomPlayerShow,
         enter = slideInVertically(initialOffsetY = { it }),
         exit = slideOutVertically(targetOffsetY = { it }),
-        modifier = Modifier
-            .navigationBarsPadding()
-            .fillMaxWidth()
-            .align(Alignment.BottomCenter)
+        modifier =
+            Modifier
+                .navigationBarsPadding()
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter),
     ) {
         BottomMusicPlayer(
             currentMusic = musicUiState.currentPlayedMusic,
@@ -35,7 +36,7 @@ fun BoxScope.BottomMusicPlayerImpl(
             isPlaying = musicUiState.isPlaying,
             onClick = { navController.navigate(Routes.Player.name) },
             onPlayPauseClicked = onPlayPlauseClicked,
-            modifier = Modifier.testTag("BottomMusicPlayer")  // testTag 추가
+            modifier = Modifier.testTag("BottomMusicPlayer"),
         )
     }
 }

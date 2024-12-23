@@ -10,17 +10,18 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple200,
-    secondary = Purple700,
-    tertiary = Teal200
-)
+private val DarkColorScheme =
+    darkColorScheme(
+        primary = Purple200,
+        secondary = Purple700,
+        tertiary = Teal200,
+    )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple500,
-    secondary = Purple700,
-    tertiary = Teal200
-
+private val LightColorScheme =
+    lightColorScheme(
+        primary = Purple500,
+        secondary = Purple700,
+        tertiary = Teal200,
     /* Other default colors to override
     background = Color.White,
     surface = Color.White,
@@ -28,29 +29,30 @@ private val LightColorScheme = lightColorScheme(
     onSecondary = Color.Black,
     onBackground = Color.Black,
     onSurface = Color.Black,
-    */
-)
+     */
+    )
 
 @Composable
 fun ComposeMusicPlayerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+    val colorScheme =
+        when {
+            dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                val context = LocalContext.current
+                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+            darkTheme -> DarkColorScheme
+            else -> LightColorScheme
+        }
 
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        content = content,
     )
 }

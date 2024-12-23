@@ -9,7 +9,7 @@ import androidx.compose.ui.test.performClick
 import androidx.navigation.NavController
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
 import com.sdu.composemusicplayer.navigation.Routes
-import com.sdu.composemusicplayer.presentation.main_screen.component.BottomMusicPlayerImpl
+import com.sdu.composemusicplayer.presentation.mainScreen.component.BottomMusicPlayerImpl
 import com.sdu.composemusicplayer.viewmodel.MusicUiState
 import io.mockk.mockk
 import io.mockk.verify
@@ -19,7 +19,6 @@ import org.junit.Test
 
 @OptIn(ExperimentalTestApi::class) // Compose 테스트를 위한 실험적 API 사용
 class BottomMusicPlayerImplTest {
-
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -30,13 +29,14 @@ class BottomMusicPlayerImplTest {
     fun setup() {
         // Mock NavController 및 MusicUiState 초기화
         mockNavController = mockk(relaxed = true)
-        mockMusicUiState = MusicUiState(
-            currentPlayedMusic = MusicEntity.default,
-            currentDuration = 0L,
-            isPlaying = false,
-            isBottomPlayerShow = true,
-            musicList = emptyList()
-        )
+        mockMusicUiState =
+            MusicUiState(
+                currentPlayedMusic = MusicEntity.default,
+                currentDuration = 0L,
+                isPlaying = false,
+                isBottomPlayerShow = true,
+                musicList = emptyList(),
+            )
     }
 
     @Test
@@ -46,7 +46,7 @@ class BottomMusicPlayerImplTest {
                 BottomMusicPlayerImpl(
                     navController = mockNavController,
                     musicUiState = mockMusicUiState,
-                    onPlayPlauseClicked = {}
+                    onPlayPlauseClicked = {},
                 )
             }
         }
@@ -64,7 +64,7 @@ class BottomMusicPlayerImplTest {
                 BottomMusicPlayerImpl(
                     navController = mockNavController,
                     musicUiState = mockMusicUiState,
-                    onPlayPlauseClicked = {}
+                    onPlayPlauseClicked = {},
                 )
             }
         }
@@ -86,7 +86,7 @@ class BottomMusicPlayerImplTest {
                 BottomMusicPlayerImpl(
                     navController = mockNavController,
                     musicUiState = mockMusicUiState,
-                    onPlayPlauseClicked = { isPlaying = true }
+                    onPlayPlauseClicked = { isPlaying = true },
                 )
             }
         }

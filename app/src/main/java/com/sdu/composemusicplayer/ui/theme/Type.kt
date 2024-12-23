@@ -9,13 +9,15 @@ import androidx.compose.ui.unit.sp
 import com.sdu.composemusicplayer.R
 
 // Set of Material typography styles to start with
-val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
-    )
-    /* Other default text styles to override
+val Typography =
+    Typography(
+        bodyLarge =
+            TextStyle(
+                fontFamily = FontFamily.Default,
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp,
+            ),
+        /* Other default text styles to override
     button = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W500,
@@ -26,16 +28,17 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp
     )
-    */
-)
+         */
+    )
 
-val Inter = FontFamily(
-    Font(R.font.inter_thin, FontWeight.Thin),
-    Font(R.font.inter_extra_light, FontWeight.ExtraLight),
-    Font(R.font.inter_light, FontWeight.Light),
-    Font(R.font.inter_regular, FontWeight.Normal),
-    Font(R.font.inter_medium, FontWeight.Medium),
-    Font(R.font.inter_semi_bold, FontWeight.SemiBold),
-    Font(R.font.inter_bold, FontWeight.Bold),
-    Font(R.font.inter_extra_bold, FontWeight.ExtraBold)
-)
+val Inter =
+    FontFamily(
+        Font(R.font.inter_thin, FontWeight.Thin),
+        Font(R.font.inter_extra_light, FontWeight.ExtraLight),
+        Font(R.font.inter_light, FontWeight.Light),
+        Font(R.font.inter_regular, FontWeight.Normal),
+        Font(R.font.inter_medium, FontWeight.Medium),
+        Font(R.font.inter_semi_bold, FontWeight.SemiBold),
+        Font(R.font.inter_bold, FontWeight.Bold),
+        Font(R.font.inter_extra_bold, FontWeight.ExtraBold),
+    )

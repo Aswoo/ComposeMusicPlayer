@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.media_player.media_notification
+package com.sdu.composemusicplayer.mediaPlayer.mediaNotification
 
 import android.app.Notification
 import android.content.Context
@@ -22,13 +22,18 @@ import com.sdu.composemusicplayer.R
  * @param player The ExoPlayer instance.
  * @param notificationListener The listener for notification events.
  */
-@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
-
+@androidx.annotation.OptIn(
+    androidx
+        .media3
+        .common
+        .util
+        .UnstableApi::class,
+)
 class MediaNotificationManager(
     private val context: Context,
     private val sessionToken: SessionToken,
     private val player: Player,
-    private val notificationListener: PlayerNotificationManager.NotificationListener
+    private val notificationListener: PlayerNotificationManager.NotificationListener,
 ) {
     lateinit var notificationManager: PlayerNotificationManager
     private var descriptionAdapter: DescriptionAdapter? = null
@@ -36,7 +41,7 @@ class MediaNotificationManager(
     @UnstableApi
     fun startMusicNotificationService(
         mediaSessionService: MediaSessionService,
-        mediaSession: MediaSession
+        mediaSession: MediaSession,
     ) {
         buildMusicNotification(mediaSession)
         startForegroundMusicService(mediaSessionService)
@@ -45,45 +50,48 @@ class MediaNotificationManager(
     fun buildMusicNotification(mediaSession: MediaSession) {
         val mediaController = MediaController.Builder(context, mediaSession.token).buildAsync()
 
-        descriptionAdapter = DescriptionAdapter(context, mediaController) {
-            notificationManager.invalidate()
-        }
-
-        notificationManager = PlayerNotificationManager.Builder(
-            context,
-            NOW_PLAYING_NOTIFICATION_ID,
-            NOW_PLAYING_CHANNEL_ID
-        )
-            .setChannelNameResourceId(R.string.media_notification_channel)
-            .setChannelDescriptionResourceId(R.string.media_notification_channel_description)
-            .setMediaDescriptionAdapter(descriptionAdapter!!)
-            .setNotificationListener(notificationListener)
-            .setSmallIconResourceId(R.drawable.music_player_icon)
-            .build()
-            .apply {
-                setPlayer(player)
-                setUseRewindAction(true)
-                setUseFastForwardAction(true)
-                setUseRewindActionInCompactView(true)
-                setUseFastForwardActionInCompactView(true)
-                setUseRewindActionInCompactView(true)
+        descriptionAdapter =
+            DescriptionAdapter(context, mediaController) {
+                notificationManager.invalidate()
             }
 
+        notificationManager =
+            PlayerNotificationManager
+                .Builder(
+                    context,
+                    NOW_PLAYING_NOTIFICATION_ID,
+                    NOW_PLAYING_CHANNEL_ID,
+                ).setChannelNameResourceId(R.string.media_notification_channel)
+                .setChannelDescriptionResourceId(R.string.media_notification_channel_description)
+                .setMediaDescriptionAdapter(descriptionAdapter!!)
+                .setNotificationListener(notificationListener)
+                .setSmallIconResourceId(R.drawable.music_player_icon)
+                .build()
+                .apply {
+                    setPlayer(player)
+                    setUseRewindAction(true)
+                    setUseFastForwardAction(true)
+                    setUseRewindActionInCompactView(true)
+                    setUseFastForwardActionInCompactView(true)
+                    setUseRewindActionInCompactView(true)
+                }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun startForegroundMusicService(mediaSessionService: MediaSessionService) {
-        val musicNotification = Notification.Builder(context, NOW_PLAYING_CHANNEL_ID)
-            .setCategory(Notification.CATEGORY_SERVICE)
-            .build()
+        val musicNotification =
+            Notification
+                .Builder(context, NOW_PLAYING_CHANNEL_ID)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .build()
 
         mediaSessionService.startForeground(NOW_PLAYING_NOTIFICATION_ID, musicNotification)
     }
-    fun unregisterBluetoothReceiver(){
+
+    fun unregisterBluetoothReceiver() {
         descriptionAdapter?.unregisterBluetoothReceiver(context)
     }
 }
-
 
 /**
  * The size of the large icon for the notification in pixels.

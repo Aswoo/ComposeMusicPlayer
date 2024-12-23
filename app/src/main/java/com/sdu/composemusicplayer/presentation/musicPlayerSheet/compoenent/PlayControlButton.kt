@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.sdu.composemusicplayer.presentation.music_player_sheet.compoenent
+package com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,35 +27,37 @@ fun PlayControlButton(
     isPlaying: Boolean,
     onPrevious: () -> Unit,
     onPlayPause: () -> Unit,
-    onNext: () -> Unit
+    onNext: () -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier.fillMaxWidth(0.8f)
+        modifier = Modifier.fillMaxWidth(0.8f),
     ) {
         IconButton(onClick = onPrevious) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_previous_filled_rounded),
                 contentDescription = null,
-                tint = TintDefaultColor
+                tint = TintDefaultColor,
             )
         }
         Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
-            ),
+            colors =
+                CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                ),
             shape = MaterialTheme.shapes.large,
             onClick = onPlayPause,
-            modifier = Modifier.size(64.dp)
+            modifier = Modifier.size(64.dp),
         ) {
             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                 Icon(
-                    painter = painterResource(
-                        id = if (!isPlaying) R.drawable.ic_play_filled_rounded else R.drawable.ic_pause_filled_rounded
-                    ),
+                    painter =
+                        painterResource(
+                            id = if (!isPlaying) R.drawable.ic_play_filled_rounded else R.drawable.ic_pause_filled_rounded,
+                        ),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = MaterialTheme.colorScheme.primary,
                 )
             }
         }
@@ -64,7 +66,7 @@ fun PlayControlButton(
             Icon(
                 painter = painterResource(id = R.drawable.ic_next_filled_rounded),
                 contentDescription = null,
-                tint = TintDefaultColor
+                tint = TintDefaultColor,
             )
         }
     }

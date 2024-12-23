@@ -5,13 +5,13 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
-import com.sdu.composemusicplayer.presentation.main_screen.ComposableLifeCycle
-import com.sdu.composemusicplayer.presentation.main_screen.MainScreen
-import com.sdu.composemusicplayer.presentation.main_screen.MusicListContent
+import com.sdu.composemusicplayer.presentation.mainScreen.ComposableLifeCycle
+import com.sdu.composemusicplayer.presentation.mainScreen.MainScreen
+import com.sdu.composemusicplayer.presentation.mainScreen.MusicListContent
 import com.sdu.composemusicplayer.viewmodel.MusicUiState
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
-import io.mockk.mockk
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,17 +19,21 @@ import org.junit.Rule
 import org.junit.Test
 
 class MainScreenUiTest {
-
     @get:Rule
     val composeTestRule = createComposeRule()
 
     @Test
     fun musicListContent_displaysMusicList_correctly() {
-        val mockMusicList = listOf(
-            MusicEntity(1, "Song 1", "Artist 1", 200000L, "/path/album1", "/path/song1"),
-            MusicEntity(2, "Song 2", "Artist 2", 180000L, "/path/album2", "/path/song2")
-        )
-        val mockUiState = MusicUiState(musicList = mockMusicList, currentPlayedMusic = mockMusicList[0])
+        val mockMusicList =
+            listOf(
+                MusicEntity(1, "Song 1", "Artist 1", 200000L, "/path/album1", "/path/song1"),
+                MusicEntity(2, "Song 2", "Artist 2", 180000L, "/path/album2", "/path/song2"),
+            )
+        val mockUiState =
+            MusicUiState(
+                musicList = mockMusicList,
+                currentPlayedMusic = mockMusicList[0],
+            )
 
         composeTestRule.setContent {
             MusicListContent(musicUiState = mockUiState, onSelectedMusic = {})
@@ -51,16 +55,26 @@ class MainScreenUiTest {
         val mockPlayerViewModel = mockk<PlayerViewModel>(relaxed = true)
         val mockNavController = mockk<NavController>(relaxed = true)
 
-        every { mockPlayerViewModel.uiState } returns MutableStateFlow(
-            MusicUiState(
-                musicList = listOf(
-                    MusicEntity(1, "Song 1", "Artist 1", 200000L, "/path/album1", "/path/song1"),
-                    MusicEntity(2, "Song 2", "Artist 2", 180000L, "/path/album2", "/path/song2")
+        every { mockPlayerViewModel.uiState } returns
+            MutableStateFlow(
+                MusicUiState(
+                    musicList =
+                        listOf(
+                            MusicEntity(1, "Song 1", "Artist 1", 200000L, "/path/album1", "/path/song1"),
+                            MusicEntity(2, "Song 2", "Artist 2", 180000L, "/path/album2", "/path/song2"),
+                        ),
+                    currentPlayedMusic =
+                        MusicEntity(
+                            1,
+                            "Song 1",
+                            "Artist 1",
+                            200000L,
+                            "/path/album1",
+                            "/path/song1",
+                        ),
+                    isPlaying = true,
                 ),
-                currentPlayedMusic = MusicEntity(1, "Song 1", "Artist 1", 200000L, "/path/album1", "/path/song1"),
-                isPlaying = true
-            )
-        ).asStateFlow()
+            ).asStateFlow()
 
         composeTestRule.setContent {
             MainScreen(navController = mockNavController, playerVM = mockPlayerViewModel)
