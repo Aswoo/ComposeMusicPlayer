@@ -10,20 +10,23 @@ on:
       - '**.kt'
 
 jobs:
+  editorconfig:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: editorconfig-checker/action-editorconfig-checker@main
+      - run: editorconfig-checker
   ktlint:
     name: AOS-ktlint
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout mindsync
+      - name: checkout mindsync
         uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
-      - name: Run ktlint with debug
-        run: ./ktlint --debug
-
-      - name: Run ktlint
+      - name: ktlint
         uses: ScaCap/action-ktlint@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }} # 자동 제공
           reporter: github-pr-check
