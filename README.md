@@ -1,9 +1,9 @@
 
 ### UI
 
-| 화면 사진 | 화면 사진 | GIF |
-| ---- | ---- | ---- |
-|  ![KakaoTalk_Photo_2024-09-08-15-34-06](https://github.com/user-attachments/assets/324745f6-b900-4d2e-bb44-876430d7a2be)    | ![KakaoTalk_Photo_2024-09-08-15-33-59](https://github.com/user-attachments/assets/3d7ecfdf-bbc1-4ff0-90c2-d8bf874da40a)   | ![화면-기록-2024-09-09-오전-10 08 29](https://github.com/user-attachments/assets/198e1e28-8f1f-4e2e-8dc2-28780e657b7a)    |
+| 화면 사진 | 화면 사진 | 화면 사진 | GIF |
+| ---- | ---- | ---- | ---- |
+|  ![KakaoTalk_Photo_2024-12-30-15-47-39 002](https://github.com/user-attachments/assets/a8843443-da6a-4e88-a79a-81c695f80827)    | ![KakaoTalk_Photo_2024-09-08-15-33-59](https://github.com/user-attachments/assets/3d7ecfdf-bbc1-4ff0-90c2-d8bf874da40a) | ![KakaoTalk_Photo_2024-12-30-15-47-39 001](https://github.com/user-attachments/assets/3201c893-4e38-4b95-b803-d31e1027a38b) | ![화면-기록-2024-09-09-오전-10 08 29](https://github.com/user-attachments/assets/198e1e28-8f1f-4e2e-8dc2-28780e657b7a)    |
 | ---- | ---- | ---- |
 
 
