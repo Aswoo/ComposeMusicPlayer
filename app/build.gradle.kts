@@ -4,9 +4,9 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.kapt)
     alias(libs.plugins.compose.screenshot)
+    alias(libs.plugins.kotlinx.serialization)
 
     id("kotlin-parcelize")
-
     // ktlint 플러그인 추가
     id("org.jlleitschuh.gradle.ktlint")
 }
@@ -170,10 +170,14 @@ dependencies {
     implementation(libs.motion.layout)
     implementation(libs.material.icon)
 
+    implementation(libs.retrofit)
+
     implementation(libs.composereorderable)
 
     implementation(libs.media3.exoplayer)
     implementation("androidx.compose.material:material:1.2.0")
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

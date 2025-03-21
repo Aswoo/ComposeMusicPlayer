@@ -7,6 +7,7 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
     id("io.gitlab.arturbosch.detekt") version "1.22.0"
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlinx.serialization) apply false
 }
 
 subprojects {
