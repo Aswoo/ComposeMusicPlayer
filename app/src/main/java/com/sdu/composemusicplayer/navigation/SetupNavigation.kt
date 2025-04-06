@@ -20,6 +20,7 @@ import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.bottomSheet
 import com.sdu.composemusicplayer.presentation.mainScreen.MainScreen
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.MusicPlayerSheet
+import com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics.LiveLyricsViewModel
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)

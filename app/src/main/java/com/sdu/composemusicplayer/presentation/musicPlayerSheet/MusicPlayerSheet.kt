@@ -23,10 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sdu.composemusicplayer.data.roomdb.MusicEntity
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent.MotionContent
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent.SheetContent
+import com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics.LiveLyricsViewModel
 import com.sdu.composemusicplayer.utils.Constants
 import com.sdu.composemusicplayer.utils.move
 import com.sdu.composemusicplayer.utils.swap

@@ -3,8 +3,10 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kapt)
+    alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.compose.screenshot)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.compose.compiler)
 
     id("kotlin-parcelize")
     // ktlint 플러그인 추가
@@ -154,12 +156,12 @@ dependencies {
 
     implementation(libs.androidx.room.ktx)
     implementation(libs.room.runtime)
-    kapt(libs.room.compiler)
+    ksp(libs.room.compiler)
 
     implementation(libs.androidx.compose.navigation)
     implementation(libs.accompanist.navigation)
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.compose)
@@ -171,6 +173,7 @@ dependencies {
     implementation(libs.material.icon)
 
     implementation(libs.retrofit)
+    implementation(libs.logging.interceptor)
 
     implementation(libs.composereorderable)
 
@@ -210,5 +213,6 @@ dependencies {
 
     androidTestImplementation(libs.mockk.android)
 
-    implementation("org.jetbrains:annotations:23.0.0")
+
+    implementation(libs.annotations)
 }
