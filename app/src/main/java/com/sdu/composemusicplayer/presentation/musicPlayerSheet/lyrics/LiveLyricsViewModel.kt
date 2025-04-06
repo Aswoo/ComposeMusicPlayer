@@ -44,6 +44,12 @@ class LiveLyricsViewModel @Inject constructor(
 //                    }
 //                }
 //        }
+
+        viewModelScope.launch {
+            playerEnvironment.getCurrentDuration().collect { duration ->
+                updateState { copy(currentDuration = duration) }
+            }
+        }
         viewModelScope.launch {
             playerEnvironment.getCurrentPlayedMusic().collect { music ->
                 updateState { copy(currentPlayedMusic = music) }

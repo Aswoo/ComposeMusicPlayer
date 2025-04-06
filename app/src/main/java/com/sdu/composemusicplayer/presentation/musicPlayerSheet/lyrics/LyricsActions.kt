@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CopyAll
 import androidx.compose.material.icons.rounded.Language
+import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,6 +35,7 @@ fun LyricsActions(
     onSaveToSongFile: () -> Unit,
     onFetchWebVersion: () -> Unit,
     onCopy: () -> Unit,
+    onSwap: () -> Unit,
 ) {
     AnimatedVisibility(modifier = modifier, visible = isShown, enter = fadeIn(), exit = fadeOut()) {
         Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.End) {
@@ -61,6 +63,15 @@ fun LyricsActions(
                 onClick = onCopy
             ) {
                 Icon(imageVector = Icons.Rounded.CopyAll, contentDescription = null)
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            IconButton(
+                modifier = Modifier.background(rippleColor, CircleShape),
+                onClick = onSwap
+            ) {
+                Icon(imageVector = Icons.Rounded.MusicNote, contentDescription = null)
             }
 
         }

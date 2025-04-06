@@ -61,18 +61,19 @@ import kotlinx.coroutines.launch
 @Composable
 fun LiveLyricsScreen(
     modifier: Modifier,
+    onSwap : () -> Unit,
     lyricsViewModel: LiveLyricsViewModel = hiltViewModel()
 ) {
 
     val state by lyricsViewModel.state.collectAsState()
-    val musicUiState by lyricsViewModel.uiState.collectAsState()
     LiveLyricsScreen(
         modifier = modifier,
         state = state,
         songProgressMillis = lyricsViewModel::songProgressMillis,
         onSeekToPositionMillis = lyricsViewModel::setSongProgressMillis,
         onRetry =  lyricsViewModel::onRetry,
-        onSaveLyricsToSongFile =  lyricsViewModel::saveExternalLyricsToSongFile
+        onSaveLyricsToSongFile =  lyricsViewModel::saveExternalLyricsToSongFile,
+        onSwap = onSwap
     )
 }
 
@@ -83,7 +84,8 @@ fun LiveLyricsScreen(
     songProgressMillis: () -> Long,
     onSeekToPositionMillis: (Long) -> Unit,
     onRetry: () -> Unit,
-    onSaveLyricsToSongFile: () -> Unit
+    onSaveLyricsToSongFile: () -> Unit,
+    onSwap: () -> Unit,
 ) {
     when (state) {
         is LyricsScreenState.NoLyrics ->
@@ -106,6 +108,7 @@ fun LiveLyricsScreen(
                 onSeekToPositionMillis = onSeekToPositionMillis,
                 songProgressMillis = songProgressMillis,
                 onSaveLyricsToSongFile = onSaveLyricsToSongFile,
+                onSwap = onSwap
             )
     }
 }
@@ -256,6 +259,7 @@ fun SyncedLyricsState(
     onSeekToPositionMillis: (Long) -> Unit,
     songProgressMillis: () -> Long,
     onSaveLyricsToSongFile: () -> Unit,
+    onSwap:() -> Unit,
 ) {
 
     var lyricIndex by remember(synchronizedLyrics) {
@@ -357,6 +361,9 @@ fun SyncedLyricsState(
             onCopy = {
                 clipboardManager.setText(AnnotatedString(synchronizedLyrics.constructStringForSharing()))
                 actionsShown = false
+            },
+            onSwap = {
+                onSwap()
             }
         )
     }

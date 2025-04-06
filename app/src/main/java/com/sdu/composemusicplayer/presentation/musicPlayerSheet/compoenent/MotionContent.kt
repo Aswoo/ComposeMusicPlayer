@@ -41,7 +41,6 @@ import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionScene
 import com.sdu.composemusicplayer.R
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics.LiveLyricsScreen
-import com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics.LiveLyricsViewModel
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics.fadingEdge
 import com.sdu.composemusicplayer.ui.theme.TextDefaultColor
 import com.sdu.composemusicplayer.ui.theme.TintDefaultColor
@@ -71,7 +70,7 @@ fun MotionContent(
         }
 
     Row(modifier = Modifier.fillMaxSize()) {
-        if(screenState.value){
+        if (screenState.value) {
             MotionLayout(
                 motionScene = MotionScene(content = motionScene),
                 progress = fraction,
@@ -196,12 +195,13 @@ fun MotionContent(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Button(onClick = {
-                        println("가사 보기 클릭 $screenState")
-                        screenState.value = !screenState.value }
-                    ){
+                    Button(
+                        onClick = {
+                            println("가사 보기 클릭 $screenState")
+                            screenState.value = !screenState.value
+                        },
+                    ) {
                         Text("가사 보기")
-
                     }
                 }
             }
@@ -211,15 +211,19 @@ fun MotionContent(
                 Brush.verticalGradient(
                     0.0f to Color.Red,
                     0.7f to Color.Red,
-                    1.0f to Color.Transparent
+                    1.0f to Color.Transparent,
                 )
             }
             LiveLyricsScreen(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(8.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .fadingEdge(fadeBrush)
                     .padding(horizontal = 8.dp, vertical = 18.dp),
+                onSwap = {
+                    screenState.value = !screenState.value
+                },
             )
         }
 
