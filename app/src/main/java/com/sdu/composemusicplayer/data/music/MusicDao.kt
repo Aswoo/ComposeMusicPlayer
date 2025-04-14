@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.data.roomdb
+package com.sdu.composemusicplayer.data.music
 
 import androidx.room.Dao
 import androidx.room.Delete

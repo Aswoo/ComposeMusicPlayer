@@ -7,8 +7,8 @@ import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import com.sdu.composemusicplayer.data.roomdb.MusicEntity
-import com.sdu.composemusicplayer.data.roomdb.MusicRepository
+import com.sdu.composemusicplayer.data.music.MusicEntity
+import com.sdu.composemusicplayer.data.music.MusicRepository
 import com.sdu.composemusicplayer.utils.MusicUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher

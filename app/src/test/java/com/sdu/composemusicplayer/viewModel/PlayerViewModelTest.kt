@@ -1,7 +1,7 @@
 package com.sdu.composemusicplayer.viewModel
 
 import android.content.Context
-import com.sdu.composemusicplayer.data.roomdb.MusicEntity
+import com.sdu.composemusicplayer.data.music.MusicEntity
 import com.sdu.composemusicplayer.mediaPlayer.service.PlayerServiceManager
 import com.sdu.composemusicplayer.viewmodel.IPlayerEnvironment
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent

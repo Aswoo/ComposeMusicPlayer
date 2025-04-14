@@ -1,6 +1,6 @@
 package com.sdu.composemusicplayer.viewmodel
 
-import com.sdu.composemusicplayer.data.roomdb.MusicEntity
+import com.sdu.composemusicplayer.data.music.MusicEntity
 
 sealed interface PlayerEvent {
     data class Play(val music: MusicEntity) : PlayerEvent

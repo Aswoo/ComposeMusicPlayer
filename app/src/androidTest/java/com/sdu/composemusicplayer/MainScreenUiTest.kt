@@ -4,7 +4,7 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
-import com.sdu.composemusicplayer.data.roomdb.MusicEntity
+import com.sdu.composemusicplayer.data.music.MusicEntity
 import com.sdu.composemusicplayer.presentation.mainScreen.ComposableLifeCycle
 import com.sdu.composemusicplayer.presentation.mainScreen.MainScreen
 import com.sdu.composemusicplayer.presentation.mainScreen.MusicListContent

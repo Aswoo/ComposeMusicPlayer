@@ -5,7 +5,9 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.sdu.composemusicplayer.R
-import com.sdu.composemusicplayer.data.roomdb.MusicEntity
+import com.sdu.composemusicplayer.data.music.MusicEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.milliseconds
 
 object MusicUtil {
@@ -109,6 +111,29 @@ object MusicUtil {
             songCursor.close()
         }
         return musicList
+    }
+    suspend fun getSongPath(context: Context,uri: Uri): String = withContext(Dispatchers.IO) {
+
+        val projection =
+            arrayOf(
+                MediaStore.Audio.Media.DATA,
+            )
+        val selection = "${MediaStore.Audio.Media._ID} = ${uri.lastPathSegment!!}"
+
+        val cursor = context.contentResolver.query(
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+            projection,
+            selection,
+            null,
+            null,
+            null
+        ) ?: throw Exception("Invalid cursor")
+
+        cursor.use {
+            it.moveToFirst()
+            val pathColumn = it.getColumnIndex(MediaStore.Audio.Media.DATA)
+            return@withContext it.getString(pathColumn)
+        }
     }
 }
 

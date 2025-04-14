@@ -7,7 +7,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.navigation.NavController
-import com.sdu.composemusicplayer.data.roomdb.MusicEntity
+import com.sdu.composemusicplayer.data.music.MusicEntity
 import com.sdu.composemusicplayer.navigation.Routes
 import com.sdu.composemusicplayer.presentation.mainScreen.component.BottomMusicPlayerImpl
 import com.sdu.composemusicplayer.viewmodel.MusicUiState

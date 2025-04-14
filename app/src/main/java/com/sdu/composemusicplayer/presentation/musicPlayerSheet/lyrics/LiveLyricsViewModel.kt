@@ -1,10 +1,9 @@
 package com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sdu.composemusicplayer.data.lyrics.LyricsRepository
 import com.sdu.composemusicplayer.data.lyrics.LyricsResult
-import com.sdu.composemusicplayer.data.roomdb.MusicEntity
+import com.sdu.composemusicplayer.data.music.MusicEntity
 import com.sdu.composemusicplayer.network.data.NetworkMonitor
 import com.sdu.composemusicplayer.network.model.NetworkStatus
 import com.sdu.composemusicplayer.viewmodel.IPlayerEnvironment
@@ -14,8 +13,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -87,7 +84,6 @@ class LiveLyricsViewModel @Inject constructor(
         val cleanedArtist = song.artist.replace(Regex("\\[.*?\\]"), "").trim()
         val lyricsResult = lyricsRepository
             .getLyrics(
-                null,
                 song.title,
                 song.albumPath,
                 cleanedArtist,

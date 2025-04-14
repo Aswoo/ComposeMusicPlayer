@@ -32,7 +32,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.kolee.composemusicexoplayer.ui.theme.Dimens
 import com.sdu.composemusicplayer.R
-import com.sdu.composemusicplayer.data.roomdb.MusicEntity
+import com.sdu.composemusicplayer.data.music.MusicEntity
 import com.sdu.composemusicplayer.presentation.mainScreen.component.BottomMusicPlayerHeight
 import com.sdu.composemusicplayer.presentation.mainScreen.component.BottomMusicPlayerImpl
 import com.sdu.composemusicplayer.presentation.mainScreen.component.MusicItem

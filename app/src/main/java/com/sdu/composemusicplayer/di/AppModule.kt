@@ -1,7 +1,7 @@
 package com.sdu.composemusicplayer.di
 
 import android.content.Context
-import com.sdu.composemusicplayer.data.roomdb.MusicDB
+import com.sdu.composemusicplayer.data.music.MusicDB
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

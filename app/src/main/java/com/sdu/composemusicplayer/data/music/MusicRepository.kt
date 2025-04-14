@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.data.roomdb
+package com.sdu.composemusicplayer.data.music
 
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

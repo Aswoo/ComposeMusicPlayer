@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.data.roomdb
+package com.sdu.composemusicplayer.data.music
 
 import android.os.Parcelable
 import androidx.room.Entity
