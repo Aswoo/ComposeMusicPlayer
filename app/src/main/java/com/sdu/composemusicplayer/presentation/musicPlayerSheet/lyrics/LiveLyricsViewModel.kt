@@ -1,5 +1,6 @@
 package com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics
 
+import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.sdu.composemusicplayer.data.lyrics.LyricsRepository
 import com.sdu.composemusicplayer.data.lyrics.LyricsResult
@@ -84,6 +85,7 @@ class LiveLyricsViewModel @Inject constructor(
         val cleanedArtist = song.artist.replace(Regex("\\[.*?\\]"), "").trim()
         val lyricsResult = lyricsRepository
             .getLyrics(
+                uri = song.audioPath.toUri(),
                 song.title,
                 song.albumPath,
                 cleanedArtist,

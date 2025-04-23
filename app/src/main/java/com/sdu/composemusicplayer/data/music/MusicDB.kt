@@ -4,10 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.sdu.composemusicplayer.data.lyrics.LyricsDao
+import com.sdu.composemusicplayer.data.lyrics.LyricsEntity
 
-@Database(entities = [MusicEntity::class], version = 1)
+@Database(entities = [MusicEntity::class, LyricsEntity::class], version = 2)
 abstract class MusicDB : RoomDatabase() {
     abstract fun musicDao(): MusicDao
+    abstract fun lyricsDao(): LyricsDao
 
     companion object {
         @Volatile // For Singleton
@@ -26,6 +29,7 @@ abstract class MusicDB : RoomDatabase() {
                     MusicDB::class.java,
                     "music_db_0903",
                 ).allowMainThreadQueries()
+                .fallbackToDestructiveMigration() // for Test
                 .build()
         }
     }

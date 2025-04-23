@@ -107,5 +107,4 @@ class LyricsRepository @Inject constructor(
             LyricsResult.NetworkError
         }
     }
-
 }

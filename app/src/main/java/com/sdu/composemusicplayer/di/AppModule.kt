@@ -17,4 +17,16 @@ object AppModule {
     fun provideMusicDB(
         @ApplicationContext context: Context,
     ): MusicDB = MusicDB.getInstance(context)
+
+    @Provides
+    @Singleton
+    fun provideMusicDao(
+        musicDB: MusicDB
+    ) = musicDB.musicDao() 
+
+    @Singleton
+    @Provides
+    fun provideLyricsDao(
+        musicDB: MusicDB
+    ) = musicDB.lyricsDao()
 }
