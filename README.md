@@ -1,10 +1,10 @@
 
 ### UI
 
-| 화면 사진 | 화면 사진 | 화면 사진 | GIF |
-| ---- | ---- | ---- | ---- |
-|  ![KakaoTalk_Photo_2024-12-30-15-47-39 002](https://github.com/user-attachments/assets/a8843443-da6a-4e88-a79a-81c695f80827)    | ![KakaoTalk_Photo_2024-09-08-15-33-59](https://github.com/user-attachments/assets/3d7ecfdf-bbc1-4ff0-90c2-d8bf874da40a) | ![KakaoTalk_Photo_2024-12-30-15-47-39 001](https://github.com/user-attachments/assets/3201c893-4e38-4b95-b803-d31e1027a38b) | ![화면-기록-2024-09-09-오전-10 08 29](https://github.com/user-attachments/assets/198e1e28-8f1f-4e2e-8dc2-28780e657b7a)    |
-| ---- | ---- | ---- |
+| 화면 사진 1 | 화면 사진 2 | notificaiton | 가사  | GIF |
+|-------------|-------------|-------------|-------------|-----|
+| ![Image](https://github.com/user-attachments/assets/f8ab9e79-be91-462d-a131-59d11e4288ac) | ![KakaoTalk_Photo_2024-09-08-15-33-59](https://github.com/user-attachments/assets/3d7ecfdf-bbc1-4ff0-90c2-d8bf874da40a) | ![KakaoTalk_Photo_2024-12-30-15-47-39 001](https://github.com/user-attachments/assets/3201c893-4e38-4b95-b803-d31e1027a38b) | ![Image](https://github.com/user-attachments/assets/e9e160ba-ab0c-4309-8d80-8757c06975be) | ![화면-기록-2024-09-09-오전-10 08 29](https://github.com/user-attachments/assets/198e1e28-8f1f-4e2e-8dc2-28780e657b7a) |
+
 
 
 ### Description
@@ -20,6 +20,8 @@ MediaSession Service를 통해 mediaSession,세션 서비스와 연동된 notifi
 notification 에서 연결된 블루투스 기기 연동 해제,성공 시 반영하기 위한 BroadcastReceiver(ACTION_ACL_CONNECTED) 설정
 
 BluetoothProfile.ServiceListener 로 연결된 기기 정보 연동
+
+Lyrics API or DataBase 를 통한 가사 불러오기 및 가사 위치 추적
 
 ### Libraries
 
