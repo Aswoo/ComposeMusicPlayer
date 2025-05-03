@@ -1,5 +1,4 @@
-package com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent
-
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,9 +10,11 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent.SmallThumbSlider
+import com.sdu.composemusicplayer.ui.theme.Gray200
 import com.sdu.composemusicplayer.ui.theme.Inter
 import com.sdu.composemusicplayer.ui.theme.Purple200
 import com.sdu.composemusicplayer.ui.theme.TextDefaultColor
@@ -25,53 +26,57 @@ fun PlayingProgress(
     currentDuration: Long,
     onChange: (Float) -> Unit,
 ) {
-    // Calculate progress
-    val progress =
-        remember(maxDuration, currentDuration) {
-            currentDuration.toFloat() / maxDuration.toFloat()
-        }
+    val progress = if (maxDuration == 0L) 0f else currentDuration.toFloat() / maxDuration
 
-    // Helper function to format time
     fun formatTime(duration: Long): String {
         val minutes = (duration.milliseconds.inWholeMinutes).toString().padStart(2, '0')
         val seconds = (duration.milliseconds.inWholeSeconds % 60).toString().padStart(2, '0')
         return "$minutes:$seconds"
     }
 
-    // Format strings
-    val maxDurationString = remember(maxDuration) { formatTime(maxDuration) }
-    val currentDurationString = remember(currentDuration) { formatTime(currentDuration) }
-
-    Column(modifier = Modifier.fillMaxWidth(0.8f)) {
-        Slider(
-            value = progress,
+    Column(
+        modifier = Modifier.fillMaxWidth().pointerInput(Unit) {
+            // 슬라이더 부분에 대해서만 제스처 이벤트 처리
+            detectHorizontalDragGestures { change, dragAmount ->
+                // 슬라이더의 움직임을 처리, 상위 Box에 영향을 미치지 않음
+                // 슬라이더의 이동을 관리하는 로직을 여기서 작성
+            }
+        },
+    ) {
+//        Slider(
+//            value = progress.coerceIn(0f, 1f),
+//            onValueChange = onChange,
+//            colors = SliderDefaults.colors(
+//                thumbColor = Gray200,
+//                activeTrackColor = Gray200,
+//                inactiveTrackColor = Gray200.copy(alpha = 0.3f),
+//            ),
+//            modifier = Modifier.fillMaxWidth(),
+//        )
+        SmallThumbSlider(
+            value = progress.coerceIn(0f, 1f),
             onValueChange = onChange,
-            colors =
-                SliderDefaults.colors(
-                    thumbColor = Purple200,
-                    activeTrackColor = Purple200,
-                ),
         )
-        Spacer(modifier = Modifier.height(8.dp))
+
+        Spacer(modifier = Modifier.height(4.dp))
+
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                text = currentDurationString,
-                style =
-                    MaterialTheme.typography.titleMedium.copy(
-                        color = TextDefaultColor,
-                        fontFamily = Inter,
-                    ),
+                text = formatTime(currentDuration),
+                style = MaterialTheme.typography.labelSmall.copy(
+                    color = TextDefaultColor,
+                    fontFamily = Inter,
+                ),
             )
             Text(
-                text = maxDurationString,
-                style =
-                    MaterialTheme.typography.titleMedium.copy(
-                        color = TextDefaultColor,
-                        fontFamily = Inter,
-                    ),
+                text = formatTime(maxDuration),
+                style = MaterialTheme.typography.labelSmall.copy(
+                    color = TextDefaultColor,
+                    fontFamily = Inter,
+                ),
             )
         }
     }

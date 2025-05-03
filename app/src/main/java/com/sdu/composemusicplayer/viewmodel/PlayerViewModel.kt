@@ -52,6 +52,11 @@ class PlayerViewModel
                     updateState { copy(isPaused = isPaused) }
                 }
             }
+            viewModelScope.launch {
+//                environment.observeQueue().collect { queue ->
+//                    updateState { copy(queue = queue) }
+//                }
+            }
         }
 
         fun onEvent(event: PlayerEvent) {
@@ -76,7 +81,7 @@ class PlayerViewModel
 
                 is PlayerEvent.SetShowBottomPlayer -> {
                     viewModelScope.launch {
-                        environment.setShowBottomMusicPlayer(event.isShow)
+//                        environment.setShowBottomMusicPlayer(event.isShow)
                     }
                 }
 
@@ -110,6 +115,21 @@ class PlayerViewModel
                     viewModelScope.launch {
                         environment.resetIsPaused()
                     }
+                }
+                is PlayerEvent.AddToQueue -> {
+                    viewModelScope.launch {
+//                        environment.addToQueue(event.music)
+                    }
+                }
+
+                is PlayerEvent.PlayPlaylist -> {
+//                    viewModelScope.launch {
+//                        environment.loadPlaylist(event.playlistId)
+//                        environment.playFromPlaylist()
+//                    }
+                }
+                else -> {
+                    println("Else Event")
                 }
             }
         }

@@ -20,4 +20,8 @@ sealed interface PlayerEvent {
     object RefreshMusicList : PlayerEvent
 
     object ResetIsPaused : PlayerEvent
+
+    data class AddToQueue(val music: MusicEntity) : PlayerEvent
+    object ClearQueue : PlayerEvent
+    data class PlayPlaylist(val playlistId: String) : PlayerEvent
 }

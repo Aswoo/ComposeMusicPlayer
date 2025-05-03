@@ -40,4 +40,8 @@ interface IPlayerEnvironment {
     suspend fun refreshMusicList()
 
     suspend fun resetIsPaused()
+
+    // queue 관련 메소드
+    fun observeQueue(): Flow<List<MusicEntity>>
+    suspend fun updateQueue(queue: List<MusicEntity>)
 }

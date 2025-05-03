@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.navigation.compose.rememberNavController
 import com.sdu.composemusicplayer.navigation.SetupNavigation
 import com.sdu.composemusicplayer.presentation.permission.CheckAndRequestPermissions
 import com.sdu.composemusicplayer.ui.theme.ComposeMusicPlayerTheme
@@ -41,16 +42,21 @@ class MainActivity : ComponentActivity() {
                 }
             }
         enableEdgeToEdge()
+        val modifier = Modifier.fillMaxSize()
         setContent {
+            val navController = rememberNavController()
+
             ComposeMusicPlayerTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = modifier,
                     color = MaterialTheme.colorScheme.background,
                 ) {
                     CheckAndRequestPermissions(
                         permissions = listOfPermissions,
                     ) {
-                        SetupNavigation(playerVM = playerVM)
+                        SetupNavigation(
+                            playerVM = playerVM, modifier = modifier, navController = navController,
+                        )
                     }
                 }
             }

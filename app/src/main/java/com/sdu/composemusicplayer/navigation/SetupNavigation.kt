@@ -1,26 +1,28 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.sdu.composemusicplayer.navigation
 
-import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.rememberSplineBasedDecay
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.gestures.AnchoredDraggableState
+import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.SwipeableDefaults
-import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.navigation.material.BottomSheetNavigator
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
-import com.google.accompanist.navigation.material.ModalBottomSheetLayout
-import com.google.accompanist.navigation.material.bottomSheet
 import com.sdu.composemusicplayer.presentation.mainScreen.MainScreen
-import com.sdu.composemusicplayer.presentation.musicPlayerSheet.MusicPlayerSheet
-import com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics.LiveLyricsViewModel
+import com.sdu.composemusicplayer.presentation.musicPlayerSheet.CompactAppScaffold
+import com.sdu.composemusicplayer.presentation.musicPlayerSheet.BarState
+import com.sdu.composemusicplayer.rememberMusicAppState
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
@@ -28,43 +30,54 @@ import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 fun SetupNavigation(
     playerVM: PlayerViewModel,
     modifier: Modifier = Modifier,
+    navController: NavHostController,
 ) {
-    val sheetState =
-        rememberModalBottomSheetState(
-            initialValue = ModalBottomSheetValue.Hidden,
-            animationSpec = SwipeableDefaults.AnimationSpec,
-            skipHalfExpanded = true,
+
+    val density = LocalDensity.current
+    val decaySpec = rememberSplineBasedDecay<Float>()
+    val playerScreenAnchors = remember {
+        AnchoredDraggableState(
+            initialValue = BarState.COLLAPSED,
+            anchors = DraggableAnchors {
+                BarState.COLLAPSED at 0f
+                BarState.EXPANDED at 1f
+            },
+            positionalThreshold = { distance: Float -> 0.5f * distance },
+            velocityThreshold = { with(density) { 70.dp.toPx() } },
+            snapAnimationSpec = tween(),
+            decayAnimationSpec = decaySpec
         )
+    }
 
-    val bottomSheetNavigator =
-        remember(sheetState) {
-            BottomSheetNavigator(sheetState = sheetState)
-        }
-    val navController = rememberNavController(bottomSheetNavigator)
-
-    ModalBottomSheetLayout(
-        bottomSheetNavigator = bottomSheetNavigator,
-        sheetBackgroundColor = Color.Transparent,
-        sheetShape =
-            MaterialTheme.shapes.large.copy(
-                bottomStart = CornerSize(0.dp),
-                bottomEnd = CornerSize(0.dp),
-            ),
-        modifier = modifier,
-    ) {
-        NavHost(
-            navController = navController,
-            startDestination = Routes.Main.name,
-        ) {
-            composable(Routes.Main.name) {
-                MainScreen(
-                    navController = navController,
-                    playerVM = playerVM,
-                )
-            }
-            bottomSheet(Routes.Player.name) {
-                MusicPlayerSheet(navController = navController, playerVM = playerVM)
+    val appState = rememberMusicAppState(
+        playerViewModel = playerVM,
+        playerScreenOffset = {
+            if (playerScreenAnchors.anchors.size > 0)
+                playerScreenAnchors.requireOffset()
+            else 0.0f
+        },
+        navHostController = navController
+    )
+    val navHost = remember {
+        movableContentOf<Modifier, MutableState<Modifier>> { navHostModifier, contentModifier ->
+            NavHost(
+                modifier = navHostModifier,
+                navController = appState.navHostController,
+                startDestination = Routes.Main.name
+            ) {
+                composable(Routes.Main.name) {
+                    MainScreen(
+                        navController = navController,
+                        playerVM = playerVM,
+                    )
+                }
             }
         }
     }
+    CompactAppScaffold(
+        appState = appState,
+        modifier = modifier,
+        playerScreenAnchors = playerScreenAnchors,
+        content = navHost
+    )
 }

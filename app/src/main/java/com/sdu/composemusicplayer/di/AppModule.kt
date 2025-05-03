@@ -29,4 +29,10 @@ object AppModule {
     fun provideLyricsDao(
         musicDB: MusicDB
     ) = musicDB.lyricsDao()
+
+    @Singleton
+    @Provides
+    fun provideQueueDao(
+        musicDB: MusicDB
+    ) = musicDB.queueDao()
 }

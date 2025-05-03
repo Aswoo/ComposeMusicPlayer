@@ -9,6 +9,8 @@ import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import com.sdu.composemusicplayer.data.music.MusicEntity
 import com.sdu.composemusicplayer.data.music.MusicRepository
+import com.sdu.composemusicplayer.data.queue.QueueRepository
+import com.sdu.composemusicplayer.domain.model.PlayBackMode
 import com.sdu.composemusicplayer.utils.MusicUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
@@ -29,6 +31,7 @@ class PlayerEnvironment
     constructor(
         @ApplicationContext private val context: Context,
         private val musicRepository: MusicRepository,
+        private val queueRepository: QueueRepository,
         private val exoPlayer: ExoPlayer,
     ) : IPlayerEnvironment {
         val dispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -138,7 +141,15 @@ class PlayerEnvironment
             _isPaused.emit(false)
         }
 
-        override suspend fun play(music: MusicEntity) {
+    override fun observeQueue(): Flow<List<MusicEntity>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateQueue(queue: List<MusicEntity>) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun play(music: MusicEntity) {
             if (music.audioId != MusicEntity.default.audioId) {
                 _hasStopped.emit(false)
                 _currentPlayedMusic.emit(music)
@@ -244,9 +255,3 @@ class PlayerEnvironment
             musicRepository.deleteMusics(*musicsToDelete.toTypedArray())
         }
     }
-
-enum class PlayBackMode {
-    REPEAT_ONE,
-    REPEAT_ALL,
-    REPEAT_OFF,
-}
