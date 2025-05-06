@@ -33,7 +33,7 @@ import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 
 @Composable
-fun ExpandedMusicPlayerContent(playerVM: PlayerViewModel) {
+fun ExpandedMusicPlayerContent(playerVM: PlayerViewModel,modifier: Modifier) {
     val musicUiState by playerVM.uiState.collectAsState()
     val context = LocalContext.current
     val screenState = remember { mutableStateOf(true) }
@@ -47,7 +47,7 @@ fun ExpandedMusicPlayerContent(playerVM: PlayerViewModel) {
             )
         }
         LiveLyricsScreen(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .padding(8.dp)
                 .clip(RoundedCornerShape(16.dp))

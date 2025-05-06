@@ -57,7 +57,6 @@ fun MiniPlayer(
 ) {
     val song = state.currentPlayedMusic
 
-
     Row(
         modifier,
         verticalAlignment = Alignment.CenterVertically

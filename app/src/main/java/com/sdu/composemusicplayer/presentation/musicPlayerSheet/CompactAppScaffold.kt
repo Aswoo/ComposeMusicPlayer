@@ -1,5 +1,6 @@
 package com.sdu.composemusicplayer.presentation.musicPlayerSheet
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -68,8 +69,12 @@ fun CompactAppScaffold(
     val contentModifier = remember { mutableStateOf<Modifier>(Modifier) }
 
     LaunchedEffect(key1 = shouldShowPlayerBar) {
-        if (!shouldShowPlayerBar)
+        Log.d("OUT","shouldShowPlayerBar :  ${shouldShowPlayerBar}")
+        if (!shouldShowPlayerBar){
+            Log.d("IN","shouldShowPlayerBar :  ${shouldShowPlayerBar}")
             playerScreenAnchors.animateTo(BarState.COLLAPSED)
+        }
+
     }
 
     LaunchedEffect(key1 = shouldShowPlayerBar) {

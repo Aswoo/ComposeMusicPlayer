@@ -7,8 +7,10 @@ import kotlinx.coroutines.CoroutineScope
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
+import com.sdu.composemusicplayer.data.music.MusicEntity
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
@@ -41,7 +43,12 @@ class MusicAppState(
     val playerScreenOffset: () -> Float
 ) {
     val shouldShowPlayerScreen: StateFlow<Boolean> = playerViewModel.uiState
-        .map { it.isPlaying || it.isPaused }
+        .map {
+            val hasValidTrack = it.currentPlayedMusic != MusicEntity.default
+            val isActive = it.isPlaying || it.isPaused
+            hasValidTrack || isActive
+        }
+        .distinctUntilChanged()
         .stateIn(
             scope = coroutineScope,
             started = SharingStarted.WhileSubscribed(5000),

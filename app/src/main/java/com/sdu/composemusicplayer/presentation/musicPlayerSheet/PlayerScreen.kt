@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -175,15 +176,14 @@ internal fun PlayerScreen(
                 state = uiState,
                 showExtraControls = true,
                 songProgressProvider = {
-//                    val current = uiState.currentDuration
-//                    val total = uiState.currentPlayedMusic.duration
-//                    if (total > 0) current.toFloat() / total else 0f
-                    0f
+                    val current = uiState.currentDuration
+                    val total = uiState.currentPlayedMusic.duration
+                    if (total > 0) current.toFloat() / total else 0f
                 },
                 enabled = !isExpanded, // if the view is expanded then disable the header
                 onTogglePlayback = { viewModel.onEvent(PlayerEvent.PlayPause(uiState.isPlaying)) },
                 onNext = { viewModel.onEvent(PlayerEvent.Next) },
-                onPrevious = {},
+                onPrevious = { viewModel.onEvent(PlayerEvent.Previous) },
             )
         }
     }
@@ -212,20 +212,20 @@ fun FullScreenNowPlaying(
     ) {
         AnimatedVisibility(
             visible = true,
-            enter = fadeIn(), exit = fadeOut()
+            enter = fadeIn(), exit = fadeOut(),
         ) {
-            CrossFadingAlbumArt(
-                modifier = Modifier.fillMaxSize(),
-                songAlbumArtModel = song.toSongAlbumArtModel(),
-                errorPainterType = ErrorPainterType.SOLID_COLOR,
-                blurTransformation = remember { BlurTransformation(radius = 40, scale = 0.15f) },
-                colorFilter = remember {
-                    ColorFilter.tint(
-                        Color(0xFF999999),
-                        BlendMode.Multiply
-                    )
-                }
-            )
+//            CrossFadingAlbumArt(
+//                modifier = Modifier.fillMaxSize(),
+//                songAlbumArtModel = song.toSongAlbumArtModel(),
+//                errorPainterType = ErrorPainterType.SOLID_COLOR,
+//                blurTransformation = remember { BlurTransformation(radius = 40, scale = 0.15f) },
+//                colorFilter = remember {
+//                    ColorFilter.tint(
+//                        Color(0xFF999999),
+//                        BlendMode.Multiply,
+//                    )
+//                },
+//            )
         }
 
 
@@ -290,7 +290,7 @@ fun FullScreenNowPlaying(
 //                    nowPlayingActions = nowPlayingActions,
 //                    onOpenQueue = onOpenQueue,
 //                )
-                ExpandedMusicPlayerContent(playerVM = playerViewModel)
+                ExpandedMusicPlayerContent(playerVM = playerViewModel, modifier = playerScreenModifier.navigationBarsPadding())
             }
         }
     }

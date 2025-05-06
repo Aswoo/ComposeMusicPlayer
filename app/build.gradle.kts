@@ -128,6 +128,8 @@ dependencies {
             .preview
             .android,
     )
+    implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.material3.window.size)
 
     // Screen Compose
     screenshotTestImplementation(platform(libs.androidx.compose.bom))

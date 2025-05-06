@@ -9,6 +9,9 @@ val Purple500 = Color(0xFF6200EE)
 val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 val Gray200 = Color(0xEEEEEE)
+val Gray500 = Color(0xFF9E9E9E)
+val Gray600 = Color(0xFF757575)
+val Gray700 = Color(0xFF616161)
 
 val TextDefaultColor: Color
     @Composable get() = if (!isSystemInDarkTheme()) Color(0xFF4B4B4B) else Color(0xFFEEEEEE)
