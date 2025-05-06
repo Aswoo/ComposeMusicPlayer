@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent.CustomSlider
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent.SmallThumbSlider
 import com.sdu.composemusicplayer.ui.theme.Gray200
 import com.sdu.composemusicplayer.ui.theme.Inter
@@ -53,7 +54,11 @@ fun PlayingProgress(
 //            ),
 //            modifier = Modifier.fillMaxWidth(),
 //        )
-        SmallThumbSlider(
+//        SmallThumbSlider(
+//            value = progress.coerceIn(0f, 1f),
+//            onValueChange = onChange,
+//        )
+        CustomSlider(
             value = progress.coerceIn(0f, 1f),
             onValueChange = onChange,
         )
