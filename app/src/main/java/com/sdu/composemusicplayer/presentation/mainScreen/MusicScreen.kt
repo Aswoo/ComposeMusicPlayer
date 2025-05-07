@@ -84,12 +84,6 @@ fun MainScreen(
                 playerVM.onEvent(PlayerEvent.Play(music))
             }
         }
-        BottomMusicPlayerImpl(
-            navController = navController,
-            musicUiState = musicUiState,
-        ) { isPlaying ->
-            playerVM.onEvent(PlayerEvent.PlayPause(isPlaying))
-        }
     }
 
     ComposableLifeCycle { _, event ->

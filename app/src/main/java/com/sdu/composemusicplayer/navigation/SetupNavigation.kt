@@ -18,14 +18,26 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.omar.musica.navigation.navigateToTopLevelDestination
 import com.sdu.composemusicplayer.presentation.mainScreen.MainScreen
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.CompactAppScaffold
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.BarState
+import com.sdu.composemusicplayer.presentation.playList.PlayList
+import com.sdu.composemusicplayer.presentation.setting.Setting
 import com.sdu.composemusicplayer.rememberMusicAppState
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
+
+val topLevelDestinations =
+    listOf(
+        Routes.Main,
+        Routes.PLAYLISTS,
+        Routes.SETTINGS
+    )
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SetupNavigation(
     playerVM: PlayerViewModel,
@@ -63,13 +75,19 @@ fun SetupNavigation(
             NavHost(
                 modifier = navHostModifier,
                 navController = appState.navHostController,
-                startDestination = Routes.Main.name
+                startDestination = Routes.Main.route
             ) {
-                composable(Routes.Main.name) {
+                composable(Routes.Main.route) {
                     MainScreen(
                         navController = navController,
                         playerVM = playerVM,
                     )
+                }
+                composable(Routes.PLAYLISTS.route) {
+                    PlayList()
+                }
+                composable(Routes.SETTINGS.route){
+                    Setting()
                 }
             }
         }
@@ -78,6 +96,9 @@ fun SetupNavigation(
         appState = appState,
         modifier = modifier,
         playerScreenAnchors = playerScreenAnchors,
-        content = navHost
+        content = navHost,
+        topLevelDestinations = topLevelDestinations,
+        currentDestination = navController.currentBackStackEntryAsState().value?.destination,
+        onDestinationSelected = { navController.navigateToTopLevelDestination(it) }
     )
 }

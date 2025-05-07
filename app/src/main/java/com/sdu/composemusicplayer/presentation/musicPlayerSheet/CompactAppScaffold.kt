@@ -14,6 +14,7 @@ import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -28,11 +29,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination
+import com.omar.musica.navigation.MusicBottomNavBar
 import com.sdu.composemusicplayer.MusicAppState
+import com.sdu.composemusicplayer.navigation.Routes
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.calculateBottomPaddingForContent
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.rememberCompactScreenUiState
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.update
@@ -48,6 +53,9 @@ fun CompactAppScaffold(
     appState: MusicAppState,
     modifier: Modifier,
     playerScreenAnchors: AnchoredDraggableState<BarState>,
+    topLevelDestinations: List<Routes>,
+    currentDestination: NavDestination?,
+    onDestinationSelected: (Routes) -> Unit,
     content: @Composable (Modifier, MutableState<Modifier>) -> Unit,
 ) {
 
@@ -163,7 +171,21 @@ fun CompactAppScaffold(
                 progressProvider = scrollProvider,
                 viewModel = appState.playerViewModel,
             )
+
         }
+
+        MusicBottomNavBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .graphicsLayer { alpha = uiState.bottomBarAlpha }
+                .offset {
+                    uiState.getBottomBarOffset()
+                },
+            topLevelDestinations = topLevelDestinations,
+            currentDestination = currentDestination,
+            onDestinationSelected = onDestinationSelected
+        )
     }
 
 }

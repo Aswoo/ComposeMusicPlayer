@@ -20,23 +20,23 @@ fun BoxScope.BottomMusicPlayerImpl(
     musicUiState: MusicUiState,
     onPlayPlauseClicked: (isPlaying: Boolean) -> Unit,
 ) {
-    AnimatedVisibility(
-        visible = musicUiState.isBottomPlayerShow,
-        enter = slideInVertically(initialOffsetY = { it }),
-        exit = slideOutVertically(targetOffsetY = { it }),
-        modifier =
-            Modifier
-                .navigationBarsPadding()
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter),
-    ) {
-        BottomMusicPlayer(
-            currentMusic = musicUiState.currentPlayedMusic,
-            currentDuration = musicUiState.currentDuration,
-            isPlaying = musicUiState.isPlaying,
-            onClick = { navController.navigate(Routes.Player.name) },
-            onPlayPauseClicked = onPlayPlauseClicked,
-            modifier = Modifier.testTag("BottomMusicPlayer"),
-        )
-    }
+//    AnimatedVisibility(
+//        visible = musicUiState.isBottomPlayerShow,
+//        enter = slideInVertically(initialOffsetY = { it }),
+//        exit = slideOutVertically(targetOffsetY = { it }),
+//        modifier =
+//            Modifier
+//                .navigationBarsPadding()
+//                .fillMaxWidth()
+//                .align(Alignment.BottomCenter),
+//    ) {
+//        BottomMusicPlayer(
+//            currentMusic = musicUiState.currentPlayedMusic,
+//            currentDuration = musicUiState.currentDuration,
+//            isPlaying = musicUiState.isPlaying,
+//            onClick = { navController.navigate(Routes.Player.name) },
+//            onPlayPauseClicked = onPlayPlauseClicked,
+//            modifier = Modifier.testTag("BottomMusicPlayer"),
+//        )
+//    }
 }
