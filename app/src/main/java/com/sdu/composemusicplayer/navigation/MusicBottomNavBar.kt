@@ -1,4 +1,4 @@
-package com.omar.musica.navigation
+package com.sdu.composemusicplayer.navigation
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Icon
@@ -12,10 +12,6 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.navOptions
-import com.sdu.composemusicplayer.navigation.MAIN_NAVIGATION_GRAPH
-import com.sdu.composemusicplayer.navigation.PLAYLISTS_NAVIGATION_GRAPH
-import com.sdu.composemusicplayer.navigation.Routes
-import com.sdu.composemusicplayer.navigation.SETTINGS_NAVIGATION_GRAPH
 
 
 @Composable

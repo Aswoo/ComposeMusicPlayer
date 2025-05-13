@@ -34,12 +34,12 @@ import androidx.core.net.toUri
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.sdu.composemusicplayer.R
-import com.sdu.composemusicplayer.data.music.MusicEntity
+import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.ui.theme.Inter
 
 @Composable
 fun MusicItem(
-    music: MusicEntity,
+    music: Music,
     isMusicPlaying: Boolean,
     selected: Boolean,
     onClick: () -> Unit,

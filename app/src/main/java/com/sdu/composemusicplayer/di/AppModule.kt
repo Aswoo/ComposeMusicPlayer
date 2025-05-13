@@ -1,7 +1,7 @@
 package com.sdu.composemusicplayer.di
 
 import android.content.Context
-import com.sdu.composemusicplayer.data.music.MusicDB
+import com.sdu.composemusicplayer.core.database.MusicDB
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,4 +35,10 @@ object AppModule {
     fun provideQueueDao(
         musicDB: MusicDB
     ) = musicDB.queueDao()
+
+    @Singleton
+    @Provides
+    fun providePlayListDao(
+        musicDB: MusicDB
+    ) = musicDB.playListDao()
 }

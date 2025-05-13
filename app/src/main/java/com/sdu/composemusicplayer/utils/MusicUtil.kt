@@ -5,7 +5,8 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.sdu.composemusicplayer.R
-import com.sdu.composemusicplayer.data.music.MusicEntity
+import com.sdu.composemusicplayer.core.database.entity.MusicEntity
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.milliseconds

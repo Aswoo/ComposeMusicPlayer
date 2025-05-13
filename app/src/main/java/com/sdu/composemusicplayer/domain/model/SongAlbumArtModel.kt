@@ -3,7 +3,7 @@ package com.sdu.composemusicplayer.domain.model
 
 import android.net.Uri
 import androidx.compose.runtime.Stable
-import com.sdu.composemusicplayer.data.music.MusicEntity
+import com.sdu.composemusicplayer.core.database.entity.MusicEntity
 
 @Stable
 data class SongAlbumArtModel(
@@ -11,5 +11,5 @@ data class SongAlbumArtModel(
     val uri: Uri
 )
 
-fun MusicEntity?.toSongAlbumArtModel() = if (this == null) SongAlbumArtModel(null, Uri.EMPTY)
+fun Music?.toSongAlbumArtModel() = if (this == null) SongAlbumArtModel(null, Uri.EMPTY)
 else SongAlbumArtModel(albumId = audioId, uri = Uri.parse(albumPath))

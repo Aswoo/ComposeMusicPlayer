@@ -1,13 +1,15 @@
 package com.sdu.composemusicplayer.viewmodel
 
-import com.sdu.composemusicplayer.data.music.MusicEntity
+
+
+import com.sdu.composemusicplayer.domain.model.Music
 import kotlinx.coroutines.flow.Flow
 
 interface IPlayerEnvironment {
     // 기존 메소드들
-    fun getAllMusics(): Flow<List<MusicEntity>>
+    fun getAllMusics(): Flow<List<Music>>
 
-    fun getCurrentPlayedMusic(): Flow<MusicEntity>
+    fun getCurrentPlayedMusic(): Flow<Music>
 
     fun isPlaying(): Flow<Boolean>
 
@@ -18,7 +20,7 @@ interface IPlayerEnvironment {
     fun isPaused(): Flow<Boolean>
 
     // 기존 suspend 메소드들
-    suspend fun play(music: MusicEntity)
+    suspend fun play(music: Music)
 
     suspend fun pause()
 
@@ -35,13 +37,13 @@ interface IPlayerEnvironment {
 
     suspend fun setShowBottomMusicPlayer(isShowed: Boolean)
 
-    suspend fun updateMusicList(musicList: List<MusicEntity>)
+    suspend fun updateMusicList(musicList: List<Music>)
 
     suspend fun refreshMusicList()
 
     suspend fun resetIsPaused()
 
     // queue 관련 메소드
-    fun observeQueue(): Flow<List<MusicEntity>>
-    suspend fun updateQueue(queue: List<MusicEntity>)
+    fun observeQueue(): Flow<List<Music>>
+    suspend fun updateQueue(queue: List<Music>)
 }

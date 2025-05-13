@@ -1,9 +1,8 @@
 package com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics
 
-
-import com.sdu.composemusicplayer.data.lyrics.LyricsFetchSource
-import com.sdu.composemusicplayer.data.lyrics.PlainLyrics
-import com.sdu.composemusicplayer.data.lyrics.SynchronizedLyrics
+import com.sdu.composemusicplayer.core.model.lyrics.LyricsFetchSource
+import com.sdu.composemusicplayer.core.model.lyrics.PlainLyrics
+import com.sdu.composemusicplayer.core.model.lyrics.SynchronizedLyrics
 
 
 sealed interface LyricsScreenState {

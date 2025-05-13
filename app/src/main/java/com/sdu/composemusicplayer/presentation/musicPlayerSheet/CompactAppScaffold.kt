@@ -35,7 +35,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
-import com.omar.musica.navigation.MusicBottomNavBar
+import com.sdu.composemusicplayer.navigation.MusicBottomNavBar
 import com.sdu.composemusicplayer.MusicAppState
 import com.sdu.composemusicplayer.navigation.Routes
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.calculateBottomPaddingForContent

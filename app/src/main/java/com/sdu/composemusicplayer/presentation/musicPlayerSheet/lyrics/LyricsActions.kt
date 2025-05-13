@@ -21,7 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.sdu.composemusicplayer.data.lyrics.LyricsFetchSource
+import com.sdu.composemusicplayer.core.model.lyrics.LyricsFetchSource
+
 
 /**
  * Shows actions which can be done to the lyrics depending on whether the lyrics

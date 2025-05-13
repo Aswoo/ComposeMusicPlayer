@@ -2,9 +2,11 @@ package com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics
 
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
-import com.sdu.composemusicplayer.data.lyrics.LyricsRepository
-import com.sdu.composemusicplayer.data.lyrics.LyricsResult
-import com.sdu.composemusicplayer.data.music.MusicEntity
+import com.sdu.composemusicplayer.core.database.LyricsRepository
+import com.sdu.composemusicplayer.core.database.entity.MusicEntity
+import com.sdu.composemusicplayer.core.database.model.LyricsResult
+import com.sdu.composemusicplayer.domain.model.Music
+
 import com.sdu.composemusicplayer.network.data.NetworkMonitor
 import com.sdu.composemusicplayer.network.model.NetworkStatus
 import com.sdu.composemusicplayer.viewmodel.IPlayerEnvironment
@@ -79,7 +81,7 @@ class LiveLyricsViewModel @Inject constructor(
         }
     }
 
-    private suspend fun loadLyrics(song: MusicEntity) = withContext(Dispatchers.Default) {
+    private suspend fun loadLyrics(song: Music) = withContext(Dispatchers.Default) {
         _state.value = LyricsScreenState.SearchingLyrics
 
         val cleanedArtist = song.artist.replace(Regex("\\[.*?\\]"), "").trim()

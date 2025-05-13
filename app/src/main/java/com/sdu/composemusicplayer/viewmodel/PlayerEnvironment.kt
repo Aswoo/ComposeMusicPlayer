@@ -7,9 +7,12 @@ import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import com.sdu.composemusicplayer.data.music.MusicEntity
-import com.sdu.composemusicplayer.data.music.MusicRepository
-import com.sdu.composemusicplayer.data.queue.QueueRepository
+import com.sdu.composemusicplayer.core.database.MusicRepository
+import com.sdu.composemusicplayer.core.database.QueueRepository
+import com.sdu.composemusicplayer.core.database.entity.MusicEntity
+import com.sdu.composemusicplayer.core.database.mapper.toDomain
+import com.sdu.composemusicplayer.core.database.mapper.toEntity
+import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.PlayBackMode
 import com.sdu.composemusicplayer.utils.MusicUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -36,8 +39,8 @@ class PlayerEnvironment
     ) : IPlayerEnvironment {
         val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
-        private val _allMusics = MutableStateFlow(emptyList<MusicEntity>())
-        private val allMusics: StateFlow<List<MusicEntity>> = _allMusics.asStateFlow()
+        private val _allMusics = MutableStateFlow(emptyList<Music>())
+        private val allMusics: StateFlow<List<Music>> = _allMusics.asStateFlow()
 
         private val _currentDuration = MutableStateFlow(0L)
         private val currentDuration: StateFlow<Long> = _currentDuration
@@ -45,8 +48,8 @@ class PlayerEnvironment
         private val _isPlaying = MutableStateFlow(false)
         val isPlaying: StateFlow<Boolean> = _isPlaying
 
-        private val _currentPlayedMusic = MutableStateFlow(MusicEntity.default)
-        val currentPlayedMusic: StateFlow<MusicEntity> = _currentPlayedMusic
+        private val _currentPlayedMusic = MutableStateFlow(Music.default)
+        val currentPlayedMusic: StateFlow<Music> = _currentPlayedMusic
 
         private val _playbackMode = MutableStateFlow(PlayBackMode.REPEAT_ONE)
         val playbackMode: StateFlow<PlayBackMode> = _playbackMode
@@ -70,7 +73,7 @@ class PlayerEnvironment
         init {
             CoroutineScope(dispatcher).launch {
                 musicRepository.getAllMusics().distinctUntilChanged().collect {
-                    _allMusics.emit(it)
+                    _allMusics.emit(it.map { entity -> entity.toDomain() })
                 }
             }
             exoPlayer.apply {
@@ -104,7 +107,7 @@ class PlayerEnvironment
 
                                     PlayBackMode.REPEAT_OFF -> {
                                         this@apply.stop()
-                                        _currentPlayedMusic.tryEmit(MusicEntity.default)
+                                        _currentPlayedMusic.tryEmit(Music.default)
                                     }
                                 }
                             }
@@ -119,11 +122,11 @@ class PlayerEnvironment
             }
         }
 
-        override fun getAllMusics(): Flow<List<MusicEntity>> {
+        override fun getAllMusics(): Flow<List<Music>> {
             return allMusics
         }
 
-        override fun getCurrentPlayedMusic(): Flow<MusicEntity> {
+        override fun getCurrentPlayedMusic(): Flow<Music> {
             return currentPlayedMusic
         }
 
@@ -141,16 +144,16 @@ class PlayerEnvironment
             _isPaused.emit(false)
         }
 
-    override fun observeQueue(): Flow<List<MusicEntity>> {
+    override fun observeQueue(): Flow<List<Music>> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateQueue(queue: List<MusicEntity>) {
+    override suspend fun updateQueue(queue: List<Music>) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun play(music: MusicEntity) {
-            if (music.audioId != MusicEntity.default.audioId) {
+    override suspend fun play(music: Music) {
+            if (music.audioId != Music.default.audioId) {
                 _hasStopped.emit(false)
                 _currentPlayedMusic.emit(music)
 
@@ -177,7 +180,7 @@ class PlayerEnvironment
         }
 
         override suspend fun resume() {
-            if (hasStopped.value && currentPlayedMusic.value != MusicEntity.default) {
+            if (hasStopped.value && currentPlayedMusic.value != Music.default) {
                 play(currentPlayedMusic.value)
             } else {
                 playerHandler.post { exoPlayer.play() }
@@ -228,7 +231,7 @@ class PlayerEnvironment
             _isBottomMusicPlayerShowed.emit(isShowed)
         }
 
-        override suspend fun updateMusicList(musicList: List<MusicEntity>) {
+        override suspend fun updateMusicList(musicList: List<Music>) {
             _allMusics.emit(musicList)
         }
 
@@ -248,7 +251,9 @@ class PlayerEnvironment
                 if (it.audioId !in storedMusicsIDs) musicsToInsert.add(it)
             }
             allMusics.value.forEach {
-                if (it.audioId !in newMusicsIDs) musicsToDelete.add(it)
+                if (it.audioId !in newMusicsIDs) {
+                    musicsToDelete.add(it.toEntity())
+                }
             }
 
             musicRepository.insertMusics(*musicsToInsert.toTypedArray())

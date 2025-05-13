@@ -178,7 +178,7 @@ internal fun PlayerScreen(
                 songProgressProvider = {
                     val current = uiState.currentDuration
                     val total = uiState.currentPlayedMusic.duration
-                    if (total > 0) current.toFloat() / total else 0f
+                    if (total > 0) current.toFloat() / total.toFloat() else 0f
                 },
                 enabled = !isExpanded, // if the view is expanded then disable the header
                 onTogglePlayback = { viewModel.onEvent(PlayerEvent.PlayPause(uiState.isPlaying)) },

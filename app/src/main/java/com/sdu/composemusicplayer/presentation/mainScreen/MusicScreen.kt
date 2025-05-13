@@ -1,5 +1,6 @@
 package com.sdu.composemusicplayer.presentation.mainScreen
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -32,9 +33,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.kolee.composemusicexoplayer.ui.theme.Dimens
 import com.sdu.composemusicplayer.R
-import com.sdu.composemusicplayer.data.music.MusicEntity
+import com.sdu.composemusicplayer.core.database.entity.MusicEntity
+import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.presentation.mainScreen.component.BottomMusicPlayerHeight
-import com.sdu.composemusicplayer.presentation.mainScreen.component.BottomMusicPlayerImpl
 import com.sdu.composemusicplayer.presentation.mainScreen.component.MusicItem
 import com.sdu.composemusicplayer.ui.theme.TextDefaultColor
 import com.sdu.composemusicplayer.viewmodel.MusicUiState
@@ -54,7 +55,7 @@ fun MainScreen(
     val musicUiState by playerVM.uiState.collectAsState()
 
     LaunchedEffect(key1 = musicUiState.currentPlayedMusic) {
-        val isShowed = (musicUiState.currentPlayedMusic != MusicEntity.default)
+        val isShowed = (musicUiState.currentPlayedMusic != Music.default)
         playerVM.onEvent(PlayerEvent.SetShowBottomPlayer(isShowed))
     }
 
@@ -66,16 +67,16 @@ fun MainScreen(
             Spacer(modifier = Modifier.height(Dimens.One))
             TopAppBar(
                 colors =
-                    TopAppBarDefaults.largeTopAppBarColors(
-                        containerColor = Color.Transparent,
-                    ),
+                TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = Color.Transparent,
+                ),
                 title = {
                     Text(
                         text = stringResource(id = R.string.music_player),
                         style =
-                            MaterialTheme.typography.titleSmall.copy(
-                                color = TextDefaultColor,
-                            ),
+                        MaterialTheme.typography.titleSmall.copy(
+                            color = TextDefaultColor,
+                        ),
                     )
                 },
             )
@@ -108,9 +109,11 @@ fun MainScreen(
             Lifecycle.Event.ON_STOP -> {
                 Log.d(TAG, "MusicScreen : ON_STOP")
             }
+
             Lifecycle.Event.ON_DESTROY -> {
                 Log.d(TAG, "MusicScreen : ON_DESTROY")
             }
+
             Lifecycle.Event.ON_ANY -> {
                 Log.d(TAG, "MusicScreen : ON_ANY")
             }
@@ -121,13 +124,13 @@ fun MainScreen(
 @Composable
 fun MusicListContent(
     musicUiState: MusicUiState,
-    onSelectedMusic: (music: MusicEntity) -> Unit,
+    onSelectedMusic: (music: Music) -> Unit,
 ) {
     LazyColumn(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
     ) {
         val currentAudioId = musicUiState.currentPlayedMusic.audioId
 
@@ -168,19 +171,19 @@ fun PreviewMusicListContent() {
     val mockMusicUiState =
         MusicUiState(
             musicList =
-                listOf(
-                    MusicEntity(1, "Song 1", "Artist 1", 200000L, "/path/album1", "/path/song1"),
-                    MusicEntity(2, "Song 2", "Artist 2", 180000L, "/path/album2", "/path/song2"),
-                ),
+            listOf(
+                Music(1, "Song 1", "Artist 1", 200000L, "/path/album1", "/path/song1"),
+                Music( 2, "Song 2", "Artist 2", 180000L, "/path/album2", "/path/song2"),
+            ),
             currentPlayedMusic =
-                MusicEntity(
-                    1,
-                    "Song 1",
-                    "Artist 1",
-                    200000L,
-                    "/path/album1",
-                    "/path/song1",
-                ),
+            Music(
+                1,
+                "Song 1",
+                "Artist 1",
+                200000L,
+                "/path/album1",
+                "/path/song1",
+            ),
             isPlaying = true,
         )
     MusicListContent(musicUiState = mockMusicUiState, onSelectedMusic = {})

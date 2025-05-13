@@ -7,7 +7,6 @@ import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.movableContentOf
@@ -19,12 +18,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
-import com.omar.musica.navigation.navigateToTopLevelDestination
 import com.sdu.composemusicplayer.presentation.mainScreen.MainScreen
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.CompactAppScaffold
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.BarState
-import com.sdu.composemusicplayer.presentation.playList.PlayList
+import com.sdu.composemusicplayer.presentation.playlists.playlist.PlaylistsScreen
 import com.sdu.composemusicplayer.presentation.setting.Setting
 import com.sdu.composemusicplayer.rememberMusicAppState
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
@@ -34,7 +31,7 @@ val topLevelDestinations =
     listOf(
         Routes.Main,
         Routes.PLAYLISTS,
-        Routes.SETTINGS
+        Routes.SETTINGS,
     )
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -57,7 +54,7 @@ fun SetupNavigation(
             positionalThreshold = { distance: Float -> 0.5f * distance },
             velocityThreshold = { with(density) { 70.dp.toPx() } },
             snapAnimationSpec = tween(),
-            decayAnimationSpec = decaySpec
+            decayAnimationSpec = decaySpec,
         )
     }
 
@@ -68,14 +65,14 @@ fun SetupNavigation(
                 playerScreenAnchors.requireOffset()
             else 0.0f
         },
-        navHostController = navController
+        navHostController = navController,
     )
     val navHost = remember {
         movableContentOf<Modifier, MutableState<Modifier>> { navHostModifier, contentModifier ->
             NavHost(
                 modifier = navHostModifier,
                 navController = appState.navHostController,
-                startDestination = Routes.Main.route
+                startDestination = Routes.Main.route,
             ) {
                 composable(Routes.Main.route) {
                     MainScreen(
@@ -84,9 +81,11 @@ fun SetupNavigation(
                     )
                 }
                 composable(Routes.PLAYLISTS.route) {
-                    PlayList()
+                    PlaylistsScreen(modifier = Modifier, onNavigateToPlaylist = {
+
+                    })
                 }
-                composable(Routes.SETTINGS.route){
+                composable(Routes.SETTINGS.route) {
                     Setting()
                 }
             }
@@ -99,6 +98,6 @@ fun SetupNavigation(
         content = navHost,
         topLevelDestinations = topLevelDestinations,
         currentDestination = navController.currentBackStackEntryAsState().value?.destination,
-        onDestinationSelected = { navController.navigateToTopLevelDestination(it) }
+        onDestinationSelected = { navController.navigateToTopLevelDestination(it) },
     )
 }

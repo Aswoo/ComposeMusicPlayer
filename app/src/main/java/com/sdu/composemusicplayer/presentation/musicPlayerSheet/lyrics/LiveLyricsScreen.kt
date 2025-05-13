@@ -50,9 +50,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sdu.composemusicplayer.data.lyrics.LyricsFetchSource
-import com.sdu.composemusicplayer.data.lyrics.PlainLyrics
-import com.sdu.composemusicplayer.data.lyrics.SynchronizedLyrics
+import com.sdu.composemusicplayer.core.model.lyrics.LyricsFetchSource
+import com.sdu.composemusicplayer.core.model.lyrics.PlainLyrics
+import com.sdu.composemusicplayer.core.model.lyrics.SynchronizedLyrics
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
