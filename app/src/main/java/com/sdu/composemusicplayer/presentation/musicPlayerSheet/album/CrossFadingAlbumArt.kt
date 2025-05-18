@@ -43,7 +43,7 @@ fun CrossFadingAlbumArt(
     val context = LocalContext.current
     val imageRequest = remember(songAlbumArtModel.uri.toString()) {
         ImageRequest.Builder(context)
-            .data(songAlbumArtModel)
+            .data(songAlbumArtModel.uri)
             .apply { if (blurTransformation != null) this.transformations(blurTransformation) }
             .size(Size.ORIGINAL).build()
     }

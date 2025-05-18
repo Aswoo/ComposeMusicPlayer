@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.presentation.playlists
+package com.sdu.composemusicplayer.presentation.component.dialog
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.PlaylistAdd

@@ -80,6 +80,15 @@ interface PlaylistDao {
         }
     }
 
+    @Transaction
+    suspend fun insertSongToPlaylist(playlistId: Int, musicUri: String) {
+        val entity = PlaylistsMusicEntity(
+            playlistId = playlistId,
+            musicUriString = musicUri
+        )
+        insertSongsToPlaylist(listOf(entity))
+    }
+
     @Query(
         "UPDATE $PLAYLIST_ENTITY SET $PLAYLIST_NAME_COLUMN = :newName " +
                 "WHERE $PLAYLIST_ID_COLUMN = :playlistId"

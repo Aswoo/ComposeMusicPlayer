@@ -50,9 +50,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
@@ -61,11 +59,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sdu.composemusicplayer.domain.model.toSongAlbumArtModel
+import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent.ExpandedMusicPlayerContent
-import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.BlurTransformation
-import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.CrossFadingAlbumArt
-import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.ErrorPainterType
 import com.sdu.composemusicplayer.viewmodel.MusicUiState
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
@@ -84,6 +79,7 @@ fun PlayerScreen(
 ) {
 
     val focusManager = LocalFocusManager.current
+    var showAddToPlaylistDialog by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = isExpanded) {
         if (isExpanded) {
             focusManager.clearFocus(true)
@@ -96,7 +92,15 @@ fun PlayerScreen(
         }
     }
 
+
     val uiState by viewModel.uiState.collectAsState()
+
+    if (showAddToPlaylistDialog) {
+        AddToPlaylistDialog(
+            musicUri = uiState.currentPlayedMusic.audioPath,
+            onDismissRequest = { showAddToPlaylistDialog = false },
+        )
+    }
 
     PlayerScreen(
         modifier = modifier.clip(RoundedCornerShape(topStart = 6.dp, topEnd = 6.dp)),
@@ -106,6 +110,7 @@ fun PlayerScreen(
         isExpanded = isExpanded,
         onExpandNowPlaying = onExpandNowPlaying,
         progressProvider = progressProvider,
+        showAddToPlaylistDialog = { showAddToPlaylistDialog = true },
         viewModel = viewModel,
     )
 
@@ -120,6 +125,7 @@ internal fun PlayerScreen(
     isExpanded: Boolean,
     onExpandNowPlaying: () -> Unit,
     progressProvider: () -> Float,
+    showAddToPlaylistDialog : () -> Unit,
     viewModel: PlayerViewModel,
 ) {
 
@@ -147,17 +153,17 @@ internal fun PlayerScreen(
                 mutableStateOf(false)
             }
             FullScreenNowPlaying(
-                Modifier
+                modifier = Modifier
                     .fillMaxSize()
                     .graphicsLayer {
                         alpha = ((progressProvider() - 0.15f) * 2.0f).coerceIn(0.0f, 1.0f)
                     },
-                isShowingQueue,
-                { isShowingQueue = false },
-                { isShowingQueue = true },
-                progressProvider,
-                uiState,
-                viewModel,
+                onOpenQueue = showAddToPlaylistDialog,
+                onCloseQueue = { isShowingQueue = true },
+                progressProvider =  progressProvider,
+                uiState = uiState,
+                playerViewModel = viewModel,
+                isShowingQueue = isShowingQueue
             )
             LaunchedEffect(key1 = isExpanded) {
                 if (!isExpanded) isShowingQueue = false
@@ -201,7 +207,7 @@ fun FullScreenNowPlaying(
     playerViewModel: PlayerViewModel,
 ) {
 
-    val song = remember(uiState.currentPlayedMusic) {
+    val music = remember(uiState.currentPlayedMusic) {
         uiState.currentPlayedMusic
     }
 
@@ -279,18 +285,7 @@ fun FullScreenNowPlaying(
 //                    onClose = onCloseQueue,
 //                )
             } else {
-
-//                PlayingScreen2(
-//                    modifier = playerScreenModifier.navigationBarsPadding(),
-//                    song = song,
-//                    playbackState = uiState.playbackState,
-//                    repeatMode = uiState.repeatMode,
-//                    isShuffleOn = uiState.isShuffleOn,
-//                    screenSize = screenSize,
-//                    nowPlayingActions = nowPlayingActions,
-//                    onOpenQueue = onOpenQueue,
-//                )
-                ExpandedMusicPlayerContent(playerVM = playerViewModel, modifier = playerScreenModifier.navigationBarsPadding())
+                ExpandedMusicPlayerContent(playerVM = playerViewModel, modifier = playerScreenModifier.navigationBarsPadding(), openAddToPlaylistDialog = onOpenQueue )
             }
         }
     }

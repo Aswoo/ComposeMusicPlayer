@@ -57,6 +57,12 @@ class PlaylistsRepository @Inject constructor(
         }
     }
 
+    fun addMusicToPlaylist(musicUri: String, selectedPlayListId: Int) {
+        coroutineScope.launch {
+            playlistsDao.insertSongToPlaylist(selectedPlayListId, musicUri)
+        }
+    }
+
     fun deletePlaylist(id: Int) {
         coroutineScope.launch {
             playlistsDao.deletePlaylistWithSongs(id)
@@ -88,7 +94,7 @@ class PlaylistsRepository @Inject constructor(
     fun getPlaylistWithSongsFlow(playlistId: Int): Flow<Playlist> =
         combine(
             musicRepository.getAllMusics(),
-            playlistsDao.getPlaylistWithSongsFlow(playlistId)
+            playlistsDao.getPlaylistWithSongsFlow(playlistId),
         ) { musicEntities, playlistWithSongs ->
 
             val musicList = musicEntities.map {
@@ -112,7 +118,7 @@ class PlaylistsRepository @Inject constructor(
             val playlistInfo = playlistWithSongs.playlistEntity
             Playlist(
                 PlaylistInfo(playlistInfo.id, playlistInfo.name, playlistSongs.size),
-                playlistSongs
+                playlistSongs,
             )
         }
 
@@ -127,7 +133,7 @@ class PlaylistsRepository @Inject constructor(
         PlaylistInfo(
             id = playlistEntity.id,
             name = playlistEntity.name,
-            numberOfMusic = numberOfMusic
+            numberOfMusic = numberOfMusic,
         )
 
     private fun List<PlaylistInfoWithNumberOfMusic>.toDomainPlaylists() =

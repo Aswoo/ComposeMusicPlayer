@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.presentation.playlists.playlist
+package com.sdu.composemusicplayer.presentation.playlists.playlistdetail
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete

@@ -1,10 +1,9 @@
-package com.sdu.composemusicplayer.presentation.playlists
+package com.sdu.composemusicplayer.presentation.component.dialog
 
 import androidx.lifecycle.ViewModel
 import com.sdu.composemusicplayer.core.model.playlist.PlaylistsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
