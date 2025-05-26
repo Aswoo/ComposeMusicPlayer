@@ -66,10 +66,9 @@ fun PlaylistsScreen(
     PlaylistsScreen(
         modifier = modifier,
         state = state,
-        onNavigateToPlaylist,
-        playlistsViewModel::onDelete,
-        playlistsViewModel::onRename,
-        playlistsViewModel,
+        onPlaylistClicked = onNavigateToPlaylist,
+        onDeletePlaylist = playlistsViewModel::onDelete,
+        onRenamePlaylist = playlistsViewModel::onRename,
     )
 
 }
@@ -82,7 +81,6 @@ fun PlaylistsScreen(
     onPlaylistClicked: (Int) -> Unit,
     onDeletePlaylist: (Int) -> Unit,
     onRenamePlaylist: (Int, String) -> Unit,
-    playlistPlaybackActions: PlaylistPlaybackActions,
 ) {
 
     val createPlaylistsDialog = rememberCreatePlaylistDialog()
@@ -204,7 +202,6 @@ fun PlaylistsScreen(
                                 },
                             ),
                         it,
-                        playlistPlaybackActions = playlistPlaybackActions,
                         inRenameMode = currentRenameId == it.id,
                         onEnableRenameMode = { currentRenameId = it.id },
                         { name -> onRenamePlaylist(it.id, name); currentRenameId = null },
@@ -234,7 +231,6 @@ fun PlaylistsScreen(
 fun PlaylistRow(
     modifier: Modifier,
     playlistInfo: PlaylistInfo,
-    playlistPlaybackActions: PlaylistPlaybackActions,
     inRenameMode: Boolean,
     onEnableRenameMode: () -> Unit,
     onRename: (String) -> Unit,
@@ -246,13 +242,6 @@ fun PlaylistRow(
             playlistInfo = playlistInfo,
             inRenameMode, onRename, onEnableRenameMode,
         )
-//        OverflowMenu(
-//            actionItems = buildSinglePlaylistActions(
-//                playlistInfo.id,
-//                playlistPlaybackActions,
-//                onEnableRenameMode, onDelete
-//            ), showIcons = false
-//        )
         Spacer(modifier = Modifier.width(8.dp))
     }
 

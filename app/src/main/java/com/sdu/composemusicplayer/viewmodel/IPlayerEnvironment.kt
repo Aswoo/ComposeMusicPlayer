@@ -1,49 +1,37 @@
 package com.sdu.composemusicplayer.viewmodel
 
-
-
 import com.sdu.composemusicplayer.domain.model.Music
 import kotlinx.coroutines.flow.Flow
 
 interface IPlayerEnvironment {
-    // 기존 메소드들
-    fun getAllMusics(): Flow<List<Music>>
+    // 🎵 상태 관련
+    fun getAllMusics(): Flow<List<Music>> // 전체 음악 목록
+    fun observeQueue(): Flow<List<Music>> // 현재 큐
+    fun getCurrentPlayedMusic(): Flow<Music> // 현재 재생 중인 음악
+    fun getCurrentIndex(): Flow<Int> // 현재 큐 인덱스
 
-    fun getCurrentPlayedMusic(): Flow<Music>
-
+    // ▶️ 재생 상태 관련
     fun isPlaying(): Flow<Boolean>
-
+    fun isPaused(): Flow<Boolean>
+    fun getCurrentDuration(): Flow<Long>
     fun isBottomMusicPlayerShowed(): Flow<Boolean>
 
-    fun getCurrentDuration(): Flow<Long>
-
-    fun isPaused(): Flow<Boolean>
-
-    // 기존 suspend 메소드들
-    suspend fun play(music: Music)
-
+    // ⏯️ 재생 제어
+    suspend fun play(music: Music) // queue 업데이트 없이 단일 음악 재생
+    suspend fun playAt(index: Int) // queue의 특정 인덱스부터 재생
     suspend fun pause()
-
     suspend fun resume()
-
     suspend fun previous()
-
     suspend fun next()
 
-    fun snapTo(
-        duration: Long,
-        fromUser: Boolean = true,
-    )
+    // ⏱️ 위치 제어
+    fun snapTo(duration: Long, fromUser: Boolean = true)
 
-    suspend fun setShowBottomMusicPlayer(isShowed: Boolean)
-
-    suspend fun updateMusicList(musicList: List<Music>)
-
-    suspend fun refreshMusicList()
-
-    suspend fun resetIsPaused()
-
-    // queue 관련 메소드
-    fun observeQueue(): Flow<List<Music>>
+    // 🧩 큐 및 설정 관련
     suspend fun updateQueue(queue: List<Music>)
+    suspend fun updateMusicList(musicList: List<Music>)
+    suspend fun refreshMusicList()
+    suspend fun setShowBottomMusicPlayer(isShowed: Boolean)
+    suspend fun resetIsPaused()
+    suspend fun setPlaylistAndPlayAtIndex(musicList: List<Music>,index : Int = 0)
 }

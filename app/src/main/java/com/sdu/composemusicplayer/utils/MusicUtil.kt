@@ -78,15 +78,15 @@ object MusicUtil {
                         audioId = audioID,
                         title = title,
                         artist =
-                            if (artist.equals(
-                                    "<unknown>",
-                                    true,
-                                )
-                            ) {
-                                context.getString(R.string.unknown)
-                            } else {
-                                artist
-                            },
+                        if (artist.equals(
+                                "<unknown>",
+                                true,
+                            )
+                        ) {
+                            context.getString(R.string.unknown)
+                        } else {
+                            artist
+                        },
                         duration = duration,
                         albumPath = albumPath.toString(),
                         audioPath = musicPath.toString(),

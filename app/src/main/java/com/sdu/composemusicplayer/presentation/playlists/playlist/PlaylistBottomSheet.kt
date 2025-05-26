@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,7 +36,7 @@ fun PlaylistBottomSheet(
     onRenameClick: () -> Unit,
     onPinClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -44,38 +45,28 @@ fun PlaylistBottomSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             // Playlist Info (Header)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     imageVector = Icons.Default.MusicNote,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier.size(32.dp),
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Column {
                     Text(
                         text = playlistName,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
-                    TextButton(
-                        onClick = onRenameClick,
-                        contentPadding = PaddingValues(0.dp)
-                    ) {
-                        Text(
-                            text = "이름 변경",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
                 }
             }
 
@@ -83,6 +74,7 @@ fun PlaylistBottomSheet(
 
             // Action Items
             PlaylistActionItem(icon = Icons.Default.PushPin, text = "플레이리스트 고정하기", onClick = onPinClick)
+            PlaylistActionItem(icon = Icons.Default.Edit, text = "플레이리스트 이름변경", onClick = onRenameClick)
             PlaylistActionItem(icon = Icons.Default.Delete, text = "플레이리스트 삭제하기", onClick = onDeleteClick)
         }
     }
@@ -92,25 +84,25 @@ fun PlaylistBottomSheet(
 fun PlaylistActionItem(
     icon: ImageVector,
     text: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
             .padding(vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector = icon,
             contentDescription = text,
             modifier = Modifier
                 .padding(end = 16.dp)
-                .size(24.dp)
+                .size(24.dp),
         )
         Text(
             text = text,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
         )
     }
 }

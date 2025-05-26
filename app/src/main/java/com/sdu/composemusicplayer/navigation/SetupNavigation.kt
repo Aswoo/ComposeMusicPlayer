@@ -22,6 +22,7 @@ import com.sdu.composemusicplayer.presentation.mainScreen.MainScreen
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.CompactAppScaffold
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.BarState
 import com.sdu.composemusicplayer.presentation.playlists.playlist.PlaylistsScreen
+import com.sdu.composemusicplayer.presentation.playlists.playlistdetail.PlaylistDetailScreen
 import com.sdu.composemusicplayer.presentation.setting.Setting
 import com.sdu.composemusicplayer.rememberMusicAppState
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
@@ -81,12 +82,18 @@ fun SetupNavigation(
                     )
                 }
                 composable(Routes.PLAYLISTS.route) {
-                    PlaylistsScreen(modifier = Modifier, onNavigateToPlaylist = {
-
-                    })
+                    PlaylistsScreen(
+                        modifier = Modifier,
+                        onNavigateToPlaylist = { playlistId ->
+                            navController.navigate("playlist_detail/$playlistId")
+                        },
+                    )
                 }
                 composable(Routes.SETTINGS.route) {
                     Setting()
+                }
+                composable("playlist_detail/{id}") { backStackEntry ->
+                    PlaylistDetailScreen(modifier = Modifier, onBackPressed = { navController.popBackStack() })
                 }
             }
         }
