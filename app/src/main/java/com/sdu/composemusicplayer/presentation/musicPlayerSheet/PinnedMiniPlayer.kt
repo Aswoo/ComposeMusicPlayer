@@ -4,6 +4,7 @@ package com.sdu.composemusicplayer.presentation.musicPlayerSheet
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,12 +39,14 @@ import androidx.compose.ui.unit.dp
 import com.sdu.composemusicplayer.domain.model.toSongAlbumArtModel
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.CrossFadingAlbumArt
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.ErrorPainterType
+import com.sdu.composemusicplayer.ui.theme.SpotiDarkGray
+import com.sdu.composemusicplayer.ui.theme.SpotiGreen
+import com.sdu.composemusicplayer.ui.theme.SpotiLightGray
 import com.sdu.composemusicplayer.viewmodel.MusicUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import androidx.compose.ui.graphics.Color
 
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MiniPlayer(
     modifier: Modifier,
@@ -58,10 +61,11 @@ fun MiniPlayer(
     val song = state.currentPlayedMusic
 
     Row(
-        modifier,
+        modifier = modifier
+            .background(SpotiDarkGray)
+            .padding(horizontal = 8.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         CrossFadingAlbumArt(
             modifier = Modifier
                 .fillMaxHeight()
@@ -83,13 +87,15 @@ fun MiniPlayer(
             Text(
                 modifier = Modifier.basicMarquee(Int.MAX_VALUE),
                 text = song.title,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White
             )
             Text(
                 modifier = Modifier,
                 text = song.artist.orEmpty(),
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Light,
+                color = SpotiLightGray,
                 maxLines = 1
             )
         }
@@ -99,7 +105,11 @@ fun MiniPlayer(
         Row {
             AnimatedVisibility(visible = showExtraControls) {
                 IconButton(onClick = onPrevious, enabled = enabled) {
-                    Icon(imageVector = Icons.TwoTone.SkipPrevious, contentDescription = "Previous")
+                    Icon(
+                        imageVector = Icons.TwoTone.SkipPrevious,
+                        contentDescription = "Previous",
+                        tint = Color.White
+                    )
                 }
             }
             Box(contentAlignment = Alignment.Center) {
@@ -110,48 +120,54 @@ fun MiniPlayer(
                 ) {
                     val icon =
                         if (state.isPlaying) Icons.TwoTone.Pause else Icons.TwoTone.PlayArrow
-                    Icon(imageVector = icon, contentDescription = null)
+                    Icon(imageVector = icon, contentDescription = null, tint = SpotiGreen)
                 }
                 SongCircularProgressIndicator(
                     modifier = Modifier.padding(end = 4.dp),
-                    songProgressProvider
+                    songProgressProvider = songProgressProvider,
+                    progressColor = SpotiGreen
                 )
             }
             AnimatedVisibility(visible = showExtraControls) {
                 IconButton(onClick = onNext, enabled = enabled) {
-                    Icon(imageVector = Icons.TwoTone.SkipNext, contentDescription = "Next")
+                    Icon(
+                        imageVector = Icons.TwoTone.SkipNext,
+                        contentDescription = "Next",
+                        tint = Color.White
+                    )
                 }
             }
         }
     }
-
 }
 
 @Composable
 fun SongCircularProgressIndicator(
     modifier: Modifier,
     songProgressProvider: () -> Float,
+    progressColor: Color = Color.White
 ) {
-    val progress = remember {
-        Animatable(0.0f)
-    }
-    LaunchedEffect(key1 = Unit) {
+    val progress = remember { Animatable(0.0f) }
+
+    LaunchedEffect(Unit) {
         while (isActive) {
             val newProgress = songProgressProvider()
             progress.animateTo(newProgress)
             delay(1000)
         }
     }
+
     CircularProgressIndicator(
         progress = { progress.value },
         modifier = modifier,
         strokeCap = StrokeCap.Round,
         strokeWidth = 2.dp,
-        trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+        color = progressColor,
+        trackColor = progressColor.copy(alpha = 0.15f)
     )
 }
 
+// 기존 enum 유지
 enum class BarState {
     COLLAPSED, EXPANDED
 }
-

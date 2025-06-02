@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sdu.composemusicplayer.core.model.playlist.PlaylistsRepository
 import com.sdu.composemusicplayer.domain.model.Music
+import com.sdu.composemusicplayer.domain.model.PlaySource
 import com.sdu.composemusicplayer.viewmodel.IPlayerEnvironment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -33,16 +34,13 @@ class PlaylistDetailViewModel @Inject constructor(
     init {
 
         collectionJob = viewModelScope.launch {
-            playlistDao.getPlaylistWithSongsFlow(id.toInt())
-                .collect {
-                    _state.emit(
-                        PlaylistDetailScreenState.Loaded(
-                            it.playlistInfo.id,
-                            it.playlistInfo.name,
-                            it.songs
-                        )
+            playlistDao.getPlaylistWithSongsFlow(id.toInt()).collect {
+                _state.emit(
+                    PlaylistDetailScreenState.Loaded(
+                        it.playlistInfo.id, it.playlistInfo.name, it.songs
                     )
-                }
+                )
+            }
         }
 
     }
@@ -56,7 +54,10 @@ class PlaylistDetailViewModel @Inject constructor(
         if (index == -1) return
 
         viewModelScope.launch {
-            playerEnvironment.setPlaylistAndPlayAtIndex(songs, index)
+            playerEnvironment.play(music = song, playSource = PlaySource.PLAYLIST, playList = songs)
+            _state.emit(
+                state.copy(currentPlayingMusic = song)
+            )
         }
     }
 
@@ -116,9 +117,9 @@ class PlaylistDetailViewModel @Inject constructor(
         val state = _state.value
         if (state !is PlaylistDetailScreenState.Loaded) return
 
-        val songs = state.music
+        val song = state.music.first()
         viewModelScope.launch {
-            playerEnvironment.setPlaylistAndPlayAtIndex(songs)
+            playerEnvironment.play(song, playSource = PlaySource.PLAYLIST, state.music)
         }
     }
 

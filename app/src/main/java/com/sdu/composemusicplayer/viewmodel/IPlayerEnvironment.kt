@@ -1,6 +1,7 @@
 package com.sdu.composemusicplayer.viewmodel
 
 import com.sdu.composemusicplayer.domain.model.Music
+import com.sdu.composemusicplayer.domain.model.PlaySource
 import kotlinx.coroutines.flow.Flow
 
 interface IPlayerEnvironment {
@@ -17,7 +18,7 @@ interface IPlayerEnvironment {
     fun isBottomMusicPlayerShowed(): Flow<Boolean>
 
     // ⏯️ 재생 제어
-    suspend fun play(music: Music) // queue 업데이트 없이 단일 음악 재생
+    suspend fun play(music: Music, playSource: PlaySource, playList: List<Music>? = null) // queue 업데이트 없이 단일 음악 재생
     suspend fun playAt(index: Int) // queue의 특정 인덱스부터 재생
     suspend fun pause()
     suspend fun resume()
@@ -33,5 +34,4 @@ interface IPlayerEnvironment {
     suspend fun refreshMusicList()
     suspend fun setShowBottomMusicPlayer(isShowed: Boolean)
     suspend fun resetIsPaused()
-    suspend fun setPlaylistAndPlayAtIndex(musicList: List<Music>,index : Int = 0)
 }

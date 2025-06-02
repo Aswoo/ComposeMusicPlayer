@@ -6,6 +6,8 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -47,135 +51,80 @@ import com.sdu.composemusicplayer.domain.model.toSongAlbumArtModel
 import com.sdu.composemusicplayer.presentation.component.menu.MenuActionItem
 import com.sdu.composemusicplayer.presentation.component.menu.MusicDropdownMenu
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.LocalEfficientThumbnailImageLoader
+import com.sdu.composemusicplayer.ui.theme.SpotiDarkGray
 import com.sdu.composemusicplayer.utils.millisToTime
 
 
+import com.sdu.composemusicplayer.ui.theme.SpotiWhite
+import com.sdu.composemusicplayer.ui.theme.SpotiGray
+import com.sdu.composemusicplayer.ui.theme.SpotiGreen
+import com.sdu.composemusicplayer.ui.theme.SpotiLightGray
+
 @Composable
 fun PlayListMusicRow(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     music: Music,
-    menuOptions: List<MenuActionItem>? = null,
-    songRowState: SongRowState
+    menuOptions: List<MenuActionItem>,
+    isPlaying: Boolean,
 ) {
-
     Row(
         modifier = modifier
-            .padding(
-                start = 12.dp,
-                end = 12.dp,
-                top = 12.dp,
-                bottom = 12.dp
-            ),
-        verticalAlignment = Alignment.CenterVertically
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 10.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(if (isPlaying) SpotiDarkGray else Color.Transparent),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-
-        MusicInfoRow(
-            modifier = Modifier.weight(1f),
-            music = music
-        )
-
-        Box(
-            Modifier
-                .fillMaxHeight()
-                .width(48.dp), contentAlignment = Alignment.Center
-        ) {
-
-            if (menuOptions != null) {
-                androidx.compose.animation.AnimatedVisibility(
-                    visible = songRowState == SongRowState.MENU_SHOWN,
-                    enter = EnterTransition.None,
-                    exit = ExitTransition.None
-                ) {
-                    MusicOverflowMenu(menuOptions = menuOptions)
-                }
-            }
-
-            androidx.compose.animation.AnimatedVisibility(
-                visible = songRowState == SongRowState.SELECTION_STATE_SELECTED,
-                enter = scaleIn(spring(Spring.DampingRatioMediumBouncy)),
-                exit = scaleOut()
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.CheckCircle,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.tertiary
-                )
-            }
-
-        }
-
-
-    }
-
-}
-
-enum class SongRowState {
-    MENU_SHOWN, SELECTION_STATE_NOT_SELECTED, SELECTION_STATE_SELECTED, EMPTY
-}
-
-@Composable
-fun MusicInfoRow(
-    modifier: Modifier,
-    music: Music,
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
         AsyncImage(
             modifier = Modifier
-                .size(54.dp)
-                .clip(RoundedCornerShape(6.dp)),
+                .padding(8.dp)
+                .size(60.dp)
+                .clip(RoundedCornerShape(12.dp)),
             model = music.toSongAlbumArtModel(),
             imageLoader = LocalEfficientThumbnailImageLoader.current,
-            contentDescription = "Cover Photo",
+            contentDescription = "Album Art",
             contentScale = ContentScale.Crop,
             fallback = rememberVectorPainter(image = Icons.Rounded.MusicNote),
-            placeholder = painterResource(id = R.drawable.placeholder),
-            error = painterResource(id = R.drawable.placeholder),
-            onError = {  }
+            placeholder = painterResource(id = R.drawable.ic_music_unknown),
+            error = painterResource(id = R.drawable.ic_music_unknown),
         )
 
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(12.dp))
 
-        Column(Modifier.weight(1f)) {
-
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 8.dp),
+        ) {
             Text(
                 text = music.title,
-                fontWeight = FontWeight.Normal,
                 fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = if (isPlaying) SpotiGreen else SpotiWhite,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            //Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = music.artist,
-                fontWeight = FontWeight.Normal,
-                fontSize = 11.sp,
+                text = "${music.artist} • Album name",
+                fontSize = 12.sp,
+                color = SpotiGray,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Elbum name",
-                    fontSize = 11.sp,
-                    maxLines = 1,
-                    modifier = Modifier.weight(1f)
-                )
-                Text(
-                    text = music.duration.millisToTime(),
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Normal
-                )
-            }
         }
+
+        Text(
+            text = music.duration.millisToTime(),
+            fontSize = 12.sp,
+            color = SpotiGray,
+            modifier = Modifier.padding(end = 8.dp),
+        )
+
+        MusicOverflowMenu(menuOptions)
     }
 }
+
 
 @Composable
 fun MusicOverflowMenu(menuOptions: List<MenuActionItem>) {
@@ -186,6 +135,6 @@ fun MusicOverflowMenu(menuOptions: List<MenuActionItem>) {
     MusicDropdownMenu(
         expanded = expanded,
         onDismissRequest = { expanded = false },
-        actions = menuOptions
+        actions = menuOptions,
     )
 }

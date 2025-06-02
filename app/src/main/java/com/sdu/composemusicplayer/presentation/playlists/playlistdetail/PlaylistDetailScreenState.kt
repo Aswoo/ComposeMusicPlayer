@@ -11,6 +11,7 @@ sealed interface PlaylistDetailScreenState {
         val id: Int,
         val name: String,
         val music: List<Music>,
+        val currentPlayingMusic: Music? = null
     ) : PlaylistDetailScreenState
 
     data object Deleted : PlaylistDetailScreenState

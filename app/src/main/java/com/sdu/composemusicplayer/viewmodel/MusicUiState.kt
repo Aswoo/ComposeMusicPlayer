@@ -1,6 +1,9 @@
 package com.sdu.composemusicplayer.viewmodel
 
 import com.sdu.composemusicplayer.domain.model.Music
+import com.sdu.composemusicplayer.domain.model.SortDirection
+import com.sdu.composemusicplayer.domain.model.SortOption
+import com.sdu.composemusicplayer.domain.model.SortState
 
 
 data class MusicUiState(
@@ -12,4 +15,5 @@ data class MusicUiState(
     val isPlaying: Boolean = false,
     val isBottomPlayerShow: Boolean = false,
     val isPaused: Boolean = false,
+    val sortState : SortState = SortState()
 )

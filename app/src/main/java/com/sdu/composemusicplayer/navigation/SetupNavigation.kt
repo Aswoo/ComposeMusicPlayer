@@ -26,6 +26,7 @@ import com.sdu.composemusicplayer.presentation.playlists.playlistdetail.Playlist
 import com.sdu.composemusicplayer.presentation.setting.Setting
 import com.sdu.composemusicplayer.rememberMusicAppState
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
+import navigateToTopLevelDestination
 
 
 val topLevelDestinations =

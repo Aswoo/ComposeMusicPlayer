@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sdu.composemusicplayer.ui.theme.SpotiWhite
 
 
 @Composable
@@ -83,7 +84,8 @@ fun RenameAbleTextView(
                 } else Modifier,
                 text = text,
                 fontWeight = fontWeight,
-                fontSize = fontSize.sp
+                fontSize = fontSize.sp,
+                color = SpotiWhite
             )
         }
     }

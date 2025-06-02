@@ -61,7 +61,7 @@ fun CrossFadingAlbumArt(
     }
 
     val solidColorPainter = remember { ColorPainter(Color.Black) }
-    val placeholderPainter = painterResource(id = R.drawable.vinyl_background)
+    val placeholderPainter = painterResource(id = R.drawable.placeholder)
 
     rememberAsyncImagePainter(
         model = imageRequest,

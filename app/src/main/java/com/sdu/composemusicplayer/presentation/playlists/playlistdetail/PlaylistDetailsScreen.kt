@@ -1,25 +1,11 @@
 package com.sdu.composemusicplayer.presentation.playlists.playlistdetail
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -28,32 +14,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlaylistAdd
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Shuffle
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -62,30 +32,24 @@ import com.sdu.composemusicplayer.domain.model.toSongAlbumArtModel
 import com.sdu.composemusicplayer.presentation.component.LocalCommonMusicAction
 import com.sdu.composemusicplayer.presentation.component.RenameAbleTextView
 import com.sdu.composemusicplayer.presentation.component.menu.buildCommonMusicActions
+import com.sdu.composemusicplayer.presentation.component.menu.buildPlayListMusicActions
+import com.sdu.composemusicplayer.presentation.component.menu.removeFromPlaylist
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.AlbumArtImage
+import com.sdu.composemusicplayer.ui.theme.SpotiGreen
 import com.sdu.composemusicplayer.utils.millisToTime
-
 
 @Composable
 fun PlaylistDetailScreen(
     modifier: Modifier,
     onBackPressed: () -> Unit,
-    playlistDetailViewModel: PlaylistDetailViewModel = hiltViewModel()
+    playlistDetailViewModel: PlaylistDetailViewModel = hiltViewModel(),
 ) {
-
     val state by playlistDetailViewModel.state.collectAsState()
-
-    LaunchedEffect(key1 = state) {
-        if (state is PlaylistDetailScreenState.Deleted) {
-            onBackPressed()
-        }
+    LaunchedEffect(state) {
+        if (state is PlaylistDetailScreenState.Deleted) onBackPressed()
     }
-
-    if (state is PlaylistDetailScreenState.Deleted) {
-        return
-    }
-
-    PlaylistDetailScreen(
+    if (state is PlaylistDetailScreenState.Deleted) return
+    PlaylistDetailContent(
         modifier = modifier,
         state = state,
         playlistActions = playlistDetailViewModel,
@@ -93,13 +57,11 @@ fun PlaylistDetailScreen(
         onSongClicked = playlistDetailViewModel::onSongClicked,
         onEdit = {},
     )
-
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PlaylistDetailScreen(
+private fun PlaylistDetailContent(
     modifier: Modifier,
     state: PlaylistDetailScreenState,
     playlistActions: PlaylistActions,
@@ -107,37 +69,24 @@ private fun PlaylistDetailScreen(
     onSongClicked: (Music) -> Unit,
     onEdit: () -> Unit,
 ) {
-
     if (state is PlaylistDetailScreenState.Loading) return
-    val state = state as PlaylistDetailScreenState.Loaded
-
-    val scope = rememberCoroutineScope()
+    val loadedState = state as PlaylistDetailScreenState.Loaded
     val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
     val listState = rememberLazyListState()
     val shouldShowTopBarTitle by rememberShouldShowTopBar(listState = listState)
     val commonSongsActions = LocalCommonMusicAction.current
-
-    val deletePlaylistDialog =
-        rememberDeletePlaylistDialog(playlistName = state.name, onDelete = playlistActions::delete)
-
     val context = LocalContext.current
     var inRenameMode by remember { mutableStateOf(false) }
-    BackHandler(inRenameMode) {
-        inRenameMode = false
-    }
-
+    BackHandler(inRenameMode) { inRenameMode = false }
 
     Scaffold(
-        modifier = modifier.pointerInput(Unit) {
-            detectTapGestures(
-                onPress = {
-                    if (inRenameMode) inRenameMode = false
-                }
-            )
-        }
-        ) { paddingValues ->
-
+        modifier = modifier
+            .background(Color.Black)
+            .pointerInput(Unit) {
+                detectTapGestures { if (inRenameMode) inRenameMode = false }
+            },
+        containerColor = Color.Black,
+    ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -147,66 +96,56 @@ private fun PlaylistDetailScreen(
         ) {
             item {
                 PlaylistHeader(
-                    Modifier
+                    modifier = Modifier
                         .fillMaxWidth()
-                        .height(IntrinsicSize.Min)
-                        .padding(start = 16.dp, end = 16.dp, top = 8.dp),
-                    state.name,
-                    state.music.size,
-                    state.music.sumOf { it.duration },
-                    state.music.firstOrNull(),
+                        .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
+                    name = loadedState.name,
+                    numberOfMusic = loadedState.music.size,
+                    songsDuration = loadedState.music.sumOf { it.duration },
+                    firstMusic = loadedState.music.firstOrNull(),
                     inRenameMode = inRenameMode,
                     onRename = { inRenameMode = false; playlistActions.rename(it) },
                     onEnableRenameMode = { inRenameMode = true },
-                    playlistActions::play,
-                    playlistActions::shuffle
+                    onPlay = playlistActions::play,
+                    onShuffle = playlistActions::shuffle,
                 )
             }
-
-            if (state.music.size == 0) {
+            if (loadedState.music.isEmpty()) {
                 item {
-                    EmptyPlaylist(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues)
-                    )
+                    EmptyPlaylist(modifier = Modifier.fillParentMaxSize())
                 }
                 return@LazyColumn
             }
-
             item {
                 Text(
-                    text = "Songs",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(
-                        top = 16.dp,
-                        bottom = 8.dp,
-                        start = 16.dp,
-                        end = 16.dp
-                    )
+                    text = "Tracks",
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Gray,
                 )
             }
-            itemsIndexed(state.music) { index, item ->
-
+            itemsIndexed(loadedState.music) { _, music ->
                 PlayListMusicRow(
-                    modifier = Modifier.fillMaxWidth().clickable {
-                        onSongClicked(item)
-                    },
-                    menuOptions = buildCommonMusicActions(
-                        music = item,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onSongClicked(music) },
+                    music = music,
+                    isPlaying = if (state.currentPlayingMusic != null && state.currentPlayingMusic.audioId == music.audioId) true else false,
+                    menuOptions = buildPlayListMusicActions(
+                        music = music,
                         context = context,
                         shareAction = commonSongsActions.shareAction,
-                        songDeleteAction = commonSongsActions.deleteAction
-                    ),
-                    songRowState = SongRowState.SELECTION_STATE_NOT_SELECTED,
-                    music = item
+                    ).apply {
+                        removeFromPlaylist {
+                            playlistActions.removeSongs(listOf(music.audioPath))
+                        }
+                    },
                 )
             }
         }
     }
 }
-
 
 @Composable
 private fun PlaylistHeader(
@@ -214,117 +153,98 @@ private fun PlaylistHeader(
     name: String,
     numberOfMusic: Int,
     songsDuration: Long,
-    firstMusic: Music?, // for the playlist image,
+    firstMusic: Music?,
     inRenameMode: Boolean,
     onRename: (String) -> Unit,
     onEnableRenameMode: () -> Unit,
     onPlay: () -> Unit,
-    onShuffle: () -> Unit
+    onShuffle: () -> Unit,
 ) {
-
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-
-        if (firstMusic != null) {
+        firstMusic?.let {
             AlbumArtImage(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .aspectRatio(1.0f)
-                    .weight(0.4f),
-                songAlbumArtModel = firstMusic.toSongAlbumArtModel(),
-                crossFadeDuration = 150
+                    .clip(RoundedCornerShape(12.dp))
+                    .size(100.dp),
+                songAlbumArtModel = it.toSongAlbumArtModel(),
+                crossFadeDuration = 150,
             )
         }
-
-        Spacer(modifier = Modifier.width(8.dp))
-
-        Column(
-            Modifier
-                .weight(0.6f)
-                .fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween
-        ) {
-
-            Column {
-                RenameAbleTextView (
-                    modifier = Modifier,
-                    inRenameMode = inRenameMode,
-                    text = name,
-                    fontSize = 24,
-                    fontWeight = FontWeight.Bold,
-                    onEnableRenameMode = onEnableRenameMode,
-                    onRename = onRename,
-                    enableLongPressToEdit = true
-                )
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    text = "$numberOfMusic tracks • ${songsDuration.millisToTime()}",
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp
-                )
-            }
-            Spacer(modifier = Modifier.heightIn(6.dp, Dp.Unspecified))
+        Spacer(modifier = Modifier.width(16.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            RenameAbleTextView(
+                modifier = Modifier.fillMaxWidth(),
+                inRenameMode = inRenameMode,
+                text = name,
+                fontSize = 24,
+                fontWeight = FontWeight.Bold,
+                onEnableRenameMode = onEnableRenameMode,
+                onRename = onRename,
+                enableLongPressToEdit = true,
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = "$numberOfMusic tracks • ${songsDuration.millisToTime()}",
+                fontSize = 13.sp,
+                color = Color.LightGray,
+            )
+            Spacer(modifier = Modifier.height(12.dp))
             Row(modifier = Modifier.fillMaxWidth()) {
                 Button(
-                    modifier = Modifier.weight(0.7f),
+                    modifier = Modifier.weight(1f),
                     onClick = onPlay,
-                    enabled = numberOfMusic > 0
+                    colors = ButtonDefaults.buttonColors(containerColor = SpotiGreen),
+                    shape = RoundedCornerShape(50),
+                    enabled = numberOfMusic > 0,
                 ) {
-                    Icon(imageVector = Icons.Rounded.PlayArrow, contentDescription = "Play")
+                    Icon(imageVector = Icons.Rounded.PlayArrow, contentDescription = null)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("Play")
                 }
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(8.dp))
                 Button(
-                    modifier = Modifier.weight(0.3f),
+                    modifier = Modifier.size(48.dp),
                     onClick = onShuffle,
                     shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
-                    enabled = numberOfMusic > 0
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray),
+                    contentPadding = PaddingValues(0.dp),
+                    enabled = numberOfMusic > 0,
                 ) {
-                    Icon(imageVector = Icons.Rounded.Shuffle, contentDescription = "Shuffle")
+                    Icon(imageVector = Icons.Rounded.Shuffle, contentDescription = null)
                 }
             }
-
-        }
-
-    }
-
-}
-
-@Composable
-fun rememberShouldShowTopBar(
-    listState: LazyListState
-): State<Boolean> {
-    return remember {
-        derivedStateOf {
-            if (listState.layoutInfo.visibleItemsInfo.isEmpty()) return@derivedStateOf false
-            if (listState.firstVisibleItemIndex != 0) true
-            else {
-                val visibleItems = listState.layoutInfo.visibleItemsInfo
-                listState.firstVisibleItemScrollOffset > visibleItems[0].size * 0.8f
-            }
         }
     }
 }
 
 @Composable
-fun EmptyPlaylist(
-    modifier: Modifier
-) {
+fun rememberShouldShowTopBar(listState: androidx.compose.foundation.lazy.LazyListState): State<Boolean> = remember {
+    derivedStateOf {
+        if (listState.layoutInfo.visibleItemsInfo.isEmpty()) false
+        else listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > listState.layoutInfo.visibleItemsInfo[0].size * 0.8f
+    }
+}
+
+@Composable
+fun EmptyPlaylist(modifier: Modifier) {
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
                 modifier = Modifier.size(72.dp),
                 imageVector = Icons.Filled.PlaylistAdd,
-                contentDescription = null
+                contentDescription = null,
+                tint = Color.Gray,
             )
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
-                modifier = Modifier.padding(horizontal = 16.dp),
                 text = "Your playlist is empty!\nAdd songs from the main page.",
-                fontWeight = FontWeight.Light, fontSize = 16.sp
+                fontSize = 14.sp,
+                color = Color.LightGray,
+                fontWeight = FontWeight.Light,
             )
         }
     }
 }
-
-

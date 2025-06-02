@@ -7,21 +7,19 @@ import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import com.sdu.composemusicplayer.core.database.DBQueueItem
 import com.sdu.composemusicplayer.core.database.MusicRepository
 import com.sdu.composemusicplayer.core.database.QueueRepository
 import com.sdu.composemusicplayer.core.database.entity.MusicEntity
 import com.sdu.composemusicplayer.core.database.mapper.toDomain
-import com.sdu.composemusicplayer.core.database.mapper.toEntity
 import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.MusicQueue
-import com.sdu.composemusicplayer.domain.model.PlayBackMode
+import com.sdu.composemusicplayer.domain.model.PlaySource
 import com.sdu.composemusicplayer.domain.model.QueueItem
-import com.sdu.composemusicplayer.utils.MusicUtil
+import com.sdu.composemusicplayer.mediaPlayer.service.PlayerServiceManager
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,232 +30,205 @@ class PlayerEnvironment @Inject constructor(
     @ApplicationContext private val context: Context,
     private val musicRepository: MusicRepository,
     private val queueRepository: QueueRepository,
+    private val serviceManager: PlayerServiceManager,
     private val exoPlayer: ExoPlayer,
 ) : IPlayerEnvironment {
 
-    val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher = Dispatchers.IO
+    private val scope = CoroutineScope(dispatcher + SupervisorJob())
 
-    private val _allMusics = MutableStateFlow(emptyList<Music>())
-    private val allMusics: StateFlow<List<Music>> = _allMusics.asStateFlow()
+    // 전체 음악 목록 (변경 없음)
+    private val _allMusics = MutableStateFlow<List<Music>>(emptyList())
+    override fun getAllMusics(): Flow<List<Music>> = _allMusics.asStateFlow()
 
-    private val _currentDuration = MutableStateFlow(0L)
-    private val currentDuration: StateFlow<Long> = _currentDuration
+    // MusicQueue 상태 관리 (큐 + 현재 인덱스)
+    private val _musicQueue = MutableStateFlow(MusicQueue.EMPTY)
+    override fun observeQueue(): Flow<List<Music>> = _musicQueue.map { queue ->
+        queue.items.map { it.music }
+    }
 
-    private val _isPlaying = MutableStateFlow(false)
-    val isPlaying: StateFlow<Boolean> = _isPlaying
+    override fun getCurrentIndex(): Flow<Int> = _musicQueue.map { it.currentIndex }
 
+    // 현재 재생 중인 Music
     private val _currentPlayedMusic = MutableStateFlow(Music.default)
-    val currentPlayedMusic: StateFlow<Music> = _currentPlayedMusic
+    override fun getCurrentPlayedMusic(): Flow<Music> = _currentPlayedMusic.asStateFlow()
 
-    private val _playbackMode = MutableStateFlow(PlayBackMode.REPEAT_ONE)
-    val playbackMode: StateFlow<PlayBackMode> = _playbackMode
-
-    private val _hasStopped = MutableStateFlow(false)
-    val hasStopped: StateFlow<Boolean> = _hasStopped
-
-    private val _isBottomMusicPlayerShowed = MutableStateFlow(false)
-    val isBottomMusicPlayerShowed: StateFlow<Boolean> = _isBottomMusicPlayerShowed
-
-    val queue = MutableStateFlow(MusicQueue.EMPTY)
+    // 재생 상태
+    private val _isPlaying = MutableStateFlow(false)
+    override fun isPlaying(): Flow<Boolean> = _isPlaying.asStateFlow()
 
     private val _isPaused = MutableStateFlow(false)
-    private val isPaused: StateFlow<Boolean> = _isPaused
+    override fun isPaused(): Flow<Boolean> = _isPaused.asStateFlow()
 
-    private val playerHandler = Handler(Looper.getMainLooper())
-    private val playingHandler = Handler(Looper.getMainLooper())
-    private var playingRunnable: Runnable = Runnable {}
+    // 재생 시간
+    private val _currentDuration = MutableStateFlow(0L)
+    override fun getCurrentDuration(): Flow<Long> = _currentDuration.asStateFlow()
+
+    // 하단 플레이어 노출 여부
+    private val _isBottomMusicPlayerShowed = MutableStateFlow(false)
+    override fun isBottomMusicPlayerShowed(): Flow<Boolean> = _isBottomMusicPlayerShowed.asStateFlow()
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val updateRunnable = object : Runnable {
+        override fun run() {
+            val position = exoPlayer.currentPosition.takeIf { exoPlayer.duration != -1L } ?: 0L
+            _currentDuration.value = position
+            handler.postDelayed(this, 1000)
+        }
+    }
+
+    private val playerListener = object : Player.Listener {
+        override fun onPlaybackStateChanged(playbackState: Int) {
+            if (playbackState == Player.STATE_ENDED) {
+                scope.launch { next() }
+            } else if (playbackState == Player.STATE_READY) {
+                serviceManager.startMusicService()  // 준비 완료 시 서비스 시작
+            }
+        }
+
+        override fun onIsPlayingChanged(isPlaying: Boolean) {
+            _isPlaying.value = isPlaying
+            _isPaused.value = !isPlaying
+        }
+    }
 
     init {
-        CoroutineScope(dispatcher).launch {
-            musicRepository.getAllMusics().distinctUntilChanged().collect {
-                _allMusics.emit(it.map { entity -> entity.toDomain() })
-            }
-        }
-        exoPlayer.addListener(
-            object : Player.Listener {
-                override fun onPlaybackStateChanged(playbackState: Int) {
-                    if (playbackState == ExoPlayer.STATE_ENDED) {
-                        when (playbackMode.value) {
-                            PlayBackMode.REPEAT_ONE -> CoroutineScope(dispatcher).launch {
-                                play(currentPlayedMusic.value)
-                            }
+        exoPlayer.addListener(playerListener)
 
-                            PlayBackMode.REPEAT_ALL -> {
-                                val currentIndex = queue.value.items.indexOfFirst {
-                                    it.music.audioId == currentPlayedMusic.value.audioId
-                                }
-                                val nextMusic = when {
-                                    currentIndex == queue.value.items.lastIndex -> queue.value.items[0].music
-                                    currentIndex != -1 -> queue.value.items[currentIndex + 1].music
-                                    else -> queue.value.items[0].music
-                                }
-                                CoroutineScope(dispatcher).launch { play(nextMusic) }
-                            }
-
-                            PlayBackMode.REPEAT_OFF -> {
-                                exoPlayer.stop()
-                                _currentPlayedMusic.tryEmit(Music.default)
-                            }
-                        }
+        scope.launch {
+            musicRepository.getAllMusics()
+                .distinctUntilChanged()
+                .map { list -> list.map(MusicEntity::toDomain) }
+                .collect { list ->
+                    _allMusics.value = list
+                    if (_musicQueue.value.items.isEmpty()) {
+                        _musicQueue.value = MusicQueue(
+                            items = list.mapIndexed { index, music -> QueueItem(music, index) }.toMutableList(),
+                            currentIndex = 0
+                        )
                     }
                 }
-
-                override fun onIsPlayingChanged(isPlaying: Boolean) {
-                    _isPlaying.tryEmit(isPlaying)
-                }
-            },
-        )
+        }
     }
 
-    override fun getAllMusics(): Flow<List<Music>> = allMusics
-    override fun getCurrentPlayedMusic(): Flow<Music> = currentPlayedMusic
-    override fun getCurrentIndex(): Flow<Int> = queue.map {
-        it.items.indexOfFirst { item -> item.music.audioId == currentPlayedMusic.value.audioId }
+    override suspend fun updateQueue(queue: List<Music>) {
+        val newItems = queue.mapIndexed { index, music -> QueueItem(music, index) }.toMutableList()
+        _musicQueue.value = MusicQueue(newItems, 0)
+//        queueRepository.saveQueueFromDBQueueItems(newItems)
     }
 
-    override fun isPlaying(): Flow<Boolean> = isPlaying
-    override fun isBottomMusicPlayerShowed(): Flow<Boolean> = isBottomMusicPlayerShowed
-    override fun getCurrentDuration(): Flow<Long> = currentDuration
-    override fun isPaused(): Flow<Boolean> = isPaused
+    override suspend fun updateMusicList(musicList: List<Music>) {
+        _allMusics.value = musicList
+    }
+
+    override suspend fun refreshMusicList() {
+        val freshList = musicRepository.getAllMusics()
+            .first()
+            .map(MusicEntity::toDomain)
+        _allMusics.value = freshList
+    }
+
+    override suspend fun setShowBottomMusicPlayer(isShowed: Boolean) {
+        _isBottomMusicPlayerShowed.value = isShowed
+    }
+
     override suspend fun resetIsPaused() {
-        _isPaused.emit(false)
+        _isPaused.value = false
     }
 
-    override fun observeQueue(): Flow<List<Music>> = queue.map { it.items.map { item -> item.music } }
+    private fun playQueueItemAt(index: Int) {
+        val queue = _musicQueue.value
+        if (index !in queue.items.indices) return
 
-    override suspend fun updateQueue(queueList: List<Music>) {
-        val musicQueue: MutableList<QueueItem> = queueList.map {
-            QueueItem(
-                music = it,
-                originalIndex = queueList.indexOf(it),
-            )
-        }.toMutableList()
-        queue.value = MusicQueue(items = musicQueue, currentIndex = 0)
+        val item = queue.items[index]
+        _musicQueue.value = queue.copy(currentIndex = index)
+        _currentPlayedMusic.value = item.music
 
-//        queueRepository.saveQueueFromDBQueueItems(musicQueue)
+        exoPlayer.setMediaItem(MediaItem.fromUri(item.music.audioPath.toUri()))
+        exoPlayer.prepare()
+        exoPlayer.play()
+
+        startDurationUpdates()
     }
 
-    override suspend fun play(music: Music) {
-        val indexInQueue = queue.value.items.indexOfFirst { it.music.audioId == music.audioId }
-        if (indexInQueue == -1) {
-            // queue에 없는 음악은 무시하거나 예외 처리
-            return
-        }
+    override suspend fun play(music: Music, playSource: PlaySource, playList: List<Music>?) {
+        when (playSource) {
+            PlaySource.PLAYLIST -> {
+                val queue = _musicQueue.value
+                val currentQueueMusicList = queue.items.map { it.music }
 
-        _hasStopped.emit(false)
-        _currentPlayedMusic.emit(music)
+                if (playList != null && currentQueueMusicList == playList) {
+                    // 같은 Queue라면 현재 큐에서 index 찾아서 재생
+                    val index = queue.items.indexOfFirst { it.music.audioId == music.audioId }
+                    if (index != -1) {
+                        playQueueItemAt(index)
+                    }
+                } else if (playList != null) {
+                    // 큐를 새로 설정하고 재생
+                    val queueItems = playList.mapIndexed { i, m -> QueueItem(m, i) }.toMutableList()
+                    val index = playList.indexOfFirst { it.audioId == music.audioId }
+                    if (index != -1) {
+                        _musicQueue.value = MusicQueue(queueItems, index)
+                        playQueueItemAt(index)
+                    }
+                }
+            }
+            PlaySource.SINGLE -> {
+                val musicList = _allMusics.value
+                val index = musicList.indexOfFirst { it.audioId == music.audioId }
+                if (index == -1) return
 
-        playerHandler.post {
-            exoPlayer.setMediaItem(MediaItem.fromUri(music.audioPath.toUri()))
-            exoPlayer.prepare()
-            exoPlayer.play()
-        }
-
-        playingRunnable = object : Runnable {
-            override fun run() {
-                val duration = if (exoPlayer.duration != -1L) exoPlayer.currentPosition else 0L
-                _currentDuration.tryEmit(duration)
-                playingHandler.postDelayed(this, 1000)
+                val queueItems = musicList.mapIndexed { i, m -> QueueItem(m, i) }.toMutableList()
+                _musicQueue.value = MusicQueue(queueItems, index)
+                playQueueItemAt(index)
             }
         }
-        playingHandler.post(playingRunnable)
     }
 
 
     override suspend fun playAt(index: Int) {
-        val music = queue.value.items.getOrNull(index)?.music ?: return
-        play(music)
+        playQueueItemAt(index)
     }
 
     override suspend fun pause() {
-        playerHandler.post { exoPlayer.pause() }
-        _isPaused.emit(true)
+        exoPlayer.pause()
     }
 
     override suspend fun resume() {
-        if (hasStopped.value && currentPlayedMusic.value != Music.default) {
-            play(currentPlayedMusic.value)
-        } else {
-            playerHandler.post { exoPlayer.play() }
-        }
+        exoPlayer.play()
     }
 
     override suspend fun previous() {
-        val currentIndex = queue.value.items.indexOfFirst {
-            it.music.audioId == currentPlayedMusic.value.audioId
+        val queue = _musicQueue.value
+        if (queue.skipToPrevious()) {
+            playQueueItemAt(queue.currentIndex)
+        } else {
+            // 만약 이전곡 없으면 반복 등 추가 처리 가능
+            // 여기서는 첫 곡 유지
         }
-        val previousMusic = when {
-            currentIndex == 0 -> queue.value.items.last().music
-            currentIndex >= 1 -> queue.value.items[currentIndex - 1].music
-            else -> queue.value.items.first().music
-        }
-        play(previousMusic)
     }
 
     override suspend fun next() {
-        val currentIndex = queue.value.items.indexOfFirst {
-            it.music.audioId == currentPlayedMusic.value.audioId
+        val queue = _musicQueue.value
+        if (queue.skipToNext()) {
+            playQueueItemAt(queue.currentIndex)
+        } else {
+            // 마지막 곡이면 첫 곡으로 이동 (반복 재생)
+            playQueueItemAt(0)
         }
-        val nextMusic = when {
-            currentIndex == queue.value.items.lastIndex -> queue.value.items.first().music
-            currentIndex != -1 -> queue.value.items[currentIndex + 1].music
-            else -> queue.value.items.first().music
-        }
-        play(nextMusic)
     }
 
     override fun snapTo(duration: Long, fromUser: Boolean) {
-        _currentDuration.tryEmit(duration)
-        if (fromUser) playerHandler.post { exoPlayer.seekTo(duration) }
+        exoPlayer.seekTo(duration)
     }
 
-    override suspend fun setShowBottomMusicPlayer(isShowed: Boolean) {
-        _isBottomMusicPlayerShowed.emit(isShowed)
+    private fun startDurationUpdates() {
+        handler.removeCallbacks(updateRunnable)
+        handler.post(updateRunnable)
     }
 
-    override suspend fun updateMusicList(musicList: List<Music>) {
-        _allMusics.emit(musicList)
-    }
-
-    override suspend fun refreshMusicList() {
-        val scannedMusics = MusicUtil.fetchMusicFromDevice(context = context)
-        insertAllMusics(scannedMusics)
-    }
-
-    private suspend fun insertAllMusics(newMusicList: List<MusicEntity>) {
-        val musicsToInsert = arrayListOf<MusicEntity>()
-        val musicsToDelete = arrayListOf<MusicEntity>()
-
-        val storedMusicsIDs = allMusics.value.map { it.audioId }
-        val newMusicsIDs = newMusicList.map { it.audioId }
-
-        newMusicList.forEach {
-            if (it.audioId !in storedMusicsIDs) musicsToInsert.add(it)
-        }
-        allMusics.value.forEach {
-            if (it.audioId !in newMusicsIDs) {
-                musicsToDelete.add(it.toEntity())
-            }
-        }
-
-        musicRepository.insertMusics(*musicsToInsert.toTypedArray())
-        musicRepository.deleteMusics(*musicsToDelete.toTypedArray(), context = context)
-    }
-
-    override suspend fun setPlaylistAndPlayAtIndex(playlist: List<Music>, index: Int) {
-        if (playlist.isEmpty()) return
-        if(!isSameQueue(playlist)){
-            updateQueue(playlist)
-        }
-        play(playlist[index])
-    }
-
-    private fun isSameQueue(playlist: List<Music>): Boolean {
-        val currentQueue = queue.value
-        if(currentQueue.items.size != playlist.size) return false
-        for (i in playlist.indices) {
-            if (currentQueue.items[i].music.audioId != playlist[i].audioId) return false
-        }
-        return true
+    private fun stopDurationUpdates() {
+        handler.removeCallbacks(updateRunnable)
+        _currentDuration.value = 0L
     }
 }

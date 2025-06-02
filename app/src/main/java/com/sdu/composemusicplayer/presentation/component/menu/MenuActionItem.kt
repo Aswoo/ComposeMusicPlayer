@@ -39,3 +39,15 @@ fun buildCommonMusicActions(
     }
     return list
 }
+
+fun buildPlayListMusicActions(
+    music: Music,
+    context: Context,
+    shareAction: MusicShareAction,
+): MutableList<MenuActionItem> {
+    val musicList = listOf(music)
+    val list = mutableListOf<MenuActionItem>().apply {
+        share { shareAction.share(context, musicList) }
+    }
+    return list
+}

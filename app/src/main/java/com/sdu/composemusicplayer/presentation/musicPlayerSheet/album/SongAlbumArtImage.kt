@@ -32,7 +32,7 @@ fun AlbumArtImage(
         contentDescription = "Artwork",
         contentScale = ContentScale.Crop,
         imageLoader = LocalInefficientThumbnailImageLoader.current,
-        error = painterResource(id = R.drawable.vinyl_background),
+        error = painterResource(id = R.drawable.placeholder),
         placeholder = ColorPainter(Color.Transparent)
     )
 }

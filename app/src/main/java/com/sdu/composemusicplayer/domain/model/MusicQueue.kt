@@ -43,6 +43,10 @@ data class MusicQueue(
         return false
     }
 
+    fun isSameQueue(oldQueue: List<QueueItem>, newList: List<Music>): Boolean {
+        return oldQueue.map { it.music.audioId } == newList.map { it.audioId }
+    }
+
     companion object {
         val EMPTY = MusicQueue(mutableListOf(), 0)
     }

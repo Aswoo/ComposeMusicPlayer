@@ -1,58 +1,36 @@
-@file:OptIn(ExperimentalFoundationApi::class)
+@file:OptIn(ExperimentalFoundationApi::class, ExperimentalFoundationApi::class)
 
 package com.sdu.composemusicplayer.presentation.playlists.playlist
 
+import PlaylistBottomSheet
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-
 import com.sdu.composemusicplayer.domain.model.PlaylistInfo
-import com.sdu.composemusicplayer.domain.playback.PlaylistPlaybackActions
 import com.sdu.composemusicplayer.presentation.component.dialog.rememberCreatePlaylistDialog
 import com.sdu.composemusicplayer.presentation.playlists.playlistdetail.rememberDeletePlaylistDialog
+import com.sdu.composemusicplayer.ui.theme.SpotiBackground
+import com.sdu.composemusicplayer.ui.theme.SpotiBlack
+import com.sdu.composemusicplayer.ui.theme.SpotiDarkGray
+import com.sdu.composemusicplayer.ui.theme.SpotiDivider
+import com.sdu.composemusicplayer.ui.theme.SpotiGray
+import com.sdu.composemusicplayer.ui.theme.SpotiGreen
+import com.sdu.composemusicplayer.ui.theme.SpotiWhite
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun PlaylistsScreen(
@@ -60,7 +38,6 @@ fun PlaylistsScreen(
     onNavigateToPlaylist: (Int) -> Unit,
     playlistsViewModel: PlaylistsViewModel = hiltViewModel(),
 ) {
-
     val state by playlistsViewModel.state.collectAsState()
 
     PlaylistsScreen(
@@ -70,7 +47,6 @@ fun PlaylistsScreen(
         onDeletePlaylist = playlistsViewModel::onDelete,
         onRenamePlaylist = playlistsViewModel::onRename,
     )
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,19 +58,13 @@ fun PlaylistsScreen(
     onDeletePlaylist: (Int) -> Unit,
     onRenamePlaylist: (Int, String) -> Unit,
 ) {
-
     val createPlaylistsDialog = rememberCreatePlaylistDialog()
-
-    val coroutineScope = rememberCoroutineScope() // 이걸 items 밖에 선언
-
+    val coroutineScope = rememberCoroutineScope()
     val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var selectedPlaylist by remember { mutableStateOf<PlaylistInfo?>(null) }
-
-    // 이름 변경 다이얼로그 상태
     var renameMode by remember { mutableStateOf(false) }
-    // 삭제 다이얼로그
     val deletePlaylistDialog = rememberDeletePlaylistDialog(
         playlistName = selectedPlaylist?.name ?: "",
     ) {
@@ -104,22 +74,20 @@ fun PlaylistsScreen(
 
     var showSheet by remember { mutableStateOf(false) }
 
-    // ModalBottomSheet은 Scaffold 밖에 두는 게 일반적
-    // sheetState와 onDismissRequest를 전달해야 함
     if (showSheet) {
         ModalBottomSheet(
             onDismissRequest = { showSheet = false },
             sheetState = sheetState,
-            dragHandle = { // Optional: 드래그 핸들 UI
+            containerColor = SpotiDarkGray,
+            dragHandle = {
                 Box(
                     Modifier
                         .padding(vertical = 8.dp)
                         .size(width = 40.dp, height = 4.dp)
-                        .background(MaterialTheme.colorScheme.onSurfaceVariant, shape = RoundedCornerShape(2.dp)),
+                        .background(SpotiGray, shape = RoundedCornerShape(2.dp)),
                 )
             },
         ) {
-            // 시트 내용
             PlaylistBottomSheet(
                 playlistName = selectedPlaylist?.name ?: "이름없는 플레이리스트",
                 onRenameClick = {
@@ -128,7 +96,7 @@ fun PlaylistsScreen(
                         renameMode = true
                     }
                 },
-                onPinClick = { /* 플레이리스트 고정하기 */ },
+                onPinClick = { /* TODO */ },
                 onDeleteClick = {
                     deletePlaylistDialog.launch()
                     showSheet = false
@@ -140,78 +108,81 @@ fun PlaylistsScreen(
 
     Scaffold(
         modifier = modifier,
+        containerColor = SpotiBackground,  // Scaffold에서 배경색 지정
         topBar = {
-
             TopAppBar(
-                title = { Text(text = "Playlists", fontWeight = FontWeight.SemiBold) },
+                title = {
+                    Text(
+                        text = "Playlists",
+                        fontWeight = FontWeight.SemiBold,
+                        color = SpotiWhite
+                    )
+                },
                 actions = {
                     IconButton(onClick = { createPlaylistsDialog.launch() }) {
-                        Icon(imageVector = Icons.Rounded.Add, contentDescription = null)
+                        Icon(
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription = null,
+                            tint = SpotiWhite
+                        )
                     }
                 },
                 scrollBehavior = topBarScrollBehavior,
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Black,
+                    titleContentColor = SpotiWhite,
+                    actionIconContentColor = SpotiWhite
+                )
             )
-
         },
     ) { paddingValues ->
 
         if (state is PlaylistsScreenState.Loading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                // .background(SpotiBackground), // 배경 제거: Scaffold가 이미 배경 담당
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = SpotiGreen)
             }
-        } else
+        } else {
+            val list = (state as PlaylistsScreenState.Success).playlists
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
                     .padding(top = paddingValues.calculateTopPadding()),
-
-                ) {
-
+            ) {
                 item {
-                    Divider(Modifier.fillMaxWidth())
+                    Divider(Modifier.fillMaxWidth(), color = SpotiDivider)
                 }
 
-                val list = (state as PlaylistsScreenState.Success).playlists
-
-
                 items(list) {
-
                     var currentRenameId by remember { mutableStateOf<Int?>(null) }
                     BackHandler(currentRenameId != null) {
                         currentRenameId = null
                     }
-
-
-                    val deletePlaylistDialog = rememberDeletePlaylistDialog(playlistName = it.name)
-                    { onDeletePlaylist(it.id) }
-
                     PlaylistRow(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onPlaylistClicked(it.id) }
                             .combinedClickable(
-                                onClick = {
-                                    println("on Click")
-                                    onPlaylistClicked(it.id)
-                                },
+                                onClick = { onPlaylistClicked(it.id) },
                                 onLongClick = {
-                                    println("Long Click")
                                     selectedPlaylist = it
                                     showSheet = true
                                 },
                             ),
-                        it,
-                        inRenameMode = currentRenameId == it.id,
-                        onEnableRenameMode = { currentRenameId = it.id },
-                        { name -> onRenamePlaylist(it.id, name); currentRenameId = null },
-                        { deletePlaylistDialog.launch() },
+                        playlistInfo = it,
                     )
+
                     if (it != list.last()) {
                         Divider(
                             Modifier
                                 .fillMaxWidth()
                                 .padding(start = (12 + 36 + 8).dp),
+                            color = SpotiDivider,
                         )
                     }
                 }
@@ -219,30 +190,25 @@ fun PlaylistsScreen(
                 item {
                     Spacer(modifier = Modifier.navigationBarsPadding())
                 }
-
             }
-
+        }
     }
-
-
 }
 
 @Composable
 fun PlaylistRow(
     modifier: Modifier,
     playlistInfo: PlaylistInfo,
-    inRenameMode: Boolean,
-    onEnableRenameMode: () -> Unit,
-    onRename: (String) -> Unit,
-    onDelete: () -> Unit,
 ) {
-    Row(modifier, verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         PlaylistInfoRow(
             modifier = Modifier.weight(1f),
             playlistInfo = playlistInfo,
-            inRenameMode, onRename, onEnableRenameMode,
         )
         Spacer(modifier = Modifier.width(8.dp))
     }
-
 }

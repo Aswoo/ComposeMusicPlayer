@@ -59,6 +59,7 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics.LiveLyricsScreen
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics.fadingEdge
+import com.sdu.composemusicplayer.ui.theme.SpotiGreen
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 
@@ -72,7 +73,7 @@ fun ExpandedMusicPlayerContent(
     val context = LocalContext.current
     val screenState = remember { mutableStateOf(true) }
 
-    val accentColor = Color(0xFF1DB954)
+    val accentColor = SpotiGreen
 
     if (!screenState.value) {
         val fadeBrush = remember {

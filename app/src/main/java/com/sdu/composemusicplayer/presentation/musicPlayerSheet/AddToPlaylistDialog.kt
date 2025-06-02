@@ -24,6 +24,7 @@ import com.sdu.composemusicplayer.domain.model.PlaylistInfo
 import com.sdu.composemusicplayer.presentation.component.dialog.AddToPlaylistState
 import com.sdu.composemusicplayer.presentation.component.dialog.AddToPlaylistViewModel
 import com.sdu.composemusicplayer.presentation.component.dialog.rememberCreatePlaylistDialog
+import com.sdu.composemusicplayer.ui.theme.SpotiGreen
 
 @Composable
 fun AddToPlaylistDialog(
@@ -102,7 +103,7 @@ fun AddToPlaylistContent(
             }
             Text("플레이리스트에 추가하기", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             TextButton(onClick = onClearAll) {
-                Text("모두 지우기", color = Color(0xFF00FF00))
+                Text("모두 지우기", color = SpotiGreen)
             }
         }
 
