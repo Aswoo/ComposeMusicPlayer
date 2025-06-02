@@ -31,7 +31,6 @@ import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.toSongAlbumArtModel
 import com.sdu.composemusicplayer.presentation.component.LocalCommonMusicAction
 import com.sdu.composemusicplayer.presentation.component.RenameAbleTextView
-import com.sdu.composemusicplayer.presentation.component.menu.buildCommonMusicActions
 import com.sdu.composemusicplayer.presentation.component.menu.buildPlayListMusicActions
 import com.sdu.composemusicplayer.presentation.component.menu.removeFromPlaylist
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.AlbumArtImage
@@ -80,31 +79,37 @@ private fun PlaylistDetailContent(
     BackHandler(inRenameMode) { inRenameMode = false }
 
     Scaffold(
-        modifier = modifier
-            .background(Color.Black)
-            .pointerInput(Unit) {
-                detectTapGestures { if (inRenameMode) inRenameMode = false }
-            },
+        modifier =
+            modifier
+                .background(Color.Black)
+                .pointerInput(Unit) {
+                    detectTapGestures { if (inRenameMode) inRenameMode = false }
+                },
         containerColor = Color.Black,
     ) { paddingValues ->
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = paddingValues.calculateTopPadding())
-                .nestedScroll(topBarScrollBehavior.nestedScrollConnection),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(top = paddingValues.calculateTopPadding())
+                    .nestedScroll(topBarScrollBehavior.nestedScrollConnection),
             state = listState,
         ) {
             item {
                 PlaylistHeader(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
                     name = loadedState.name,
                     numberOfMusic = loadedState.music.size,
                     songsDuration = loadedState.music.sumOf { it.duration },
                     firstMusic = loadedState.music.firstOrNull(),
                     inRenameMode = inRenameMode,
-                    onRename = { inRenameMode = false; playlistActions.rename(it) },
+                    onRename = {
+                        inRenameMode = false
+                        playlistActions.rename(it)
+                    },
                     onEnableRenameMode = { inRenameMode = true },
                     onPlay = playlistActions::play,
                     onShuffle = playlistActions::shuffle,
@@ -127,20 +132,22 @@ private fun PlaylistDetailContent(
             }
             itemsIndexed(loadedState.music) { _, music ->
                 PlayListMusicRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { onSongClicked(music) },
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clickable { onSongClicked(music) },
                     music = music,
                     isPlaying = if (state.currentPlayingMusic != null && state.currentPlayingMusic.audioId == music.audioId) true else false,
-                    menuOptions = buildPlayListMusicActions(
-                        music = music,
-                        context = context,
-                        shareAction = commonSongsActions.shareAction,
-                    ).apply {
-                        removeFromPlaylist {
-                            playlistActions.removeSongs(listOf(music.audioPath))
-                        }
-                    },
+                    menuOptions =
+                        buildPlayListMusicActions(
+                            music = music,
+                            context = context,
+                            shareAction = commonSongsActions.shareAction,
+                        ).apply {
+                            removeFromPlaylist {
+                                playlistActions.removeSongs(listOf(music.audioPath))
+                            }
+                        },
                 )
             }
         }
@@ -166,9 +173,10 @@ private fun PlaylistHeader(
     ) {
         firstMusic?.let {
             AlbumArtImage(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .size(100.dp),
+                modifier =
+                    Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .size(100.dp),
                 songAlbumArtModel = it.toSongAlbumArtModel(),
                 crossFadeDuration = 150,
             )
@@ -221,12 +229,16 @@ private fun PlaylistHeader(
 }
 
 @Composable
-fun rememberShouldShowTopBar(listState: androidx.compose.foundation.lazy.LazyListState): State<Boolean> = remember {
-    derivedStateOf {
-        if (listState.layoutInfo.visibleItemsInfo.isEmpty()) false
-        else listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > listState.layoutInfo.visibleItemsInfo[0].size * 0.8f
+fun rememberShouldShowTopBar(listState: androidx.compose.foundation.lazy.LazyListState): State<Boolean> =
+    remember {
+        derivedStateOf {
+            if (listState.layoutInfo.visibleItemsInfo.isEmpty()) {
+                false
+            } else {
+                listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > listState.layoutInfo.visibleItemsInfo[0].size * 0.8f
+            }
+        }
     }
-}
 
 @Composable
 fun EmptyPlaylist(modifier: Modifier) {

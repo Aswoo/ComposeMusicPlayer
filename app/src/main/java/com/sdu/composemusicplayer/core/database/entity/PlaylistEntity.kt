@@ -12,7 +12,6 @@ data class PlaylistEntity(
     @ColumnInfo(name = PLAYLIST_ID_COLUMN)
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-
     @ColumnInfo(name = PLAYLIST_NAME_COLUMN)
     val name: String,
 )

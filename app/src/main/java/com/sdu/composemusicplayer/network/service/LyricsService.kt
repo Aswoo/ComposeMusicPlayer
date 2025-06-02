@@ -5,7 +5,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface LyricsService {
-
     companion object {
         const val BASE_URL = "https://lrclib.net/"
     }
@@ -17,5 +16,4 @@ interface LyricsService {
         @Query("album_name") albumName: String,
         @Query("duration") durationSeconds: Int,
     ): SongLyricsNetwork
-
 }

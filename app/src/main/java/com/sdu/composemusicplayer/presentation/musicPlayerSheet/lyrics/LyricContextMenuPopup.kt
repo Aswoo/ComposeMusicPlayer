@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
@@ -43,29 +42,32 @@ fun Modifier.shimmerLoadingAnimation(
     durationMillis: Int = 800,
 ): Modifier {
     return composed {
-
-        val shimmerColors = listOf(
-            Color.White.copy(alpha = 0.3f),
-            Color.White.copy(alpha = 0.5f),
-            Color.White.copy(alpha = 1.0f),
-            Color.White.copy(alpha = 0.5f),
-            Color.White.copy(alpha = 0.3f),
-        )
+        val shimmerColors =
+            listOf(
+                Color.White.copy(alpha = 0.3f),
+                Color.White.copy(alpha = 0.5f),
+                Color.White.copy(alpha = 1.0f),
+                Color.White.copy(alpha = 0.5f),
+                Color.White.copy(alpha = 0.3f),
+            )
 
         val transition = rememberInfiniteTransition(label = "")
 
-        val translateAnimation = transition.animateFloat(
-            initialValue = 0f,
-            targetValue = (durationMillis + widthOfShadowBrush).toFloat(),
-            animationSpec = infiniteRepeatable(
-                animation = tween(
-                    durationMillis = durationMillis,
-                    easing = LinearEasing,
-                ),
-                repeatMode = RepeatMode.Restart,
-            ),
-            label = "Shimmer loading animation",
-        )
+        val translateAnimation =
+            transition.animateFloat(
+                initialValue = 0f,
+                targetValue = (durationMillis + widthOfShadowBrush).toFloat(),
+                animationSpec =
+                    infiniteRepeatable(
+                        animation =
+                            tween(
+                                durationMillis = durationMillis,
+                                easing = LinearEasing,
+                            ),
+                        repeatMode = RepeatMode.Restart,
+                    ),
+                label = "Shimmer loading animation",
+            )
 
         this.drawWithContent {
             drawContent()
@@ -92,14 +94,16 @@ class ContextMenuPopupProvider : PopupPositionProvider {
 
         val availableHeight = anchorBounds.topLeft.y
 
-        return if (availableHeight >= popupHeight + 40) return IntOffset(
-            anchorBounds.topLeft.x,
-            anchorBounds.topLeft.y - popupHeight,
-        )
-        else IntOffset(anchorBounds.topLeft.x, anchorBounds.bottomLeft.y + popupHeight)
+        return if (availableHeight >= popupHeight + 40) {
+            return IntOffset(
+                anchorBounds.topLeft.x,
+                anchorBounds.topLeft.y - popupHeight,
+            )
+        } else {
+            IntOffset(anchorBounds.topLeft.x, anchorBounds.bottomLeft.y + popupHeight)
+        }
     }
 }
-
 
 @Composable
 fun LineContextMenu(
@@ -107,31 +111,36 @@ fun LineContextMenu(
     onCopy: () -> Unit,
     onShare: () -> Unit,
 ) {
-
     AnimatedVisibility(
-        visible = true, enter = fadeIn(), exit = fadeOut(),
+        visible = true,
+        enter = fadeIn(),
+        exit = fadeOut(),
     ) {
         Row(
             modifier
                 .clip(RoundedCornerShape(8.dp))
                 .background(MaterialTheme.colorScheme.secondaryContainer),
             verticalAlignment = Alignment.CenterVertically,
-
-            ) {
+        ) {
             Text(
                 text = "Copy",
-                modifier = Modifier
-                    .clickable { onCopy() }
-                    .padding(start = 12.dp, top = 12.dp, bottom = 12.dp, end = 8.dp),
+                modifier =
+                    Modifier
+                        .clickable { onCopy() }
+                        .padding(start = 12.dp, top = 12.dp, bottom = 12.dp, end = 8.dp),
             )
-            Divider(Modifier
-                .height(2.dp)
-                .fillMaxWidth(), color = MaterialTheme.colorScheme.onSecondaryContainer)
+            Divider(
+                Modifier
+                    .height(2.dp)
+                    .fillMaxWidth(),
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+            )
             Text(
                 text = "Share",
-                modifier = Modifier
-                    .clickable { onShare() }
-                    .padding(start = 12.dp, top = 12.dp, bottom = 12.dp, end = 8.dp),
+                modifier =
+                    Modifier
+                        .clickable { onShare() }
+                        .padding(start = 12.dp, top = 12.dp, bottom = 12.dp, end = 8.dp),
             )
         }
     }

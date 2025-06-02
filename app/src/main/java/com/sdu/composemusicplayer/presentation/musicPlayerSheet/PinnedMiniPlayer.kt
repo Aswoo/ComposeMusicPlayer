@@ -1,9 +1,7 @@
 package com.sdu.composemusicplayer.presentation.musicPlayerSheet
 
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Box
@@ -33,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -45,7 +44,6 @@ import com.sdu.composemusicplayer.ui.theme.SpotiLightGray
 import com.sdu.composemusicplayer.viewmodel.MusicUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import androidx.compose.ui.graphics.Color
 
 @Composable
 fun MiniPlayer(
@@ -61,34 +59,36 @@ fun MiniPlayer(
     val song = state.currentPlayedMusic
 
     Row(
-        modifier = modifier
-            .background(SpotiDarkGray)
-            .padding(horizontal = 8.dp, vertical = 6.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .background(SpotiDarkGray)
+                .padding(horizontal = 8.dp, vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         CrossFadingAlbumArt(
-            modifier = Modifier
-                .fillMaxHeight()
-                .aspectRatio(1.0f)
-                .scale(0.7f)
-                .shadow(2.dp, shape = RoundedCornerShape(4.dp))
-                .clip(RoundedCornerShape(8.dp)),
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .aspectRatio(1.0f)
+                    .scale(0.7f)
+                    .shadow(2.dp, shape = RoundedCornerShape(4.dp))
+                    .clip(RoundedCornerShape(8.dp)),
             containerModifier = Modifier.padding(start = 8.dp),
             songAlbumArtModel = song.toSongAlbumArtModel(),
-            errorPainterType = ErrorPainterType.PLACEHOLDER
+            errorPainterType = ErrorPainterType.PLACEHOLDER,
         )
 
         Spacer(modifier = Modifier.width(4.dp))
 
         Column(
             modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.Start,
         ) {
             Text(
                 modifier = Modifier.basicMarquee(Int.MAX_VALUE),
                 text = song.title,
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color.White
+                color = Color.White,
             )
             Text(
                 modifier = Modifier,
@@ -96,7 +96,7 @@ fun MiniPlayer(
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Light,
                 color = SpotiLightGray,
-                maxLines = 1
+                maxLines = 1,
             )
         }
 
@@ -108,7 +108,7 @@ fun MiniPlayer(
                     Icon(
                         imageVector = Icons.TwoTone.SkipPrevious,
                         contentDescription = "Previous",
-                        tint = Color.White
+                        tint = Color.White,
                     )
                 }
             }
@@ -116,7 +116,7 @@ fun MiniPlayer(
                 IconButton(
                     modifier = Modifier.padding(end = 4.dp),
                     onClick = onTogglePlayback,
-                    enabled = enabled
+                    enabled = enabled,
                 ) {
                     val icon =
                         if (state.isPlaying) Icons.TwoTone.Pause else Icons.TwoTone.PlayArrow
@@ -125,7 +125,7 @@ fun MiniPlayer(
                 SongCircularProgressIndicator(
                     modifier = Modifier.padding(end = 4.dp),
                     songProgressProvider = songProgressProvider,
-                    progressColor = SpotiGreen
+                    progressColor = SpotiGreen,
                 )
             }
             AnimatedVisibility(visible = showExtraControls) {
@@ -133,7 +133,7 @@ fun MiniPlayer(
                     Icon(
                         imageVector = Icons.TwoTone.SkipNext,
                         contentDescription = "Next",
-                        tint = Color.White
+                        tint = Color.White,
                     )
                 }
             }
@@ -145,7 +145,7 @@ fun MiniPlayer(
 fun SongCircularProgressIndicator(
     modifier: Modifier,
     songProgressProvider: () -> Float,
-    progressColor: Color = Color.White
+    progressColor: Color = Color.White,
 ) {
     val progress = remember { Animatable(0.0f) }
 
@@ -163,11 +163,12 @@ fun SongCircularProgressIndicator(
         strokeCap = StrokeCap.Round,
         strokeWidth = 2.dp,
         color = progressColor,
-        trackColor = progressColor.copy(alpha = 0.15f)
+        trackColor = progressColor.copy(alpha = 0.15f),
     )
 }
 
 // 기존 enum 유지
 enum class BarState {
-    COLLAPSED, EXPANDED
+    COLLAPSED,
+    EXPANDED,
 }

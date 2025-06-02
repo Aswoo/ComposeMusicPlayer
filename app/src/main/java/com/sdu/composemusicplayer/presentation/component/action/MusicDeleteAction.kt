@@ -20,12 +20,10 @@ fun interface MusicDeleteAction {
     fun deleteMusic(songs: List<Music>)
 }
 
-
 class AndroidRAboveDeleter(
     private val activityResultLauncher: ActivityResultLauncher<IntentSenderRequest>,
-    private val context: Context
+    private val context: Context,
 ) : MusicDeleteAction {
-
     @RequiresApi(30)
     override fun deleteMusic(songs: List<Music>) {
         if (songs.isEmpty()) return
@@ -34,41 +32,43 @@ class AndroidRAboveDeleter(
     }
 
     @RequiresApi(30)
-    private fun getIntentSenderRequest(context: Context, uri: Uri): IntentSenderRequest {
+    private fun getIntentSenderRequest(
+        context: Context,
+        uri: Uri,
+    ): IntentSenderRequest {
         return with(context) {
-
             val deleteRequest =
                 android.provider.MediaStore.createDeleteRequest(contentResolver, listOf(uri))
 
-            IntentSenderRequest.Builder(deleteRequest)
+            IntentSenderRequest
+                .Builder(deleteRequest)
                 .setFillInIntent(null)
                 .setFlags(android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION, 0)
                 .build()
         }
     }
-
 }
 
 class AndroidQBelowDeleter(
-    private val mediaRepository: MediaRepository
+    private val mediaRepository: MediaRepository,
 ) : MusicDeleteAction {
-
     override fun deleteMusic(songs: List<Music>) {
         songs.forEach { mediaRepository.deleteMusic(it) }
     }
-
 }
 
 @Composable
 fun deleteRequestLauncher(): AndroidRAboveDeleter {
     val context = LocalContext.current
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartIntentSenderForResult(),
-        onResult = {
-            if (it.resultCode == Activity.RESULT_OK) {
-                Toast.makeText(context, "Song deleted", Toast.LENGTH_SHORT).show()
-            }
-        })
+    val launcher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartIntentSenderForResult(),
+            onResult = {
+                if (it.resultCode == Activity.RESULT_OK) {
+                    Toast.makeText(context, "Song deleted", Toast.LENGTH_SHORT).show()
+                }
+            },
+        )
     return remember {
         AndroidRAboveDeleter(launcher, context)
     }
@@ -76,7 +76,8 @@ fun deleteRequestLauncher(): AndroidRAboveDeleter {
 
 @Composable
 fun rememberSongDeleter(mediaRepository: MediaRepository): MusicDeleteAction =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         deleteRequestLauncher()
-    else
+    } else {
         remember { AndroidQBelowDeleter(mediaRepository = mediaRepository) }
+    }

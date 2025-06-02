@@ -42,9 +42,11 @@ fun MainScreen(
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(SpotiBackground), // Spotify-like dark background
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(SpotiBackground),
+        // Spotify-like dark background
     ) {
         MusicListContent(
             musicUiState = musicUiState,
@@ -67,14 +69,14 @@ fun MusicListContent(
     onSelectedMusic: (Music) -> Unit,
     updateSortState: (SortState) -> Unit,
 ) {
-
-    val tabTitles = listOf(SortOption.TITLE,SortOption.ARTIST)
+    val tabTitles = listOf(SortOption.TITLE, SortOption.ARTIST)
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-            .padding(8.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+                .padding(8.dp),
     ) {
         // 상단 타이틀
 
@@ -85,7 +87,7 @@ fun MusicListContent(
             color = Color.White,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
         )
 
         SortHeader(
@@ -99,8 +101,9 @@ fun MusicListContent(
 //        Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier =
+                Modifier
+                    .fillMaxSize(),
         ) {
             val currentAudioId = musicUiState.currentPlayedMusic.audioId
 
@@ -126,9 +129,10 @@ fun ComposableLifeCycle(
     onEvent: (LifecycleOwner, Lifecycle.Event) -> Unit,
 ) {
     DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { source, event ->
-            onEvent(source, event)
-        }
+        val observer =
+            LifecycleEventObserver { source, event ->
+                onEvent(source, event)
+            }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)

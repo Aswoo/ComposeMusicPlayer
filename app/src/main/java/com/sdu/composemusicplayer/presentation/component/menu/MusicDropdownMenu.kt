@@ -14,18 +14,16 @@ fun MusicDropdownMenu(
     onDismissRequest: () -> Unit,
     actions: List<MenuActionItem>,
 ) {
-
     DropdownMenu(expanded = expanded, onDismissRequest = onDismissRequest) {
-
         actions.forEach {
             DropdownMenuItem(
                 modifier = Modifier.padding(end = 4.dp),
                 text = { Text(text = it.title) },
-                onClick = { onDismissRequest(); it.callback() },
+                onClick = {
+                    onDismissRequest()
+                    it.callback()
+                },
             )
         }
-
     }
-
-
 }

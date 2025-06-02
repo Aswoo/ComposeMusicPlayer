@@ -7,12 +7,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.BarState
 
-
 @OptIn(ExperimentalFoundationApi::class)
 fun AnchoredDraggableState<BarState>.update(
     layoutHeightPx: Int,
     barHeightPx: Int,
-    bottomBarHeightPx: Int
+    bottomBarHeightPx: Int,
 ): Int {
     var offset = 0
     updateAnchors(
@@ -22,16 +21,15 @@ fun AnchoredDraggableState<BarState>.update(
             BarState.COLLAPSED at offset.toFloat()
             BarState.EXPANDED at 0.0f
         },
-        this.currentValue
+        this.currentValue,
     )
     return offset
 }
 
-
 fun calculateBottomPaddingForContent(
     shouldShowNowPlayingBar: Boolean,
     bottomBarHeight: Dp,
-    nowPlayingBarHeight: Dp
+    nowPlayingBarHeight: Dp,
 ): Dp {
     return bottomBarHeight + (if (shouldShowNowPlayingBar) nowPlayingBarHeight else 0.dp)
 }

@@ -20,10 +20,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sdu.composemusicplayer.domain.model.PlaylistInfo
-import com.sdu.composemusicplayer.presentation.component.RenameAbleTextView
 import com.sdu.composemusicplayer.ui.theme.SpotiGray
 import com.sdu.composemusicplayer.ui.theme.SpotiWhite
-
 
 @Composable
 fun PlaylistInfoRow(
@@ -31,16 +29,17 @@ fun PlaylistInfoRow(
     playlistInfo: PlaylistInfo,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector = Icons.Rounded.PlaylistPlay,
             contentDescription = null,
             modifier = Modifier.size(40.dp),
-            tint = SpotiWhite.copy(alpha = 0.9f) // 조금 투명하게
+            tint = SpotiWhite.copy(alpha = 0.9f), // 조금 투명하게
         )
 
         Spacer(modifier = Modifier.width(12.dp))
@@ -60,7 +59,7 @@ fun PlaylistInfoRow(
                 color = SpotiGray.copy(alpha = 0.7f),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
             )
         }
     }

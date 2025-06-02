@@ -1,19 +1,9 @@
 package com.sdu.composemusicplayer.presentation.playlists.playlistdetail
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,12 +11,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,13 +40,10 @@ import com.sdu.composemusicplayer.presentation.component.menu.MenuActionItem
 import com.sdu.composemusicplayer.presentation.component.menu.MusicDropdownMenu
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.LocalEfficientThumbnailImageLoader
 import com.sdu.composemusicplayer.ui.theme.SpotiDarkGray
-import com.sdu.composemusicplayer.utils.millisToTime
-
-
-import com.sdu.composemusicplayer.ui.theme.SpotiWhite
 import com.sdu.composemusicplayer.ui.theme.SpotiGray
 import com.sdu.composemusicplayer.ui.theme.SpotiGreen
-import com.sdu.composemusicplayer.ui.theme.SpotiLightGray
+import com.sdu.composemusicplayer.ui.theme.SpotiWhite
+import com.sdu.composemusicplayer.utils.millisToTime
 
 @Composable
 fun PlayListMusicRow(
@@ -68,18 +53,20 @@ fun PlayListMusicRow(
     isPlaying: Boolean,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 10.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(if (isPlaying) SpotiDarkGray else Color.Transparent),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 10.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(if (isPlaying) SpotiDarkGray else Color.Transparent),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
-            modifier = Modifier
-                .padding(8.dp)
-                .size(60.dp)
-                .clip(RoundedCornerShape(12.dp)),
+            modifier =
+                Modifier
+                    .padding(8.dp)
+                    .size(60.dp)
+                    .clip(RoundedCornerShape(12.dp)),
             model = music.toSongAlbumArtModel(),
             imageLoader = LocalEfficientThumbnailImageLoader.current,
             contentDescription = "Album Art",
@@ -92,9 +79,10 @@ fun PlayListMusicRow(
         Spacer(modifier = Modifier.width(12.dp))
 
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(end = 8.dp),
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp),
         ) {
             Text(
                 text = music.title,
@@ -124,7 +112,6 @@ fun PlayListMusicRow(
         MusicOverflowMenu(menuOptions)
     }
 }
-
 
 @Composable
 fun MusicOverflowMenu(menuOptions: List<MenuActionItem>) {

@@ -10,7 +10,6 @@ import com.sdu.composemusicplayer.core.database.PLAYLIST_MUSIC_ENTITY
 data class PlaylistsMusicEntity(
     @ColumnInfo(name = PLAYLIST_ID_COLUMN)
     val playlistId: Int,
-
     @ColumnInfo(name = MUSIC_URI_STRING_COLUMN)
-    val musicUriString: String
+    val musicUriString: String,
 )

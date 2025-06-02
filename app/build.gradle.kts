@@ -217,6 +217,5 @@ dependencies {
 
     androidTestImplementation(libs.mockk.android)
 
-
     implementation(libs.annotations)
 }

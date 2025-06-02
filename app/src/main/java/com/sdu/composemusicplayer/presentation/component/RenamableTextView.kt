@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sdu.composemusicplayer.ui.theme.SpotiWhite
 
-
 @Composable
 fun RenameAbleTextView(
     modifier: Modifier,
@@ -37,55 +36,60 @@ fun RenameAbleTextView(
     fontWeight: FontWeight,
     enableLongPressToEdit: Boolean = false,
     onEnableRenameMode: () -> Unit,
-    onRename: (String) -> Unit
+    onRename: (String) -> Unit,
 ) {
     Box(modifier) {
         if (inRenameMode) {
-
             var textFieldValue by remember {
                 mutableStateOf(
                     TextFieldValue(
                         text = text,
-                        selection = TextRange(text.length, text.length)
-                    )
+                        selection = TextRange(text.length, text.length),
+                    ),
                 )
             }
 
             val focusRequester = remember { FocusRequester() }
 
             BasicTextField(
-                modifier = Modifier
-                    .padding(top = 2.dp)
-                    .focusRequester(focusRequester)
-                    .border(1.dp, color = MaterialTheme.colorScheme.primary),
+                modifier =
+                    Modifier
+                        .padding(top = 2.dp)
+                        .focusRequester(focusRequester)
+                        .border(1.dp, color = MaterialTheme.colorScheme.primary),
                 value = textFieldValue,
-                textStyle = TextStyle(
-                    fontWeight = fontWeight,
-                    fontSize = fontSize.sp,
-                    color = MaterialTheme.colorScheme.onSurface,
-                ),
+                textStyle =
+                    TextStyle(
+                        fontWeight = fontWeight,
+                        fontSize = fontSize.sp,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
                 onValueChange = { textFieldValue = it },
                 singleLine = true,
                 maxLines = 1,
                 keyboardActions = KeyboardActions(onDone = { onRename(textFieldValue.text) }),
-                cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface)
+                cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface),
             )
 
             LaunchedEffect(key1 = Unit) {
                 focusRequester.requestFocus()
             }
-
         } else {
             Text(
-                modifier = if (enableLongPressToEdit) Modifier.pointerInput(Unit) {
-                    detectTapGestures(
-                        onLongPress = { onEnableRenameMode() }
-                    )
-                } else Modifier,
+                modifier =
+                    if (enableLongPressToEdit) {
+                        Modifier.pointerInput(Unit) {
+                            detectTapGestures(
+                                onLongPress = { onEnableRenameMode() },
+                            )
+                        }
+                    } else {
+                        Modifier
+                    },
                 text = text,
                 fontWeight = fontWeight,
                 fontSize = fontSize.sp,
-                color = SpotiWhite
+                color = SpotiWhite,
             )
         }
     }

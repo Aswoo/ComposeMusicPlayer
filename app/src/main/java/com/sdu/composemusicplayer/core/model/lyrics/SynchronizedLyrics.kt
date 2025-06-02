@@ -1,13 +1,11 @@
 package com.sdu.composemusicplayer.core.model.lyrics
 
-
 /**
  * Synced Lyrics containing a list of [SyncedLyricsSegment]s
  */
 data class SynchronizedLyrics(
-    val segments: List<SyncedLyricsSegment>
+    val segments: List<SyncedLyricsSegment>,
 ) {
-
     fun constructStringForSharing(): String {
         return segments.joinToString(separator = "\n") { it.text }
     }
@@ -20,8 +18,9 @@ data class SynchronizedLyrics(
 
             val lines = text.split("\n")
             for (line in lines) {
-                if (!line.startsWith("["))
+                if (!line.startsWith("[")) {
                     continue
+                }
 
                 val timeInfoLastIndex = line.indexOfFirst { it == ']' }
                 if (timeInfoLastIndex == -1) continue
@@ -37,7 +36,7 @@ data class SynchronizedLyrics(
 
                 SyncedLyricsSegment(
                     line.substring(timeInfoLastIndex + 1).trim(),
-                    minutes * 60 * 1000 + seconds * 1000 + millis
+                    minutes * 60 * 1000 + seconds * 1000 + millis,
                 ).also { segments.add(it) }
             }
 
@@ -45,9 +44,7 @@ data class SynchronizedLyrics(
             return SynchronizedLyrics(segments)
         }
     }
-
 }
-
 
 /**
  * Represents a single line of a synced lyrics text
@@ -57,5 +54,5 @@ data class SynchronizedLyrics(
  */
 data class SyncedLyricsSegment(
     val text: String,
-    val durationMillis: Int
+    val durationMillis: Int,
 )

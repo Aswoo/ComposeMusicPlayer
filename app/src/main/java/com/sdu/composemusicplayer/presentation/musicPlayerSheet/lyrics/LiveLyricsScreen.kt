@@ -57,23 +57,21 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun LiveLyricsScreen(
     modifier: Modifier,
-    onSwap : () -> Unit,
-    lyricsViewModel: LiveLyricsViewModel = hiltViewModel()
+    onSwap: () -> Unit,
+    lyricsViewModel: LiveLyricsViewModel = hiltViewModel(),
 ) {
-
     val state by lyricsViewModel.state.collectAsState()
     LiveLyricsScreen(
         modifier = modifier,
         state = state,
         songProgressMillis = lyricsViewModel::songProgressMillis,
         onSeekToPositionMillis = lyricsViewModel::setSongProgressMillis,
-        onRetry =  lyricsViewModel::onRetry,
-        onSaveLyricsToSongFile =  lyricsViewModel::saveExternalLyricsToSongFile,
-        onSwap = onSwap
+        onRetry = lyricsViewModel::onRetry,
+        onSaveLyricsToSongFile = lyricsViewModel::saveExternalLyricsToSongFile,
+        onSwap = onSwap,
     )
 }
 
@@ -108,7 +106,7 @@ fun LiveLyricsScreen(
                 onSeekToPositionMillis = onSeekToPositionMillis,
                 songProgressMillis = songProgressMillis,
                 onSaveLyricsToSongFile = onSaveLyricsToSongFile,
-                onSwap = onSwap
+                onSwap = onSwap,
             )
     }
 }
@@ -119,16 +117,15 @@ fun LyricLine(
     line: String,
     isCurrentLine: Boolean = false,
     isShowingContextMenu: Boolean = false,
-    onDismissContextMenu: () -> Unit = {}
+    onDismissContextMenu: () -> Unit = {},
 ) {
-
     val context = LocalContext.current
     val localClipboardManager = LocalClipboardManager.current
     Box(modifier = modifier) {
         if (isShowingContextMenu) {
             Popup(
                 popupPositionProvider = ContextMenuPopupProvider(),
-                onDismissRequest = onDismissContextMenu
+                onDismissRequest = onDismissContextMenu,
             ) {
                 LineContextMenu(
                     Modifier
@@ -141,20 +138,20 @@ fun LyricLine(
                     onShare = {
                         context.shareText(line)
                         onDismissContextMenu()
-                    }
+                    },
                 )
             }
         }
         Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .graphicsLayer {
-                    alpha = if (isCurrentLine || isShowingContextMenu) 1.0f else 0.35f
-                }
-                .then(if (isShowingContextMenu) Modifier.shimmerLoadingAnimation() else Modifier),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .graphicsLayer {
+                        alpha = if (isCurrentLine || isShowingContextMenu) 1.0f else 0.35f
+                    }.then(if (isShowingContextMenu) Modifier.shimmerLoadingAnimation() else Modifier),
             text = line,
             fontSize = 25.sp,
-            fontWeight = FontWeight.ExtraBold
+            fontWeight = FontWeight.ExtraBold,
         )
     }
 }
@@ -166,7 +163,6 @@ fun Modifier.fadingEdge(brush: Brush) =
             drawContent()
             drawRect(brush = brush, blendMode = BlendMode.DstIn)
         }
-
 
 @Composable
 fun NoLyricsState(
@@ -185,7 +181,7 @@ fun NoLyricsState(
             Column(
                 modifier = modifier,
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(text = "Check your network connection")
                 Spacer(modifier = Modifier.height(4.dp))
@@ -198,18 +194,14 @@ fun NoLyricsState(
 }
 
 @Composable
-fun LoadingState(
-    modifier: Modifier
-) {
+fun LoadingState(modifier: Modifier) {
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         CircularProgressIndicator()
     }
 }
 
 @Composable
-fun NotPlayingState(
-    modifier: Modifier
-) {
+fun NotPlayingState(modifier: Modifier) {
     Box(modifier = modifier) {
         Text(modifier = Modifier.align(Alignment.Center), text = "No song is being played.")
     }
@@ -218,7 +210,7 @@ fun NotPlayingState(
 @Composable
 fun PlainLyricsState(
     modifier: Modifier,
-    plainLyrics: PlainLyrics
+    plainLyrics: PlainLyrics,
 ) {
     val itemsSpacing = 12.dp
 
@@ -228,23 +220,25 @@ fun PlainLyricsState(
 
     val vibrationManager = LocalHapticFeedback.current
     LazyColumn(
-        modifier
+        modifier,
     ) {
         itemsIndexed(plainLyrics.lines) { index, s ->
             LyricLine(
-                modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onLongPress = {
-                                contextMenuShownIndex = index
-                                vibrationManager.performHapticFeedback(HapticFeedbackType.LongPress)
-                            }) { }
-                    },
+                modifier =
+                    Modifier
+                        .fillMaxWidth(0.9f)
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onLongPress = {
+                                    contextMenuShownIndex = index
+                                    vibrationManager.performHapticFeedback(HapticFeedbackType.LongPress)
+                                },
+                            ) { }
+                        },
                 line = s,
                 isCurrentLine = true,
                 isShowingContextMenu = index == contextMenuShownIndex,
-                onDismissContextMenu = { contextMenuShownIndex = -1 }
+                onDismissContextMenu = { contextMenuShownIndex = -1 },
             )
             Spacer(modifier = Modifier.height(itemsSpacing))
         }
@@ -259,9 +253,8 @@ fun SyncedLyricsState(
     onSeekToPositionMillis: (Long) -> Unit,
     songProgressMillis: () -> Long,
     onSaveLyricsToSongFile: () -> Unit,
-    onSwap:() -> Unit,
+    onSwap: () -> Unit,
 ) {
-
     var lyricIndex by remember(synchronizedLyrics) {
         mutableStateOf(-1)
     }
@@ -284,13 +277,18 @@ fun SyncedLyricsState(
         mutableStateOf(true)
     }
 
-    val scrollListener = object : NestedScrollConnection {
-        override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-            if (available.y > 1.0)
-                actionsShown = true
-            return Offset.Zero
+    val scrollListener =
+        object : NestedScrollConnection {
+            override fun onPreScroll(
+                available: Offset,
+                source: NestedScrollSource,
+            ): Offset {
+                if (available.y > 1.0) {
+                    actionsShown = true
+                }
+                return Offset.Zero
+            }
         }
-    }
 
     LaunchedEffect(key1 = actionsShown) {
         delay(1000)
@@ -299,11 +297,11 @@ fun SyncedLyricsState(
 
     LyricSynchronizerEffect(
         synchronizedLyrics = synchronizedLyrics,
-        songProgressMillis = songProgressMillis
+        songProgressMillis = songProgressMillis,
     ) {
         if (lyricIndex == it) return@LyricSynchronizerEffect
         lyricIndex = it
-        if (contextMenuShownIndex == -1)
+        if (contextMenuShownIndex == -1) {
             coroutineScope.launch {
                 val visibleItems = listState.layoutInfo.visibleItemsInfo
                 val itemInfo = visibleItems.find { it.index == lyricIndex }
@@ -313,35 +311,38 @@ fun SyncedLyricsState(
                     actionsShown = false
                 }
             }
+        }
     }
 
     val vibrationManager = LocalHapticFeedback.current
     Box(modifier.onGloballyPositioned { listHeightPx = it.size.height }) {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .nestedScroll(scrollListener),
-            state = listState
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .nestedScroll(scrollListener),
+            state = listState,
         ) {
             itemsIndexed(synchronizedLyrics.segments) { index, segment ->
                 LyricLine(
-                    modifier = Modifier
-                        .fillMaxWidth(0.9f)
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onPress = { actionsShown = true },
-                                onLongPress = {
-                                    contextMenuShownIndex = index
-                                    vibrationManager.performHapticFeedback(HapticFeedbackType.LongPress)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(0.9f)
+                            .pointerInput(Unit) {
+                                detectTapGestures(
+                                    onPress = { actionsShown = true },
+                                    onLongPress = {
+                                        contextMenuShownIndex = index
+                                        vibrationManager.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    },
+                                ) {
+                                    onSeekToPositionMillis(segment.durationMillis.toLong())
                                 }
-                            ) {
-                                onSeekToPositionMillis(segment.durationMillis.toLong())
-                            }
-                        },
+                            },
                     line = segment.text,
                     isCurrentLine = index == lyricIndex && contextMenuShownIndex == -1,
                     isShowingContextMenu = index == contextMenuShownIndex,
-                    onDismissContextMenu = { contextMenuShownIndex = -1 }
+                    onDismissContextMenu = { contextMenuShownIndex = -1 },
                 )
 
                 Spacer(modifier = Modifier.height(itemsSpacing))
@@ -350,9 +351,10 @@ fun SyncedLyricsState(
 
         val clipboardManager = LocalClipboardManager.current
         LyricsActions(
-            modifier = Modifier
-                .fillMaxHeight()
-                .align(Alignment.CenterEnd),
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .align(Alignment.CenterEnd),
             isShown = actionsShown,
             lyricsFetchSource = lyricsFetchSource,
             onSaveToSongFile = {
@@ -364,7 +366,7 @@ fun SyncedLyricsState(
             },
             onSwap = {
                 onSwap()
-            }
+            },
         )
     }
 }
@@ -389,5 +391,3 @@ fun LyricSynchronizerEffect(
         }
     }
 }
-
-

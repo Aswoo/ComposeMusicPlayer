@@ -59,12 +59,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent.ExpandedMusicPlayerContent
 import com.sdu.composemusicplayer.viewmodel.MusicUiState
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
-
 
 @Composable
 fun PlayerScreen(
@@ -77,7 +75,6 @@ fun PlayerScreen(
     progressProvider: () -> Float,
     viewModel: PlayerViewModel = hiltViewModel(),
 ) {
-
     val focusManager = LocalFocusManager.current
     var showAddToPlaylistDialog by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = isExpanded) {
@@ -91,7 +88,6 @@ fun PlayerScreen(
             onCollapseNowPlaying()
         }
     }
-
 
     val uiState by viewModel.uiState.collectAsState()
 
@@ -113,7 +109,6 @@ fun PlayerScreen(
         showAddToPlaylistDialog = { showAddToPlaylistDialog = true },
         viewModel = viewModel,
     )
-
 }
 
 @Composable
@@ -125,10 +120,9 @@ internal fun PlayerScreen(
     isExpanded: Boolean,
     onExpandNowPlaying: () -> Unit,
     progressProvider: () -> Float,
-    showAddToPlaylistDialog : () -> Unit,
+    showAddToPlaylistDialog: () -> Unit,
     viewModel: PlayerViewModel,
 ) {
-
 //    val playerTheme = LocalUserPreferences.current.uiSettings.playerThemeUi
 //    val isDarkTheme = when (LocalUserPreferences.current.uiSettings.theme) {
 //        AppThemeUi.DARK -> true
@@ -141,44 +135,42 @@ internal fun PlayerScreen(
 //    if (isExpanded && (isDarkTheme || playerTheme == PlayerThemeUi.BLUR))
 //        DarkStatusBarEffect()
 
-
     Surface(
         modifier = modifier,
         tonalElevation = if (MaterialTheme.colorScheme.background == Color.Black) 0.dp else 3.dp,
     ) {
-
         Box(modifier = Modifier.fillMaxSize()) {
-
             var isShowingQueue by remember {
                 mutableStateOf(false)
             }
             FullScreenNowPlaying(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .graphicsLayer {
-                        alpha = ((progressProvider() - 0.15f) * 2.0f).coerceIn(0.0f, 1.0f)
-                    },
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .graphicsLayer {
+                            alpha = ((progressProvider() - 0.15f) * 2.0f).coerceIn(0.0f, 1.0f)
+                        },
                 onOpenQueue = showAddToPlaylistDialog,
                 onCloseQueue = { isShowingQueue = true },
-                progressProvider =  progressProvider,
+                progressProvider = progressProvider,
                 uiState = uiState,
                 playerViewModel = viewModel,
-                isShowingQueue = isShowingQueue
+                isShowingQueue = isShowingQueue,
             )
             LaunchedEffect(key1 = isExpanded) {
                 if (!isExpanded) isShowingQueue = false
             }
             MiniPlayer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(barHeight)
-                    .padding(nowPlayingBarPadding)
-                    .pointerInput(Unit) {
-                        detectTapGestures { onExpandNowPlaying() }
-                    }
-                    .graphicsLayer {
-                        alpha = (1 - (progressProvider() * 6.66f).coerceAtMost(1.0f))
-                    },
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(barHeight)
+                        .padding(nowPlayingBarPadding)
+                        .pointerInput(Unit) {
+                            detectTapGestures { onExpandNowPlaying() }
+                        }.graphicsLayer {
+                            alpha = (1 - (progressProvider() * 6.66f).coerceAtMost(1.0f))
+                        },
                 state = uiState,
                 showExtraControls = true,
                 songProgressProvider = {
@@ -186,7 +178,7 @@ internal fun PlayerScreen(
                     val total = uiState.currentPlayedMusic.duration
                     if (total > 0) current.toFloat() / total.toFloat() else 0f
                 },
-                enabled = !isExpanded, // if the view is expanded then disable the header
+                enabled = !isExpanded,
                 onTogglePlayback = { viewModel.onEvent(PlayerEvent.PlayPause(uiState.isPlaying)) },
                 onNext = { viewModel.onEvent(PlayerEvent.Next) },
                 onPrevious = { viewModel.onEvent(PlayerEvent.Previous) },
@@ -206,11 +198,10 @@ fun FullScreenNowPlaying(
     uiState: MusicUiState,
     playerViewModel: PlayerViewModel,
 ) {
-
-    val music = remember(uiState.currentPlayedMusic) {
-        uiState.currentPlayedMusic
-    }
-
+    val music =
+        remember(uiState.currentPlayedMusic) {
+            uiState.currentPlayedMusic
+        }
 
     Box(
         modifier = modifier,
@@ -218,7 +209,8 @@ fun FullScreenNowPlaying(
     ) {
         AnimatedVisibility(
             visible = true,
-            enter = fadeIn(), exit = fadeOut(),
+            enter = fadeIn(),
+            exit = fadeOut(),
         ) {
 //            CrossFadingAlbumArt(
 //                modifier = Modifier.fillMaxSize(),
@@ -234,46 +226,47 @@ fun FullScreenNowPlaying(
 //            )
         }
 
-
         val activity = LocalContext.current as Activity
         val windowSizeClass = calculateWindowSizeClass(activity = activity)
         val heightClass = windowSizeClass.heightSizeClass
         val widthClass = windowSizeClass.widthSizeClass
 
+        val screenSize =
+            when {
+                heightClass == WindowHeightSizeClass.Compact && widthClass == WindowWidthSizeClass.Compact -> NowPlayingScreenSize.COMPACT
+                heightClass == WindowHeightSizeClass.Compact && widthClass != WindowWidthSizeClass.Compact -> NowPlayingScreenSize.LANDSCAPE
+                else -> NowPlayingScreenSize.PORTRAIT
+            }
 
-        val screenSize = when {
-            heightClass == WindowHeightSizeClass.Compact && widthClass == WindowWidthSizeClass.Compact -> NowPlayingScreenSize.COMPACT
-            heightClass == WindowHeightSizeClass.Compact && widthClass != WindowWidthSizeClass.Compact -> NowPlayingScreenSize.LANDSCAPE
-            else -> NowPlayingScreenSize.PORTRAIT
-        }
-
-
-        val paddingModifier = remember(screenSize) {
-            if (screenSize == NowPlayingScreenSize.LANDSCAPE)
-                Modifier.padding(16.dp)
-            else
-                Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp)
-
-        }
-
-        val playerScreenModifier = remember(paddingModifier) {
-            Modifier
-                .fillMaxSize()
-                .graphicsLayer {
-                    alpha = ((progressProvider() - 0.15f) * 2.0f).coerceIn(0.0f, 1.0f)
+        val paddingModifier =
+            remember(screenSize) {
+                if (screenSize == NowPlayingScreenSize.LANDSCAPE) {
+                    Modifier.padding(16.dp)
+                } else {
+                    Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp)
                 }
-                .then(paddingModifier)
-                .statusBarsPadding()
-        }
+            }
+
+        val playerScreenModifier =
+            remember(paddingModifier) {
+                Modifier
+                    .fillMaxSize()
+                    .graphicsLayer {
+                        alpha = ((progressProvider() - 0.15f) * 2.0f).coerceIn(0.0f, 1.0f)
+                    }.then(paddingModifier)
+                    .statusBarsPadding()
+            }
 
         AnimatedContent(
             modifier = Modifier.fillMaxSize(),
-            targetState = isShowingQueue, label = "",
+            targetState = isShowingQueue,
+            label = "",
             transitionSpec = {
-                if (this.targetState)
+                if (this.targetState) {
                     fadeIn() togetherWith fadeOut()
-                else
+                } else {
                     scaleIn(initialScale = 1.2f) + fadeIn() togetherWith fadeOut()
+                }
             },
         ) {
             if (it) {
@@ -285,12 +278,15 @@ fun FullScreenNowPlaying(
 //                    onClose = onCloseQueue,
 //                )
             } else {
-                ExpandedMusicPlayerContent(playerVM = playerViewModel, modifier = playerScreenModifier.navigationBarsPadding(), openAddToPlaylistDialog = onOpenQueue )
+                ExpandedMusicPlayerContent(
+                    playerVM = playerViewModel,
+                    modifier = playerScreenModifier.navigationBarsPadding(),
+                    openAddToPlaylistDialog = onOpenQueue,
+                )
             }
         }
     }
 }
-
 
 @Composable
 fun SongControls(
@@ -302,17 +298,16 @@ fun SongControls(
     onJumpForward: () -> Unit,
     onJumpBackward: () -> Unit,
 ) {
-
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-
         ControlButton(
-            modifier = Modifier
-                .size(34.dp)
-                .clip(RoundedCornerShape(4.dp)),
+            modifier =
+                Modifier
+                    .size(34.dp)
+                    .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.SkipPrevious,
             "Skip Previous",
             onPrevious,
@@ -321,9 +316,10 @@ fun SongControls(
         Spacer(modifier = Modifier.width(8.dp))
 
         ControlButton(
-            modifier = Modifier
-                .size(34.dp)
-                .clip(RoundedCornerShape(4.dp)),
+            modifier =
+                Modifier
+                    .size(34.dp)
+                    .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.FastRewind,
             "Jump Back",
             onJumpBackward,
@@ -331,14 +327,16 @@ fun SongControls(
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        val pausePlayButton = remember(isPlaying) {
-            if (isPlaying) Icons.Rounded.PauseCircle else Icons.Rounded.PlayCircle
-        }
+        val pausePlayButton =
+            remember(isPlaying) {
+                if (isPlaying) Icons.Rounded.PauseCircle else Icons.Rounded.PlayCircle
+            }
 
         ControlButton(
-            modifier = Modifier
-                .size(64.dp)
-                .clip(CircleShape),
+            modifier =
+                Modifier
+                    .size(64.dp)
+                    .clip(CircleShape),
             icon = pausePlayButton,
             "Skip Previous",
             onTogglePlayback,
@@ -347,9 +345,10 @@ fun SongControls(
         Spacer(modifier = Modifier.width(16.dp))
 
         ControlButton(
-            modifier = Modifier
-                .size(36.dp)
-                .clip(RoundedCornerShape(4.dp)),
+            modifier =
+                Modifier
+                    .size(36.dp)
+                    .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.FastForward,
             "Jump Forward",
             onJumpForward,
@@ -358,15 +357,14 @@ fun SongControls(
         Spacer(modifier = Modifier.width(8.dp))
 
         ControlButton(
-            modifier = Modifier
-                .size(36.dp)
-                .clip(RoundedCornerShape(4.dp)),
+            modifier =
+                Modifier
+                    .size(36.dp)
+                    .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.SkipNext,
             "Skip To Next",
             onNext,
         )
-
-
     }
 }
 
@@ -377,17 +375,19 @@ fun ControlButton(
     contentDescription: String? = null,
     onClick: () -> Unit,
 ) {
-    val iconModifier = remember {
-        modifier.clickable { onClick() }
-    }
+    val iconModifier =
+        remember {
+            modifier.clickable { onClick() }
+        }
     Icon(
         modifier = iconModifier,
         imageVector = icon,
         contentDescription = contentDescription,
     )
-
 }
 
 enum class NowPlayingScreenSize {
-    LANDSCAPE, PORTRAIT, COMPACT
+    LANDSCAPE,
+    PORTRAIT,
+    COMPACT,
 }

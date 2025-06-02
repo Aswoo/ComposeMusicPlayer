@@ -24,7 +24,6 @@ import com.sdu.composemusicplayer.domain.model.PlaylistInfo
 import com.sdu.composemusicplayer.presentation.component.dialog.rememberCreatePlaylistDialog
 import com.sdu.composemusicplayer.presentation.playlists.playlistdetail.rememberDeletePlaylistDialog
 import com.sdu.composemusicplayer.ui.theme.SpotiBackground
-import com.sdu.composemusicplayer.ui.theme.SpotiBlack
 import com.sdu.composemusicplayer.ui.theme.SpotiDarkGray
 import com.sdu.composemusicplayer.ui.theme.SpotiDivider
 import com.sdu.composemusicplayer.ui.theme.SpotiGray
@@ -65,12 +64,13 @@ fun PlaylistsScreen(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var selectedPlaylist by remember { mutableStateOf<PlaylistInfo?>(null) }
     var renameMode by remember { mutableStateOf(false) }
-    val deletePlaylistDialog = rememberDeletePlaylistDialog(
-        playlistName = selectedPlaylist?.name ?: "",
-    ) {
-        selectedPlaylist?.id?.let { onDeletePlaylist(it) }
-        selectedPlaylist = null
-    }
+    val deletePlaylistDialog =
+        rememberDeletePlaylistDialog(
+            playlistName = selectedPlaylist?.name ?: "",
+        ) {
+            selectedPlaylist?.id?.let { onDeletePlaylist(it) }
+            selectedPlaylist = null
+        }
 
     var showSheet by remember { mutableStateOf(false) }
 
@@ -108,14 +108,14 @@ fun PlaylistsScreen(
 
     Scaffold(
         modifier = modifier,
-        containerColor = SpotiBackground,  // Scaffold에서 배경색 지정
+        containerColor = SpotiBackground, // Scaffold에서 배경색 지정
         topBar = {
             TopAppBar(
                 title = {
                     Text(
                         text = "Playlists",
                         fontWeight = FontWeight.SemiBold,
-                        color = SpotiWhite
+                        color = SpotiWhite,
                     )
                 },
                 actions = {
@@ -123,26 +123,28 @@ fun PlaylistsScreen(
                         Icon(
                             imageVector = Icons.Rounded.Add,
                             contentDescription = null,
-                            tint = SpotiWhite
+                            tint = SpotiWhite,
                         )
                     }
                 },
                 scrollBehavior = topBarScrollBehavior,
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Black,
-                    titleContentColor = SpotiWhite,
-                    actionIconContentColor = SpotiWhite
-                )
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Black,
+                        titleContentColor = SpotiWhite,
+                        actionIconContentColor = SpotiWhite,
+                    ),
             )
         },
     ) { paddingValues ->
 
         if (state is PlaylistsScreenState.Loading) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier =
+                    Modifier
+                        .fillMaxSize(),
                 // .background(SpotiBackground), // 배경 제거: Scaffold가 이미 배경 담당
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator(color = SpotiGreen)
             }
@@ -150,10 +152,11 @@ fun PlaylistsScreen(
             val list = (state as PlaylistsScreenState.Success).playlists
 
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
-                    .padding(top = paddingValues.calculateTopPadding()),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
+                        .padding(top = paddingValues.calculateTopPadding()),
             ) {
                 item {
                     Divider(Modifier.fillMaxWidth(), color = SpotiDivider)
@@ -165,15 +168,16 @@ fun PlaylistsScreen(
                         currentRenameId = null
                     }
                     PlaylistRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .combinedClickable(
-                                onClick = { onPlaylistClicked(it.id) },
-                                onLongClick = {
-                                    selectedPlaylist = it
-                                    showSheet = true
-                                },
-                            ),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .combinedClickable(
+                                    onClick = { onPlaylistClicked(it.id) },
+                                    onLongClick = {
+                                        selectedPlaylist = it
+                                        showSheet = true
+                                    },
+                                ),
                         playlistInfo = it,
                     )
 
@@ -203,7 +207,7 @@ fun PlaylistRow(
     Row(
         modifier
             .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         PlaylistInfoRow(
             modifier = Modifier.weight(1f),

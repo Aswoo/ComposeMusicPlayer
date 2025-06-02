@@ -13,18 +13,15 @@ import com.sdu.composemusicplayer.presentation.component.action.MusicShareAction
 data class MenuActionItem(
     val icon: ImageVector,
     val title: String,
-    val callback: () -> Unit
+    val callback: () -> Unit,
 )
 
-
-fun MutableList<MenuActionItem>.delete(callback: () -> Unit) =
-    add(MenuActionItem(Icons.Rounded.Delete, "Delete", callback))
+fun MutableList<MenuActionItem>.delete(callback: () -> Unit) = add(MenuActionItem(Icons.Rounded.Delete, "Delete", callback))
 
 fun MutableList<MenuActionItem>.removeFromPlaylist(callback: () -> Unit) =
     add(MenuActionItem(Icons.Rounded.PlaylistRemove, "Remove from Playlist", callback))
 
-fun MutableList<MenuActionItem>.share(callback: () -> Unit) =
-    add(MenuActionItem(Icons.Rounded.Share, "Share", callback))
+fun MutableList<MenuActionItem>.share(callback: () -> Unit) = add(MenuActionItem(Icons.Rounded.Share, "Share", callback))
 
 fun buildCommonMusicActions(
     music: Music,
@@ -33,10 +30,11 @@ fun buildCommonMusicActions(
     songDeleteAction: MusicDeleteAction,
 ): MutableList<MenuActionItem> {
     val musicList = listOf(music)
-    val list = mutableListOf<MenuActionItem>().apply {
-        share { shareAction.share(context, musicList) }
-        delete { songDeleteAction.deleteMusic(musicList) }
-    }
+    val list =
+        mutableListOf<MenuActionItem>().apply {
+            share { shareAction.share(context, musicList) }
+            delete { songDeleteAction.deleteMusic(musicList) }
+        }
     return list
 }
 
@@ -46,8 +44,9 @@ fun buildPlayListMusicActions(
     shareAction: MusicShareAction,
 ): MutableList<MenuActionItem> {
     val musicList = listOf(music)
-    val list = mutableListOf<MenuActionItem>().apply {
-        share { shareAction.share(context, musicList) }
-    }
+    val list =
+        mutableListOf<MenuActionItem>().apply {
+            share { shareAction.share(context, musicList) }
+        }
     return list
 }

@@ -12,19 +12,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
-
-
 interface DeletePlaylistDialogLauncher {
     fun launch()
 }
-
 
 @Composable
 private fun DeletePlaylistDialog(
     visible: Boolean,
     playlistName: String,
     onDismissRequest: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
 ) {
     if (!visible) return
     AlertDialog(
@@ -41,22 +38,24 @@ private fun DeletePlaylistDialog(
                 Text(text = "Cancel")
             }
         },
-        onDismissRequest = onDismissRequest
+        onDismissRequest = onDismissRequest,
     )
 }
-
 
 @Composable
 fun rememberDeletePlaylistDialog(
     playlistName: String,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
 ): DeletePlaylistDialogLauncher {
     var visible by remember { mutableStateOf(false) }
     DeletePlaylistDialog(
         visible = visible,
         playlistName = playlistName,
-        onDelete = { onDelete(); visible = false },
-        onDismissRequest = { visible = false }
+        onDelete = {
+            onDelete()
+            visible = false
+        },
+        onDismissRequest = { visible = false },
     )
     return remember {
         object : DeletePlaylistDialogLauncher {

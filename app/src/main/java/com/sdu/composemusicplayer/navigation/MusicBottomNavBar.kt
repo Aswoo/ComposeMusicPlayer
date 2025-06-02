@@ -1,5 +1,9 @@
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,7 +19,6 @@ import com.sdu.composemusicplayer.navigation.Routes
 import com.sdu.composemusicplayer.navigation.SETTINGS_NAVIGATION_GRAPH
 import com.sdu.composemusicplayer.ui.theme.Gray500
 import com.sdu.composemusicplayer.ui.theme.SpotiBlackBar
-import com.sdu.composemusicplayer.ui.theme.SpotiGray
 import com.sdu.composemusicplayer.ui.theme.SpotiGreen
 import com.sdu.composemusicplayer.ui.theme.SpotiLightGray
 
@@ -29,7 +32,7 @@ fun MusicBottomNavBar(
 ) {
     NavigationBar(
         modifier = modifier,
-        containerColor = SpotiBlackBar, // Dark background
+        containerColor = SpotiBlackBar,
         tonalElevation = 0.dp,
     ) {
         topLevelDestinations.forEach { item ->
@@ -56,7 +59,7 @@ fun RowScope.BottomNavItem(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = if (isSelected) SpotiGreen else Gray500, // Spotify green vs light gray
+                tint = if (isSelected) SpotiGreen else Gray500,
             )
         },
         label = {
@@ -68,24 +71,26 @@ fun RowScope.BottomNavItem(
             }
         },
         alwaysShowLabel = false,
-        colors = NavigationBarItemDefaults.colors(
-            indicatorColor = Color.Transparent,
-            selectedIconColor = SpotiGreen,
-            unselectedIconColor = SpotiLightGray,
-            selectedTextColor = Color.White,
-            unselectedTextColor = SpotiLightGray,
-        ),
+        colors =
+            NavigationBarItemDefaults.colors(
+                indicatorColor = Color.Transparent,
+                selectedIconColor = SpotiGreen,
+                unselectedIconColor = SpotiLightGray,
+                selectedTextColor = Color.White,
+                unselectedTextColor = SpotiLightGray,
+            ),
     )
 }
 
 fun NavHostController.navigateToTopLevelDestination(routes: Routes) {
-    val navOptions = navOptions {
-        popUpTo(this@navigateToTopLevelDestination.graph.findStartDestination().id) {
-            saveState = true
+    val navOptions =
+        navOptions {
+            popUpTo(this@navigateToTopLevelDestination.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
         }
-        launchSingleTop = true
-        restoreState = true
-    }
 
     when (routes) {
         Routes.Main -> navigate(MAIN_NAVIGATION_GRAPH, navOptions)

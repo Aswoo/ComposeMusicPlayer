@@ -6,7 +6,6 @@ import android.provider.MediaStore
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.sdu.composemusicplayer.R
 import com.sdu.composemusicplayer.core.database.entity.MusicEntity
-
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.milliseconds
@@ -78,15 +77,15 @@ object MusicUtil {
                         audioId = audioID,
                         title = title,
                         artist =
-                        if (artist.equals(
-                                "<unknown>",
-                                true,
-                            )
-                        ) {
-                            context.getString(R.string.unknown)
-                        } else {
-                            artist
-                        },
+                            if (artist.equals(
+                                    "<unknown>",
+                                    true,
+                                )
+                            ) {
+                                context.getString(R.string.unknown)
+                            } else {
+                                artist
+                            },
                         duration = duration,
                         albumPath = albumPath.toString(),
                         audioPath = musicPath.toString(),
@@ -113,29 +112,34 @@ object MusicUtil {
         }
         return musicList
     }
-    suspend fun getSongPath(context: Context,uri: Uri): String = withContext(Dispatchers.IO) {
 
-        val projection =
-            arrayOf(
-                MediaStore.Audio.Media.DATA,
-            )
-        val selection = "${MediaStore.Audio.Media._ID} = ${uri.lastPathSegment!!}"
+    suspend fun getSongPath(
+        context: Context,
+        uri: Uri,
+    ): String =
+        withContext(Dispatchers.IO) {
+            val projection =
+                arrayOf(
+                    MediaStore.Audio.Media.DATA,
+                )
+            val selection = "${MediaStore.Audio.Media._ID} = ${uri.lastPathSegment!!}"
 
-        val cursor = context.contentResolver.query(
-            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-            projection,
-            selection,
-            null,
-            null,
-            null
-        ) ?: throw Exception("Invalid cursor")
+            val cursor =
+                context.contentResolver.query(
+                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                    projection,
+                    selection,
+                    null,
+                    null,
+                    null,
+                ) ?: throw Exception("Invalid cursor")
 
-        cursor.use {
-            it.moveToFirst()
-            val pathColumn = it.getColumnIndex(MediaStore.Audio.Media.DATA)
-            return@withContext it.getString(pathColumn)
+            cursor.use {
+                it.moveToFirst()
+                val pathColumn = it.getColumnIndex(MediaStore.Audio.Media.DATA)
+                return@withContext it.getString(pathColumn)
+            }
         }
-    }
 }
 
 fun <T> Collection<T>.move(

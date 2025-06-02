@@ -7,16 +7,10 @@ const val QUEUE_TABLE = "queue"
 
 @Entity(QUEUE_TABLE)
 data class QueueEntity(
-
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-
     val songUri: String,
-
     val title: String,
-
     val artist: String?,
-
-    val albumTitle: String?
-
+    val albumTitle: String?,
 )

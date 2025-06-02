@@ -12,35 +12,38 @@ import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
-class NetworkMonitor @Inject constructor(
-    @ApplicationContext private val context: Context
-) {
+class NetworkMonitor
+    @Inject
+    constructor(
+        @ApplicationContext private val context: Context,
+    ) {
+        private val _state = MutableStateFlow(NetworkStatus.NOT_CONNECTED)
 
-    private val _state = MutableStateFlow(NetworkStatus.NOT_CONNECTED)
+        val state: StateFlow<NetworkStatus>
+            get() = _state
 
-    val state: StateFlow<NetworkStatus>
-        get() = _state
+        init {
+            val networkRequest =
+                NetworkRequest
+                    .Builder()
+                    .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                    .build()
 
-    init {
-        val networkRequest = NetworkRequest.Builder()
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            .build()
+            val networkCallback =
+                object : ConnectivityManager.NetworkCallback() {
+                    override fun onAvailable(network: Network) {
+                        super.onAvailable(network)
+                        _state.value = NetworkStatus.CONNECTED
+                    }
 
-        val networkCallback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                super.onAvailable(network)
-                _state.value = NetworkStatus.CONNECTED
-            }
+                    override fun onLost(network: Network) {
+                        super.onLost(network)
+                        _state.value = NetworkStatus.NOT_CONNECTED
+                    }
+                }
 
-            override fun onLost(network: Network) {
-                super.onLost(network)
-                _state.value = NetworkStatus.NOT_CONNECTED
-            }
+            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            connectivityManager.requestNetwork(networkRequest, networkCallback)
         }
-
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        connectivityManager.requestNetwork(networkRequest, networkCallback)
     }
-}

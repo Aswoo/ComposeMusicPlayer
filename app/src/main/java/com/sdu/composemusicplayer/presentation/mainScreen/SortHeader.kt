@@ -37,33 +37,33 @@ fun SortHeader(
     var selectedTab by remember { mutableStateOf(SortOption.TITLE) }
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             sortTabOption.forEach { option ->
                 val isSelected = selectedTab == option
                 Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(50))
-                        .background(if (isSelected) Color.White else Color.DarkGray)
-                        .clickable {
-                            selectedTab = option
-                            onSortChange(currentSort.copy(option = option))
-                        }
-                        .padding(horizontal = 20.dp, vertical = 8.dp),
+                    modifier =
+                        Modifier
+                            .clip(RoundedCornerShape(50))
+                            .background(if (isSelected) Color.White else Color.DarkGray)
+                            .clickable {
+                                selectedTab = option
+                                onSortChange(currentSort.copy(option = option))
+                            }.padding(horizontal = 20.dp, vertical = 8.dp),
                 ) {
                     Text(
-                        text = option.name, // 또는 option.displayName (아래 참고)
+                        text = option.name,
                         color = if (isSelected) Color.Black else Color.LightGray,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                     )
                 }
             }
-
         }
 
         val ascending = currentSort.direction == SortDirection.ASCENDING
@@ -72,14 +72,14 @@ fun SortHeader(
         Icon(
             imageVector = Icons.AutoMirrored.Filled.Sort,
             contentDescription = if (ascending) "오름차순" else "내림차순",
-            modifier = Modifier
-                .padding(start = 4.dp)
-                .graphicsLayer {
-                    scaleY = if (ascending) 1f else -1f
-                }
-                .clickable {
-                    onSortChange(currentSort.copy(direction = toggledDirection))
-                },
+            modifier =
+                Modifier
+                    .padding(start = 4.dp)
+                    .graphicsLayer {
+                        scaleY = if (ascending) 1f else -1f
+                    }.clickable {
+                        onSortChange(currentSort.copy(direction = toggledDirection))
+                    },
             tint = Color.White,
         )
     }

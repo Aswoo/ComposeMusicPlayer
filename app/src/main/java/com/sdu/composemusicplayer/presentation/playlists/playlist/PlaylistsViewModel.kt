@@ -3,38 +3,36 @@ package com.sdu.composemusicplayer.presentation.playlists.playlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sdu.composemusicplayer.core.model.playlist.PlaylistsRepository
-import com.sdu.composemusicplayer.domain.model.Music
-import com.sdu.composemusicplayer.domain.playback.PlaylistPlaybackActions
-import com.sdu.composemusicplayer.viewmodel.IPlayerEnvironment
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PlaylistsViewModel @Inject constructor(
-    private val playlistsRepository: PlaylistsRepository,
-) : ViewModel() {
+class PlaylistsViewModel
+    @Inject
+    constructor(
+        private val playlistsRepository: PlaylistsRepository,
+    ) : ViewModel() {
+        val state: StateFlow<PlaylistsScreenState> =
+            playlistsRepository
+                .playlistsWithInfoFlows
+                .map {
+                    PlaylistsScreenState.Success(it)
+                }.stateIn(viewModelScope, SharingStarted.Eagerly, PlaylistsScreenState.Loading)
 
-    val state: StateFlow<PlaylistsScreenState> =
-        playlistsRepository.playlistsWithInfoFlows
-            .map {
-                PlaylistsScreenState.Success(it)
-            }
-            .stateIn(viewModelScope, SharingStarted.Eagerly, PlaylistsScreenState.Loading)
+        fun onDelete(id: Int) {
+            playlistsRepository.deletePlaylist(id)
+        }
 
-    fun onDelete(id: Int) {
-        playlistsRepository.deletePlaylist(id)
-    }
-
-    fun onRename(id: Int, name: String) {
-        playlistsRepository.renamePlaylist(id, name)
-    }
+        fun onRename(
+            id: Int,
+            name: String,
+        ) {
+            playlistsRepository.renamePlaylist(id, name)
+        }
 
 //    override fun shufflePlaylistNext(playlistId: Int) {
 //        viewModelScope.launch(Dispatchers.IO) {
@@ -97,4 +95,4 @@ class PlaylistsViewModel @Inject constructor(
 //            }
 //        }
 //    }
-}
+    }
