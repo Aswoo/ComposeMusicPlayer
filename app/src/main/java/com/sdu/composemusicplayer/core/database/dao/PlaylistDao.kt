@@ -115,8 +115,12 @@ interface PlaylistDao {
     )
 
     @Query(
-        "SELECT P.*, COUNT(S.$MUSIC_URI_STRING_COLUMN) as 'numberOfMusic' FROM $PLAYLIST_ENTITY P LEFT OUTER JOIN $PLAYLIST_MUSIC_ENTITY S " +
-            "ON P.${PLAYLIST_ID_COLUMN} = S.${PLAYLIST_ID_COLUMN} GROUP BY P.$PLAYLIST_ID_COLUMN",
+        """
+    SELECT P.*, COUNT(S.$MUSIC_URI_STRING_COLUMN) as 'numberOfMusic'
+    FROM $PLAYLIST_ENTITY P
+    LEFT OUTER JOIN $PLAYLIST_MUSIC_ENTITY S ON P.${PLAYLIST_ID_COLUMN} = S.${PLAYLIST_ID_COLUMN}
+    GROUP BY P.$PLAYLIST_ID_COLUMN
+    """,
     )
     fun getPlaylistsInfoFlow(): Flow<List<PlaylistInfoWithNumberOfMusic>>
 }

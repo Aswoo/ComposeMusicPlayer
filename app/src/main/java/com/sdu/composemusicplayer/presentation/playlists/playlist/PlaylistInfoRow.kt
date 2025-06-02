@@ -39,7 +39,7 @@ fun PlaylistInfoRow(
             imageVector = Icons.Rounded.PlaylistPlay,
             contentDescription = null,
             modifier = Modifier.size(40.dp),
-            tint = SpotiWhite.copy(alpha = 0.9f), // 조금 투명하게
+            tint = SpotiWhite.copy(alpha = 0.9f),
         )
 
         Spacer(modifier = Modifier.width(12.dp))

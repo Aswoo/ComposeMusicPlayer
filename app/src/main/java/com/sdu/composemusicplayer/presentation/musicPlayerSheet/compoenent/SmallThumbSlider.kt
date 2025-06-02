@@ -49,7 +49,7 @@ fun SmallThumbSlider(
                     color = Color.Black,
                     start = Offset(startX, startY),
                     end = Offset(endX, endY),
-                    strokeWidth = 1.dp.toPx(), // 선의 두께를 1dp로 매우 얇게 설정
+                    strokeWidth = 1.dp.toPx(),
                 )
             }
         },
