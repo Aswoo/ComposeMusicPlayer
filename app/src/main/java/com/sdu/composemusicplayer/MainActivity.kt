@@ -9,12 +9,8 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.navigation.compose.rememberNavController
 import com.sdu.composemusicplayer.core.media.MediaRepository
 import com.sdu.composemusicplayer.navigation.SetupNavigation
@@ -56,14 +52,13 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             ComposeMusicPlayerTheme {
-
                 val commonMusicActions =
                     rememberCommonMusicActions(
                         mediaRepository,
                     )
 
                 CompositionLocalProvider(
-                    LocalCommonMusicAction provides commonMusicActions
+                    LocalCommonMusicAction provides commonMusicActions,
                 ) {
                     Surface(
                         modifier = modifier,
@@ -73,13 +68,13 @@ class MainActivity : ComponentActivity() {
                             permissions = listOfPermissions,
                         ) {
                             SetupNavigation(
-                                playerVM = playerVM, modifier = modifier, navController = navController,
+                                playerVM = playerVM,
+                                modifier = modifier,
+                                navController = navController,
                             )
                         }
                     }
                 }
-
-
             }
         }
     }

@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sdu.composemusicplayer.core.model.lyrics.LyricsFetchSource
 
-
 /**
  * Shows actions which can be done to the lyrics depending on whether the lyrics
  * are fetched from API or from the song metadata
@@ -40,20 +39,22 @@ fun LyricsActions(
 ) {
     AnimatedVisibility(modifier = modifier, visible = isShown, enter = fadeIn(), exit = fadeOut()) {
         Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.End) {
-
             val rippleColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.26f)
             IconButton(
                 modifier = Modifier.background(rippleColor, CircleShape),
                 onClick =
-                if (lyricsFetchSource == LyricsFetchSource.FROM_INTERNET)
-                    onSaveToSongFile else
-                    onFetchWebVersion
+                    if (lyricsFetchSource == LyricsFetchSource.FROM_INTERNET) {
+                        onSaveToSongFile
+                    } else {
+                        onFetchWebVersion
+                    },
             ) {
                 val icon =
-                    if (lyricsFetchSource == LyricsFetchSource.FROM_INTERNET)
+                    if (lyricsFetchSource == LyricsFetchSource.FROM_INTERNET) {
                         Icons.Rounded.Save
-                    else
+                    } else {
                         Icons.Rounded.Language
+                    }
                 Icon(imageVector = icon, contentDescription = null)
             }
 
@@ -61,7 +62,7 @@ fun LyricsActions(
 
             IconButton(
                 modifier = Modifier.background(rippleColor, CircleShape),
-                onClick = onCopy
+                onClick = onCopy,
             ) {
                 Icon(imageVector = Icons.Rounded.CopyAll, contentDescription = null)
             }
@@ -70,11 +71,10 @@ fun LyricsActions(
 
             IconButton(
                 modifier = Modifier.background(rippleColor, CircleShape),
-                onClick = onSwap
+                onClick = onSwap,
             ) {
                 Icon(imageVector = Icons.Rounded.MusicNote, contentDescription = null)
             }
-
         }
     }
 }

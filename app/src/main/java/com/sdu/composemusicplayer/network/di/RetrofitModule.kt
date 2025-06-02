@@ -14,38 +14,39 @@ import retrofit2.Retrofit
 import retrofit2.create
 import java.util.concurrent.TimeUnit
 
-
 annotation class LyricsRetrofitService
 
 @Module
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
-
     val contentType = "application/json".toMediaType()
     val json = Json { ignoreUnknownKeys = true } // Optionally set your serialization preferences here
 
-    val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
+    val loggingInterceptor =
+        HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
 
-    val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .build()
+    val okHttpClient =
+        OkHttpClient
+            .Builder()
+            .addInterceptor(loggingInterceptor)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build()
 
     @Provides
     fun provideLyricsService(
-        @LyricsRetrofitService lyricsRetrofitService: Retrofit
+        @LyricsRetrofitService lyricsRetrofitService: Retrofit,
     ) = lyricsRetrofitService.create<LyricsService>()
-
 
     @LyricsRetrofitService
     @Provides
-    fun provideRetrofit() = Retrofit.Builder()
-        .baseUrl(LyricsService.BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(json.asConverterFactory(contentType))
-        .build()
-
+    fun provideRetrofit() =
+        Retrofit
+            .Builder()
+            .baseUrl(LyricsService.BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(json.asConverterFactory(contentType))
+            .build()
 }

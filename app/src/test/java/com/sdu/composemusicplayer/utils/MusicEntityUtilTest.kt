@@ -1,5 +1,5 @@
-import android.content.Context
 import android.content.ContentResolver
+import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
@@ -11,7 +11,6 @@ import org.junit.Before
 import org.junit.Test
 
 class MusicEntityUtilTest {
-
     @Before
     fun setUp() {
         // Uri.parse 메소드를 정적으로 모킹

@@ -12,7 +12,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import com.sdu.composemusicplayer.ui.theme.Gray200
 import com.sdu.composemusicplayer.ui.theme.Gray600
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,14 +23,16 @@ fun SmallThumbSlider(
     Slider(
         value = value.coerceIn(0f, 1f),
         onValueChange = onValueChange,
-        colors = SliderDefaults.colors(
-            thumbColor = Gray600,
-            activeTrackColor = Gray600,
-            inactiveTrackColor = Gray600.copy(alpha = 0.3f),
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .pointerInput(Unit) { /* 아무것도 하지 않음으로써 상위 gesture 차단 무효화 */ },
+        colors =
+            SliderDefaults.colors(
+                thumbColor = Gray600,
+                activeTrackColor = Gray600,
+                inactiveTrackColor = Gray600.copy(alpha = 0.3f),
+            ),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .pointerInput(Unit) { /* 아무것도 하지 않음으로써 상위 gesture 차단 무효화 */ },
         thumb = {
             // 작은 원형 thumb
             Canvas(modifier = Modifier.size(8.dp)) {
@@ -48,10 +49,9 @@ fun SmallThumbSlider(
                     color = Color.Black,
                     start = Offset(startX, startY),
                     end = Offset(endX, endY),
-                    strokeWidth = 1.dp.toPx() // 선의 두께를 1dp로 매우 얇게 설정
+                    strokeWidth = 1.dp.toPx(),
                 )
             }
-
         },
     )
 }

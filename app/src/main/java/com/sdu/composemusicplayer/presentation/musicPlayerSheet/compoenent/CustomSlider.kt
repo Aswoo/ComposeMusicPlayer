@@ -24,14 +24,16 @@ fun CustomSlider(
     Slider(
         value = value,
         onValueChange = onValueChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        colors = SliderDefaults.colors(
-            thumbColor = Color.Black,
-            activeTrackColor = Color.DarkGray,
-            inactiveTrackColor = Color.LightGray,
-        ),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+        colors =
+            SliderDefaults.colors(
+                thumbColor = Color.Black,
+                activeTrackColor = Color.DarkGray,
+                inactiveTrackColor = Color.LightGray,
+            ),
         thumb = {
             // 커스텀 thumb: 얇은 세로 선
             Canvas(modifier = Modifier.size(16.dp)) {
@@ -43,7 +45,7 @@ fun CustomSlider(
                     color = Color.Black,
                     start = Offset(centerX, startY),
                     end = Offset(centerX, endY),
-                    strokeWidth = 2.dp.toPx()
+                    strokeWidth = 2.dp.toPx(),
                 )
             }
         },
@@ -51,9 +53,10 @@ fun CustomSlider(
             // 커스텀 트랙: 얇은 바
 
             Canvas(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(8.dp),
             ) {
                 val trackHeight = 2.dp.toPx()
                 val y = size.height / 2f
@@ -62,16 +65,16 @@ fun CustomSlider(
                     color = Color.LightGray,
                     start = Offset(0f, y),
                     end = Offset(size.width, y),
-                    strokeWidth = trackHeight
+                    strokeWidth = trackHeight,
                 )
                 // Active Track
                 drawLine(
                     color = Color.DarkGray,
                     start = Offset(0f, y),
                     end = Offset(sliderPositions.value * size.width, y),
-                    strokeWidth = trackHeight
+                    strokeWidth = trackHeight,
                 )
             }
-        }
+        },
     )
 }

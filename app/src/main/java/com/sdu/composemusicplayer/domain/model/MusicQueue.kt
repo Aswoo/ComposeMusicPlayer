@@ -5,12 +5,13 @@ package com.sdu.composemusicplayer.domain.model
  */
 data class MusicQueue(
     val items: MutableList<QueueItem> = mutableListOf(),
-    var currentIndex: Int = 0
+    var currentIndex: Int = 0,
 ) {
     val currentItem: QueueItem?
         get() = items.getOrNull(currentIndex)
 
     fun hasNext(): Boolean = currentIndex + 1 < items.size
+
     fun hasPrevious(): Boolean = currentIndex - 1 >= 0
 
     fun skipToNext(): Boolean {
@@ -43,6 +44,13 @@ data class MusicQueue(
         return false
     }
 
+    fun isSameQueue(
+        oldQueue: List<QueueItem>,
+        newList: List<Music>,
+    ): Boolean {
+        return oldQueue.map { it.music.audioId } == newList.map { it.audioId }
+    }
+
     companion object {
         val EMPTY = MusicQueue(mutableListOf(), 0)
     }
@@ -56,5 +64,5 @@ data class MusicQueue(
  */
 data class QueueItem(
     val music: Music,
-    val originalIndex: Int
+    val originalIndex: Int,
 )

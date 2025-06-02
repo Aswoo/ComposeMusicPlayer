@@ -7,5 +7,5 @@ import com.sdu.composemusicplayer.core.database.entity.PlaylistEntity
 data class PlaylistInfoWithNumberOfMusic(
     @Embedded
     val playlistEntity: PlaylistEntity,
-    val numberOfMusic: Int
+    val numberOfMusic: Int,
 )

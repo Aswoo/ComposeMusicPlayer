@@ -35,6 +35,6 @@ enum class Routes(
         Icons.Rounded.Settings,
         Icons.Outlined.Settings,
         "Settings",
-        SETTINGS_NAVIGATION_GRAPH
-    )
+        SETTINGS_NAVIGATION_GRAPH,
+    ),
 }

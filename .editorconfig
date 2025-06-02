@@ -9,7 +9,6 @@ continuation_indent_size = 8
 [*.{kt,kts,java,xml}]
 # Ktlint 공식 코드 스타일 적용
 
-
 # 트레일링 콤마 규칙
 ij_kotlin_allow_trailing_comma = true
 ij_kotlin_allow_trailing_comma_on_call_site = true
@@ -32,6 +31,9 @@ ktlint_standard_function-expression-body = disabled
 
 # Backing property naming rule
 ktlint_standard_backing-property-naming = disabled
+
+# ✅ 프로퍼티 이름이 소문자 및 camelCase여야 한다는 규칙 비활성화
+ktlint_standard_property-naming = disabled
 
 # Class signature rule 비활성화
 ktlint_standard_class-signature = disabled

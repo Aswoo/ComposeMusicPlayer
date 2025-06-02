@@ -2,7 +2,6 @@ package com.sdu.composemusicplayer.viewmodel
 
 import com.sdu.composemusicplayer.domain.model.Music
 
-
 sealed interface PlayerEvent {
     data class Play(val music: Music) : PlayerEvent
 
@@ -23,6 +22,8 @@ sealed interface PlayerEvent {
     object ResetIsPaused : PlayerEvent
 
     data class AddToQueue(val music: Music) : PlayerEvent
+
     object ClearQueue : PlayerEvent
+
     data class PlayPlaylist(val playlistId: String) : PlayerEvent
 }

@@ -13,13 +13,11 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sdu.composemusicplayer.presentation.component.InputStringDialog
 
-
 @Composable
 fun CreatePlaylistDialog(
     viewModel: CreatePlaylistViewModel = hiltViewModel(),
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
-
     val playlistNames by viewModel.currentPlaylists.collectAsState(initial = listOf())
     val focusRequester = remember { FocusRequester() }
 
@@ -27,9 +25,12 @@ fun CreatePlaylistDialog(
         title = "New Playlist",
         icon = Icons.AutoMirrored.Rounded.PlaylistAdd,
         isInputValid = { input -> input.isNotBlank() && input !in playlistNames },
-        onConfirm = { name -> viewModel.onInsertPlaylist(name); onDismissRequest() },
+        onConfirm = { name ->
+            viewModel.onInsertPlaylist(name)
+            onDismissRequest()
+        },
         focusRequester = focusRequester,
-        onDismissRequest = onDismissRequest
+        onDismissRequest = onDismissRequest,
     )
 
     LaunchedEffect(key1 = Unit, block = { focusRequester.requestFocus() })
@@ -37,15 +38,15 @@ fun CreatePlaylistDialog(
 
 @Composable
 fun rememberCreatePlaylistDialog(): PlaylistDialog {
-
     var isVisible by remember {
         mutableStateOf(false)
     }
 
-    if (isVisible)
+    if (isVisible) {
         CreatePlaylistDialog {
             isVisible = false
         }
+    }
 
     return remember {
         object : PlaylistDialog {

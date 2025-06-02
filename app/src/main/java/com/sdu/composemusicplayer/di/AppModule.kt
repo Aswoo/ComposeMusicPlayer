@@ -20,25 +20,17 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMusicDao(
-        musicDB: MusicDB
-    ) = musicDB.musicDao() 
+    fun provideMusicDao(musicDB: MusicDB) = musicDB.musicDao()
 
     @Singleton
     @Provides
-    fun provideLyricsDao(
-        musicDB: MusicDB
-    ) = musicDB.lyricsDao()
+    fun provideLyricsDao(musicDB: MusicDB) = musicDB.lyricsDao()
 
     @Singleton
     @Provides
-    fun provideQueueDao(
-        musicDB: MusicDB
-    ) = musicDB.queueDao()
+    fun provideQueueDao(musicDB: MusicDB) = musicDB.queueDao()
 
     @Singleton
     @Provides
-    fun providePlayListDao(
-        musicDB: MusicDB
-    ) = musicDB.playListDao()
+    fun providePlayListDao(musicDB: MusicDB) = musicDB.playListDao()
 }

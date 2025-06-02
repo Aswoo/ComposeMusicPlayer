@@ -1,8 +1,5 @@
 package com.sdu.composemusicplayer.domain.model
 
-import android.net.Uri
-import com.sdu.composemusicplayer.core.database.entity.MusicEntity
-
 data class Music(
     val audioId: Long,
     val title: String,

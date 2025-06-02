@@ -23,9 +23,9 @@ import com.sdu.composemusicplayer.R
 import com.sdu.composemusicplayer.domain.model.SongAlbumArtModel
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.BlurTransformation
 
-
 enum class ErrorPainterType {
-    PLACEHOLDER, SOLID_COLOR
+    PLACEHOLDER,
+    SOLID_COLOR,
 }
 
 @Composable
@@ -36,17 +36,18 @@ fun CrossFadingAlbumArt(
     errorPainterType: ErrorPainterType,
     colorFilter: ColorFilter? = null,
     blurTransformation: BlurTransformation? = null,
-    contentScale: ContentScale = ContentScale.Crop
+    contentScale: ContentScale = ContentScale.Crop,
 ) {
-
-
     val context = LocalContext.current
-    val imageRequest = remember(songAlbumArtModel.uri.toString()) {
-        ImageRequest.Builder(context)
-            .data(songAlbumArtModel.uri)
-            .apply { if (blurTransformation != null) this.transformations(blurTransformation) }
-            .size(Size.ORIGINAL).build()
-    }
+    val imageRequest =
+        remember(songAlbumArtModel.uri.toString()) {
+            ImageRequest
+                .Builder(context)
+                .data(songAlbumArtModel.uri)
+                .apply { if (blurTransformation != null) this.transformations(blurTransformation) }
+                .size(Size.ORIGINAL)
+                .build()
+        }
 
     var firstPainter by remember {
         mutableStateOf<Painter>(ColorPainter(Color.Black))
@@ -61,7 +62,7 @@ fun CrossFadingAlbumArt(
     }
 
     val solidColorPainter = remember { ColorPainter(Color.Black) }
-    val placeholderPainter = painterResource(id = R.drawable.vinyl_background)
+    val placeholderPainter = painterResource(id = R.drawable.placeholder)
 
     rememberAsyncImagePainter(
         model = imageRequest,
@@ -82,21 +83,26 @@ fun CrossFadingAlbumArt(
                 is AsyncImagePainter.State.Error -> {
                     if (isUsingFirstPainter) {
                         secondPainter =
-                            if (errorPainterType == ErrorPainterType.PLACEHOLDER) placeholderPainter
-                            else solidColorPainter
+                            if (errorPainterType == ErrorPainterType.PLACEHOLDER) {
+                                placeholderPainter
+                            } else {
+                                solidColorPainter
+                            }
                     } else {
                         firstPainter =
-                            if (errorPainterType == ErrorPainterType.PLACEHOLDER) placeholderPainter
-                            else solidColorPainter
+                            if (errorPainterType == ErrorPainterType.PLACEHOLDER) {
+                                placeholderPainter
+                            } else {
+                                solidColorPainter
+                            }
                     }
                     isUsingFirstPainter = !isUsingFirstPainter
                 }
 
                 else -> {
-
                 }
             }
-        }
+        },
     )
 
     Crossfade(modifier = containerModifier, targetState = isUsingFirstPainter, label = "") {
@@ -105,7 +111,7 @@ fun CrossFadingAlbumArt(
             painter = if (it) firstPainter else secondPainter,
             contentDescription = null,
             colorFilter = colorFilter,
-            contentScale = contentScale
+            contentScale = contentScale,
         )
     }
 }

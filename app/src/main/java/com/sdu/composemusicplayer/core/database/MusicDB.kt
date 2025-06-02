@@ -8,11 +8,11 @@ import com.sdu.composemusicplayer.core.database.dao.LyricsDao
 import com.sdu.composemusicplayer.core.database.dao.MusicDao
 import com.sdu.composemusicplayer.core.database.dao.PlaylistDao
 import com.sdu.composemusicplayer.core.database.dao.QueueDao
-import com.sdu.composemusicplayer.core.database.entity.QueueEntity
 import com.sdu.composemusicplayer.core.database.entity.LyricsEntity
 import com.sdu.composemusicplayer.core.database.entity.MusicEntity
 import com.sdu.composemusicplayer.core.database.entity.PlaylistEntity
 import com.sdu.composemusicplayer.core.database.entity.PlaylistsMusicEntity
+import com.sdu.composemusicplayer.core.database.entity.QueueEntity
 
 @Database(
     entities = [MusicEntity::class, LyricsEntity::class, QueueEntity::class, PlaylistEntity::class, PlaylistsMusicEntity::class],
@@ -20,8 +20,11 @@ import com.sdu.composemusicplayer.core.database.entity.PlaylistsMusicEntity
 )
 abstract class MusicDB : RoomDatabase() {
     abstract fun musicDao(): MusicDao
+
     abstract fun lyricsDao(): LyricsDao
+
     abstract fun queueDao(): QueueDao
+
     abstract fun playListDao(): PlaylistDao
 
     companion object {

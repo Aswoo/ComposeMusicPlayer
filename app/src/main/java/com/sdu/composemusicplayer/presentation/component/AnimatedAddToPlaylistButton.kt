@@ -23,11 +23,11 @@ fun AnimatedAddToPlaylistButton() {
     var isAdded by remember { mutableStateOf(false) }
     val rotation by animateFloatAsState(
         targetValue = if (isAdded) 360f else 0f,
-        animationSpec = tween(durationMillis = 500)
+        animationSpec = tween(durationMillis = 500),
     )
     val iconAlpha by animateFloatAsState(
         targetValue = if (isAdded) 1f else 1f,
-        animationSpec = tween(durationMillis = 300)
+        animationSpec = tween(durationMillis = 300),
     )
 
     val icon = if (isAdded) Icons.Default.Check else Icons.Default.Add
@@ -36,12 +36,12 @@ fun AnimatedAddToPlaylistButton() {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            modifier = Modifier
-                .graphicsLayer {
-                    rotationZ = rotation
-                }
-                .size(24.dp)
-                .alpha(iconAlpha)
+            modifier =
+                Modifier
+                    .graphicsLayer {
+                        rotationZ = rotation
+                    }.size(24.dp)
+                    .alpha(iconAlpha),
         )
     }
 }

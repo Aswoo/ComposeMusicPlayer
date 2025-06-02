@@ -21,18 +21,21 @@ fun AlbumArtImage(
     crossFadeDuration: Int = 300,
 ) {
     val context = LocalContext.current
-    val imageRequest = remember(songAlbumArtModel) {
-        ImageRequest.Builder(context)
-            .data(songAlbumArtModel)
-            .transitionFactory(CrossfadeTransition.Factory(crossFadeDuration)).build()
-    }
+    val imageRequest =
+        remember(songAlbumArtModel) {
+            ImageRequest
+                .Builder(context)
+                .data(songAlbumArtModel)
+                .transitionFactory(CrossfadeTransition.Factory(crossFadeDuration))
+                .build()
+        }
     AsyncImage(
         modifier = modifier,
         model = imageRequest,
         contentDescription = "Artwork",
         contentScale = ContentScale.Crop,
         imageLoader = LocalInefficientThumbnailImageLoader.current,
-        error = painterResource(id = R.drawable.vinyl_background),
-        placeholder = ColorPainter(Color.Transparent)
+        error = painterResource(id = R.drawable.placeholder),
+        placeholder = ColorPainter(Color.Transparent),
     )
 }

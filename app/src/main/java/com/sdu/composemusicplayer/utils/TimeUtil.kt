@@ -1,7 +1,6 @@
 package com.sdu.composemusicplayer.utils
 
 fun Long.millisToTime(): String {
-
     val seconds = this / 1000
     val hours = seconds / 3600
     val minutes = (seconds % 3600) / 60

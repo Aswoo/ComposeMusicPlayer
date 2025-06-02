@@ -6,18 +6,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent.CustomSlider
-import com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent.SmallThumbSlider
-import com.sdu.composemusicplayer.ui.theme.Gray200
 import com.sdu.composemusicplayer.ui.theme.Inter
-import com.sdu.composemusicplayer.ui.theme.Purple200
 import com.sdu.composemusicplayer.ui.theme.TextDefaultColor
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -36,13 +31,14 @@ fun PlayingProgress(
     }
 
     Column(
-        modifier = Modifier.fillMaxWidth().pointerInput(Unit) {
-            // 슬라이더 부분에 대해서만 제스처 이벤트 처리
-            detectHorizontalDragGestures { change, dragAmount ->
-                // 슬라이더의 움직임을 처리, 상위 Box에 영향을 미치지 않음
-                // 슬라이더의 이동을 관리하는 로직을 여기서 작성
-            }
-        },
+        modifier =
+            Modifier.fillMaxWidth().pointerInput(Unit) {
+                // 슬라이더 부분에 대해서만 제스처 이벤트 처리
+                detectHorizontalDragGestures { change, dragAmount ->
+                    // 슬라이더의 움직임을 처리, 상위 Box에 영향을 미치지 않음
+                    // 슬라이더의 이동을 관리하는 로직을 여기서 작성
+                }
+            },
     ) {
 //        Slider(
 //            value = progress.coerceIn(0f, 1f),
@@ -71,17 +67,19 @@ fun PlayingProgress(
         ) {
             Text(
                 text = formatTime(currentDuration),
-                style = MaterialTheme.typography.labelSmall.copy(
-                    color = TextDefaultColor,
-                    fontFamily = Inter,
-                ),
+                style =
+                    MaterialTheme.typography.labelSmall.copy(
+                        color = TextDefaultColor,
+                        fontFamily = Inter,
+                    ),
             )
             Text(
                 text = formatTime(maxDuration),
-                style = MaterialTheme.typography.labelSmall.copy(
-                    color = TextDefaultColor,
-                    fontFamily = Inter,
-                ),
+                style =
+                    MaterialTheme.typography.labelSmall.copy(
+                        color = TextDefaultColor,
+                        fontFamily = Inter,
+                    ),
             )
         }
     }

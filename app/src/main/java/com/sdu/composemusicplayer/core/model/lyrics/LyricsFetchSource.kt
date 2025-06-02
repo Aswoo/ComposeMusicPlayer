@@ -7,5 +7,6 @@ package com.sdu.composemusicplayer.core.model.lyrics
  * on the internet if the lyrics was fetched from the song metadata.
  */
 enum class LyricsFetchSource {
-    FROM_SONG_METADATA, FROM_INTERNET
+    FROM_SONG_METADATA,
+    FROM_INTERNET,
 }

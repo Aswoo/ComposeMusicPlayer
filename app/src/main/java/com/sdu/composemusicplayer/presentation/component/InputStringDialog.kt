@@ -19,7 +19,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 
-
 @Composable
 fun InputStringDialog(
     title: String,
@@ -30,7 +29,6 @@ fun InputStringDialog(
     onConfirm: (String) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-
     var input by remember {
         mutableStateOf("")
     }
@@ -39,9 +37,12 @@ fun InputStringDialog(
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        icon = if (icon != null) {
-            { Icon(imageVector = icon, contentDescription = null) }
-        } else null,
+        icon =
+            if (icon != null) {
+                { Icon(imageVector = icon, contentDescription = null) }
+            } else {
+                null
+            },
         title = { Text(text = title) },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
@@ -51,7 +52,7 @@ fun InputStringDialog(
         confirmButton = {
             TextButton(
                 onClick = { if (!isError) onConfirm(input) },
-                enabled = !isError
+                enabled = !isError,
             ) {
                 Text(text = "Confirm")
             }
@@ -64,13 +65,12 @@ fun InputStringDialog(
                     input = it
                 },
                 isError = isError,
-                placeholder = { Text(text = placeholder.orEmpty()) }
+                placeholder = { Text(text = placeholder.orEmpty()) },
             )
-        }
+        },
     )
 
     LaunchedEffect(key1 = Unit) {
         focusRequester.requestFocus()
     }
-
 }

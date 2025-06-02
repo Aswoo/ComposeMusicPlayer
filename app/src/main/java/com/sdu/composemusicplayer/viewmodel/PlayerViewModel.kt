@@ -2,7 +2,10 @@ package com.sdu.composemusicplayer.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.viewModelScope
-import com.sdu.composemusicplayer.mediaPlayer.service.PlayerServiceManager
+import com.sdu.composemusicplayer.domain.model.PlaySource
+import com.sdu.composemusicplayer.domain.model.SortDirection
+import com.sdu.composemusicplayer.domain.model.SortOption
+import com.sdu.composemusicplayer.domain.model.SortState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -14,8 +17,37 @@ class PlayerViewModel
     constructor(
         @ApplicationContext private val context: Context,
         private val environment: IPlayerEnvironment,
-        private val serviceManager: PlayerServiceManager,
     ) : StatefulViewModel<MusicUiState>(MusicUiState()) {
+        fun updateSort(sortType: SortState) {
+            val currentSort = uiState.value.sortState.option
+            val currentOrder = uiState.value.sortState.direction
+
+            val newOrder =
+                if (currentSort == sortType.option) {
+                    // 같은 옵션이면 정렬 방향 토글
+                    if (currentOrder == SortDirection.ASCENDING) SortDirection.DESCENDING else SortDirection.ASCENDING
+                } else {
+                    // 다른 옵션이면 ASCENDING으로 초기화
+                    SortDirection.ASCENDING
+                }
+
+            val sortedList =
+                when (sortType.option) {
+                    SortOption.TITLE -> uiState.value.musicList.sortedBy { it.title.lowercase() }
+                    SortOption.ARTIST -> uiState.value.musicList.sortedBy { it.artist.lowercase() }
+                    SortOption.ALBUM -> uiState.value.musicList.sortedBy { it.albumPath.lowercase() }
+                }.let { list -> if (newOrder == SortDirection.DESCENDING) list.reversed() else list }
+
+            println("sortedList : ${sortedList[0].title}")
+
+            updateState {
+                copy(
+                    musicList = sortedList,
+                    sortState = SortState(option = sortType.option, direction = newOrder),
+                )
+            }
+        }
+
         init {
             viewModelScope.launch {
                 environment.getAllMusics().collect { musics ->
@@ -59,13 +91,15 @@ class PlayerViewModel
             }
         }
 
-        fun onEvent(event: PlayerEvent) {
+        fun onEvent(
+            event: PlayerEvent,
+            playSource: PlaySource = PlaySource.SINGLE,
+        ) {
             when (event) {
                 is PlayerEvent.Play -> {
                     viewModelScope.launch {
-                        environment.play(event.music)
+                        environment.play(event.music, playSource = playSource)
                     }
-                    serviceManager.startMusicService()
                 }
 
                 is PlayerEvent.PlayPause -> {
@@ -76,7 +110,6 @@ class PlayerViewModel
                             environment.resume()
                         }
                     }
-                    serviceManager.startMusicService()
                 }
 
                 is PlayerEvent.SetShowBottomPlayer -> {
@@ -90,6 +123,7 @@ class PlayerViewModel
                         environment.refreshMusicList()
                     }
                 }
+
                 is PlayerEvent.Previous -> {
                     viewModelScope.launch {
                         environment.previous()
@@ -101,21 +135,25 @@ class PlayerViewModel
                         environment.next()
                     }
                 }
+
                 is PlayerEvent.SnapTo -> {
                     viewModelScope.launch {
                         environment.snapTo(event.duration)
                     }
                 }
+
                 is PlayerEvent.UpdateMusicList -> {
                     viewModelScope.launch {
                         environment.updateMusicList(event.musicList)
                     }
                 }
+
                 is PlayerEvent.ResetIsPaused -> {
                     viewModelScope.launch {
                         environment.resetIsPaused()
                     }
                 }
+
                 is PlayerEvent.AddToQueue -> {
                     viewModelScope.launch {
 //                        environment.addToQueue(event.music)
@@ -128,6 +166,7 @@ class PlayerViewModel
 //                        environment.playFromPlaylist()
 //                    }
                 }
+
                 else -> {
                     println("Else Event")
                 }

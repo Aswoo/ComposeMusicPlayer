@@ -8,10 +8,8 @@ import com.sdu.composemusicplayer.core.database.entity.QUEUE_TABLE
 import com.sdu.composemusicplayer.core.database.entity.QueueEntity
 import kotlinx.coroutines.flow.Flow
 
-
 @Dao
 interface QueueDao {
-
     @Transaction
     suspend fun changeQueue(queue: List<QueueEntity>) {
         deleteQueue()
@@ -29,5 +27,4 @@ interface QueueDao {
 
     @Query("SELECT * FROM $QUEUE_TABLE")
     suspend fun getQueue(): List<QueueEntity>
-
 }

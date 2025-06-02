@@ -1,5 +1,6 @@
 package com.sdu.composemusicplayer.presentation.musicPlayerSheet
 
+import MusicBottomNavBar
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -35,7 +36,6 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
-import com.sdu.composemusicplayer.navigation.MusicBottomNavBar
 import com.sdu.composemusicplayer.MusicAppState
 import com.sdu.composemusicplayer.navigation.Routes
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.calculateBottomPaddingForContent
@@ -43,7 +43,6 @@ import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.rememberCom
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.update
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
-
 
 private val COMPACT_NOW_PLAYING_BAR_HEIGHT = 56.dp
 
@@ -58,7 +57,6 @@ fun CompactAppScaffold(
     onDestinationSelected: (Routes) -> Unit,
     content: @Composable (Modifier, MutableState<Modifier>) -> Unit,
 ) {
-
     val density = LocalDensity.current
     val shouldShowPlayerBar by appState.shouldShowPlayerScreen.collectAsState(initial = false)
     val playerBarHeightPx = with(density) { COMPACT_NOW_PLAYING_BAR_HEIGHT.toPx() }
@@ -77,38 +75,38 @@ fun CompactAppScaffold(
     val contentModifier = remember { mutableStateOf<Modifier>(Modifier) }
 
     LaunchedEffect(key1 = shouldShowPlayerBar) {
-        Log.d("OUT","shouldShowPlayerBar :  ${shouldShowPlayerBar}")
-        if (!shouldShowPlayerBar){
-            Log.d("IN","shouldShowPlayerBar :  ${shouldShowPlayerBar}")
+        Log.d("OUT", "shouldShowPlayerBar :  $shouldShowPlayerBar")
+        if (!shouldShowPlayerBar) {
+            Log.d("IN", "shouldShowPlayerBar :  $shouldShowPlayerBar")
             playerScreenAnchors.animateTo(BarState.COLLAPSED)
         }
-
     }
 
     LaunchedEffect(key1 = shouldShowPlayerBar) {
-        contentModifier.value = Modifier.padding(
-            bottom = calculateBottomPaddingForContent(
-                shouldShowPlayerBar,
-                0.dp,
-                COMPACT_NOW_PLAYING_BAR_HEIGHT,
-            ),
-        )
+        contentModifier.value =
+            Modifier.padding(
+                bottom =
+                    calculateBottomPaddingForContent(
+                        shouldShowPlayerBar,
+                        0.dp,
+                        COMPACT_NOW_PLAYING_BAR_HEIGHT,
+                    ),
+            )
     }
 
-
-    val uiState = rememberCompactScreenUiState(
-        screenHeightPx = layoutHeightPx,
-        playerAnchors = playerScreenAnchors,
-        scrollProvider = scrollProvider,
-        bottomBarHeightPx = bottomNavBarHeightPx.toInt(),
-        density = density,
-        isPinnedMode = false,
-        isPlayerVisible = shouldShowPlayerBar,
-    )
+    val uiState =
+        rememberCompactScreenUiState(
+            screenHeightPx = layoutHeightPx,
+            playerAnchors = playerScreenAnchors,
+            scrollProvider = scrollProvider,
+            bottomBarHeightPx = bottomNavBarHeightPx.toInt(),
+            density = density,
+            isPinnedMode = false,
+            isPlayerVisible = shouldShowPlayerBar,
+        )
 
     // App itself
     Box(modifier = modifier) {
-
         // DrawContentFirst
         Box(modifier = Modifier.fillMaxSize()) {
             content(
@@ -120,43 +118,43 @@ fun CompactAppScaffold(
             )
         }
 
-
         AnimatedVisibility(
             visible = shouldShowPlayerBar,
-            enter = slideInVertically(
-                tween(600),
-                initialOffsetY = { playerBarHeightPx.roundToInt() * 2 },
-            ),
-            exit = slideOutVertically(
-                tween(600),
-                targetOffsetY = { -playerBarHeightPx.roundToInt() },
-            ),
+            enter =
+                slideInVertically(
+                    tween(600),
+                    initialOffsetY = { playerBarHeightPx.roundToInt() * 2 },
+                ),
+            exit =
+                slideOutVertically(
+                    tween(600),
+                    targetOffsetY = { -playerBarHeightPx.roundToInt() },
+                ),
         ) {
-
             PlayerScreen(
                 barHeight = COMPACT_NOW_PLAYING_BAR_HEIGHT,
                 nowPlayingBarPadding = PaddingValues(0.dp),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .offset {
-                        uiState.getNowPlayingOffset()
-                    }
-                    .onSizeChanged { layoutSize ->
-                        layoutHeightPx = layoutSize.height
-                        playerBarMinOffset = playerScreenAnchors
-                            .update(
-                                layoutHeightPx,
-                                playerBarHeightPx.toInt(),
-                                bottomNavBarHeightPx.toInt(),
-                            )
-                    }
-                    .anchoredDraggable(playerScreenAnchors, Orientation.Vertical)
-                    .pointerInput(Unit) {
-                        // PlayerScreen에서 제스처 차단
-                        detectHorizontalDragGestures { _, _ ->
-                            // 좌우 스와이프 이벤트를 차단
-                        }
-                    },
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .offset {
+                            uiState.getNowPlayingOffset()
+                        }.onSizeChanged { layoutSize ->
+                            layoutHeightPx = layoutSize.height
+                            playerBarMinOffset =
+                                playerScreenAnchors
+                                    .update(
+                                        layoutHeightPx,
+                                        playerBarHeightPx.toInt(),
+                                        bottomNavBarHeightPx.toInt(),
+                                    )
+                        }.anchoredDraggable(playerScreenAnchors, Orientation.Vertical)
+                        .pointerInput(Unit) {
+                            // PlayerScreen에서 제스처 차단
+                            detectHorizontalDragGestures { _, _ ->
+                                // 좌우 스와이프 이벤트를 차단
+                            }
+                        },
                 onCollapseNowPlaying = {
                     appState.coroutineScope.launch {
                         playerScreenAnchors.animateTo(BarState.COLLAPSED)
@@ -171,21 +169,20 @@ fun CompactAppScaffold(
                 progressProvider = scrollProvider,
                 viewModel = appState.playerViewModel,
             )
-
         }
 
         MusicBottomNavBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .graphicsLayer { alpha = uiState.bottomBarAlpha }
-                .offset {
-                    uiState.getBottomBarOffset()
-                },
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .graphicsLayer { alpha = uiState.bottomBarAlpha }
+                    .offset {
+                        uiState.getBottomBarOffset()
+                    },
             topLevelDestinations = topLevelDestinations,
             currentDestination = currentDestination,
-            onDestinationSelected = onDestinationSelected
+            onDestinationSelected = onDestinationSelected,
         )
     }
-
 }

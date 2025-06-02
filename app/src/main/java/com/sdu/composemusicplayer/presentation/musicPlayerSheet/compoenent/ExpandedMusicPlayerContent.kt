@@ -59,6 +59,7 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics.LiveLyricsScreen
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics.fadingEdge
+import com.sdu.composemusicplayer.ui.theme.SpotiGreen
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 
@@ -66,29 +67,31 @@ import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 fun ExpandedMusicPlayerContent(
     playerVM: PlayerViewModel,
     modifier: Modifier = Modifier,
-    openAddToPlaylistDialog : () -> Unit,
+    openAddToPlaylistDialog: () -> Unit,
 ) {
     val musicUiState by playerVM.uiState.collectAsState()
     val context = LocalContext.current
     val screenState = remember { mutableStateOf(true) }
 
-    val accentColor = Color(0xFF1DB954)
+    val accentColor = SpotiGreen
 
     if (!screenState.value) {
-        val fadeBrush = remember {
-            Brush.verticalGradient(
-                0.0f to accentColor,
-                0.7f to accentColor,
-                1.0f to Color.Transparent,
-            )
-        }
+        val fadeBrush =
+            remember {
+                Brush.verticalGradient(
+                    0.0f to accentColor,
+                    0.7f to accentColor,
+                    1.0f to Color.Transparent,
+                )
+            }
         LiveLyricsScreen(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(8.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .fadingEdge(fadeBrush)
-                .padding(horizontal = 8.dp, vertical = 18.dp),
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .padding(8.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .fadingEdge(fadeBrush)
+                    .padding(horizontal = 8.dp, vertical = 18.dp),
             onSwap = {
                 screenState.value = !screenState.value
             },
@@ -97,25 +100,28 @@ fun ExpandedMusicPlayerContent(
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Color.Black),
     ) {
         // Blurred album art background
         AsyncImage(
             model = musicUiState.currentPlayedMusic.albumPath,
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxSize()
-                .blur(80.dp)
-                .alpha(0.2f),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .blur(80.dp)
+                    .alpha(0.2f),
         )
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(64.dp))
@@ -125,10 +131,11 @@ fun ExpandedMusicPlayerContent(
                 painter = rememberAsyncImagePainter(musicUiState.currentPlayedMusic.albumPath),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(280.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .shadow(12.dp, RoundedCornerShape(20.dp)),
+                modifier =
+                    Modifier
+                        .size(280.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .shadow(12.dp, RoundedCornerShape(20.dp)),
             )
 
             Spacer(modifier = Modifier.height(36.dp))
@@ -137,10 +144,11 @@ fun ExpandedMusicPlayerContent(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     text = musicUiState.currentPlayedMusic.title,
-                    style = MaterialTheme.typography.headlineSmall.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                    ),
+                    style =
+                        MaterialTheme.typography.headlineSmall.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                        ),
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -149,9 +157,10 @@ fun ExpandedMusicPlayerContent(
 
                 Text(
                     text = musicUiState.currentPlayedMusic.artist,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = Color(0xFFB3B3B3),
-                    ),
+                    style =
+                        MaterialTheme.typography.bodyMedium.copy(
+                            color = Color(0xFFB3B3B3),
+                        ),
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -190,9 +199,10 @@ fun ExpandedMusicPlayerContent(
 
                 IconButton(
                     onClick = { playerVM.onEvent(PlayerEvent.PlayPause(musicUiState.isPlaying)) },
-                    modifier = Modifier
-                        .size(72.dp)
-                        .background(accentColor, shape = CircleShape),
+                    modifier =
+                        Modifier
+                            .size(72.dp)
+                            .background(accentColor, shape = CircleShape),
                 ) {
                     Icon(
                         imageVector = if (musicUiState.isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
@@ -218,9 +228,10 @@ fun ExpandedMusicPlayerContent(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
             ) {
                 // 기존 "가사 보기" 버튼
                 Button(
@@ -235,14 +246,15 @@ fun ExpandedMusicPlayerContent(
 
                 // Plus → Check 애니메이션 전환 버튼
                 Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .border(1.dp, Color.White, CircleShape)
-                        .background(Color.Black.copy(alpha = 0.3f))
-                        .size(48.dp)
-                        .clickable {
-                            openAddToPlaylistDialog()
-                        },
+                    modifier =
+                        Modifier
+                            .clip(CircleShape)
+                            .border(1.dp, Color.White, CircleShape)
+                            .background(Color.Black.copy(alpha = 0.3f))
+                            .size(48.dp)
+                            .clickable {
+                                openAddToPlaylistDialog()
+                            },
                     contentAlignment = Alignment.Center,
                 ) {
                     AnimatedContent(
