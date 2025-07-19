@@ -20,6 +20,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +46,7 @@ import com.sdu.composemusicplayer.ui.theme.TextDefaultColor
 @Composable
 fun CheckAndRequestPermissions(
     permissions: MutableList<String>,
+    onPermissionsGranted: () -> Unit,
     appContent: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
@@ -52,6 +54,13 @@ fun CheckAndRequestPermissions(
 
     val permissionState = rememberMultiplePermissionsState(permissions = permissions)
     var isPermissionDenied by remember { mutableStateOf(false) }
+
+    // A side effect to trigger onPermissionsGranted when all permissions are granted.
+    LaunchedEffect(permissionState.allPermissionsGranted) {
+        if (permissionState.allPermissionsGranted) {
+            onPermissionsGranted()
+        }
+    }
 
     PermissionsRequired(
         multiplePermissionsState = permissionState,

@@ -154,7 +154,7 @@ private fun PlaylistDetailContent(
                     color = Color.Gray,
                 )
             }
-            itemsIndexed(loadedState.music) { _, music ->
+            itemsIndexed(items = loadedState.music, key = { index, music -> music.audioId }) { _, music ->
                 PlayListMusicRow(
                     modifier =
                         Modifier

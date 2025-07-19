@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
@@ -17,6 +17,8 @@
 
 
     <application
+        android:sharedUserId="com.sdu.composemusicplayer.uid"
+        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:name=".BaseApp"
         android:dataExtractionRules="@xml/data_extraction_rules"

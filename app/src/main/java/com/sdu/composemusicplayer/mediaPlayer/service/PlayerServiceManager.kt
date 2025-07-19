@@ -1,3 +1,4 @@
+@file:OptIn(UnstableApi::class)
 package com.sdu.composemusicplayer.mediaPlayer.service
 
 import android.content.Context
@@ -6,6 +7,8 @@ import android.os.Build
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
+import androidx.media3.common.util.UnstableApi
+
 class PlayerServiceManager
     @Inject
     constructor(
@@ -13,6 +16,7 @@ class PlayerServiceManager
     ) {
         private var isServiceRunning = false
 
+        @OptIn(UnstableApi::class)
         fun startMusicService() {
             if (!isServiceRunning) {
                 val intent = Intent(context, MediaService::class.java)
@@ -25,6 +29,7 @@ class PlayerServiceManager
             }
         }
 
+        @OptIn(UnstableApi::class)
         fun stopMusicService() {
             if (isServiceRunning) {
                 val intent = Intent(context, MediaService::class.java)

@@ -56,6 +56,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -170,7 +171,7 @@ internal fun PlayerScreen(
                             detectTapGestures { onExpandNowPlaying() }
                         }.graphicsLayer {
                             alpha = (1 - (progressProvider() * 6.66f).coerceAtMost(1.0f))
-                        },
+                        }.testTag("miniPlayer"),
                 state = uiState,
                 showExtraControls = true,
                 songProgressProvider = {
@@ -309,7 +310,7 @@ fun SongControls(
                     .size(34.dp)
                     .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.SkipPrevious,
-            "Skip Previous",
+            "Previous", // Changed from "Skip Previous"
             onPrevious,
         )
 
@@ -321,7 +322,7 @@ fun SongControls(
                     .size(34.dp)
                     .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.FastRewind,
-            "Jump Back",
+            "Rewind", // Changed from "Jump Back"
             onJumpBackward,
         )
 
@@ -338,7 +339,7 @@ fun SongControls(
                     .size(64.dp)
                     .clip(CircleShape),
             icon = pausePlayButton,
-            "Skip Previous",
+            "Play/Pause", // Changed from "Skip Previous"
             onTogglePlayback,
         )
 
@@ -350,7 +351,7 @@ fun SongControls(
                     .size(36.dp)
                     .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.FastForward,
-            "Jump Forward",
+            "Forward", // Changed from "Jump Forward"
             onJumpForward,
         )
 
@@ -362,7 +363,7 @@ fun SongControls(
                     .size(36.dp)
                     .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.SkipNext,
-            "Skip To Next",
+            "Next", // Changed from "Skip To Next"
             onNext,
         )
     }

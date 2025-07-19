@@ -29,7 +29,6 @@ import androidx.navigation.NavController
 import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.SortOption
 import com.sdu.composemusicplayer.domain.model.SortState
-import com.sdu.composemusicplayer.presentation.mainScreen.component.BottomMusicPlayerHeight
 import com.sdu.composemusicplayer.presentation.mainScreen.component.MusicItem
 import com.sdu.composemusicplayer.ui.theme.SpotiBackground
 import com.sdu.composemusicplayer.viewmodel.MusicUiState
@@ -125,9 +124,7 @@ fun MusicListContent(
                 )
             }
 
-            item {
-                Spacer(modifier = Modifier.height(BottomMusicPlayerHeight.value))
-            }
+            
         }
     }
 }

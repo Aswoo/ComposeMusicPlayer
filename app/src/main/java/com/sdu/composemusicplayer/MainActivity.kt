@@ -18,6 +18,7 @@ import com.sdu.composemusicplayer.presentation.component.LocalCommonMusicAction
 import com.sdu.composemusicplayer.presentation.component.rememberCommonMusicActions
 import com.sdu.composemusicplayer.presentation.permission.CheckAndRequestPermissions
 import com.sdu.composemusicplayer.ui.theme.ComposeMusicPlayerTheme
+import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -66,6 +67,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         CheckAndRequestPermissions(
                             permissions = listOfPermissions,
+                            onPermissionsGranted = { playerVM.onEvent(PlayerEvent.RefreshMusicList) },
                         ) {
                             SetupNavigation(
                                 playerVM = playerVM,

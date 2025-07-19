@@ -61,6 +61,7 @@ import kotlinx.coroutines.launch
 fun LiveLyricsScreen(
     modifier: Modifier,
     onSwap: () -> Unit,
+    onBack: () -> Unit, // Add this line
     lyricsViewModel: LiveLyricsViewModel = hiltViewModel(),
 ) {
     val state by lyricsViewModel.state.collectAsState()
@@ -72,6 +73,7 @@ fun LiveLyricsScreen(
         onRetry = lyricsViewModel::onRetry,
         onSaveLyricsToSongFile = lyricsViewModel::saveExternalLyricsToSongFile,
         onSwap = onSwap,
+        onBack = onBack, // Pass the callback
     )
 }
 
@@ -84,10 +86,11 @@ fun LiveLyricsScreen(
     onRetry: () -> Unit,
     onSaveLyricsToSongFile: () -> Unit,
     onSwap: () -> Unit,
+    onBack: () -> Unit, // Add this line
 ) {
     when (state) {
         is LyricsScreenState.NoLyrics ->
-            NoLyricsState(modifier = modifier, reason = state.reason, onRetry)
+            NoLyricsState(modifier = modifier, reason = state.reason, onRetry = onRetry, onBack = onBack) // Pass onBack
 
         is LyricsScreenState.Loading, is LyricsScreenState.SearchingLyrics ->
             LoadingState(modifier = modifier)
@@ -169,11 +172,21 @@ fun NoLyricsState(
     modifier: Modifier,
     reason: NoLyricsReason,
     onRetry: () -> Unit,
+    onBack: () -> Unit, // Add this line
 ) {
     when (reason) {
         NoLyricsReason.NOT_FOUND -> {
             Box(modifier = modifier) {
-                Text(modifier = Modifier.align(Alignment.Center), text = "No lyrics available")
+                Column(
+                    modifier = Modifier.align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = "No lyrics available")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(onClick = onBack) { // Add this button
+                        Text(text = "Go Back")
+                    }
+                }
             }
         }
 

@@ -70,6 +70,10 @@ fun CrossFadingAlbumArt(
         imageLoader = LocalInefficientThumbnailImageLoader.current,
         onState = {
             when (it) {
+                is AsyncImagePainter.State.Empty -> {
+                    // Do nothing or show a loading indicator
+                }
+
                 is AsyncImagePainter.State.Success -> {
                     val newPainter = it.painter
                     if (isUsingFirstPainter) {

@@ -88,7 +88,7 @@ fun CompactAppScaffold(
                 bottom =
                     calculateBottomPaddingForContent(
                         shouldShowPlayerBar,
-                        0.dp,
+                        with(density) { bottomNavBarHeightPx.toDp() }, // Use actual bottom nav bar height
                         COMPACT_NOW_PLAYING_BAR_HEIGHT,
                     ),
             )
@@ -119,6 +119,19 @@ fun CompactAppScaffold(
         }
 
         AnimatedVisibility(
+            visible = shouldShowPlayerBar,
+            enter =
+                slideInVertically(
+                    tween(600),
+                    initialOffsetY = { playerBarHeightPx.roundToInt() * 2 },
+                ),
+            exit =
+                slideOutVertically(
+                    tween(600),
+                    targetOffsetY = { -playerBarHeightPx.roundToInt() },
+                ),
+        ) {
+            AnimatedVisibility(
             visible = shouldShowPlayerBar,
             enter =
                 slideInVertically(
@@ -169,6 +182,7 @@ fun CompactAppScaffold(
                 progressProvider = scrollProvider,
                 viewModel = appState.playerViewModel,
             )
+        }
         }
 
         MusicBottomNavBar(

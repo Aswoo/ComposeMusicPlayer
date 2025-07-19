@@ -140,12 +140,7 @@ class PlayerEnvironment
         }
 
         override suspend fun refreshMusicList() {
-            val freshList =
-                musicRepository
-                    .getAllMusics()
-                    .first()
-                    .map(MusicEntity::toDomain)
-            _allMusics.value = freshList
+            musicRepository.syncMusicWithDevice()
         }
 
         override suspend fun setShowBottomMusicPlayer(isShowed: Boolean) {

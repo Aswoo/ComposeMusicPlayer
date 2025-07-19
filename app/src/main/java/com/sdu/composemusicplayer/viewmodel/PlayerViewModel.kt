@@ -38,8 +38,6 @@ class PlayerViewModel
                     SortOption.ALBUM -> uiState.value.musicList.sortedBy { it.albumPath.lowercase() }
                 }.let { list -> if (newOrder == SortDirection.DESCENDING) list.reversed() else list }
 
-            println("sortedList : ${sortedList[0].title}")
-
             updateState {
                 copy(
                     musicList = sortedList,
