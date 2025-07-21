@@ -24,7 +24,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.sdu.composemusicplayer.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
