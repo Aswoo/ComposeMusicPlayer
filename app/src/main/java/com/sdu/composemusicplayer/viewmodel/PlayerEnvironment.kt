@@ -2,7 +2,6 @@ package com.sdu.composemusicplayer.viewmodel
 
 import android.content.Context
 import android.os.Handler
-import android.os.Looper
 import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -24,7 +23,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,6 +37,7 @@ class PlayerEnvironment
         private val queueRepository: QueueRepository,
         private val serviceManager: PlayerServiceManager,
         private val exoPlayer: ExoPlayer,
+        private val handler: Handler,
     ) : IPlayerEnvironment {
         private val dispatcher = Dispatchers.IO
         private val scope = CoroutineScope(dispatcher + SupervisorJob())
@@ -82,7 +81,6 @@ class PlayerEnvironment
 
         override fun isBottomMusicPlayerShowed(): Flow<Boolean> = _isBottomMusicPlayerShowed.asStateFlow()
 
-        private val handler = Handler(Looper.getMainLooper())
         private val updateRunnable =
             object : Runnable {
                 override fun run() {
@@ -105,6 +103,21 @@ class PlayerEnvironment
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
                     _isPlaying.value = isPlaying
                     _isPaused.value = !isPlaying
+                }
+
+                override fun onMediaItemTransition(
+                    mediaItem: MediaItem?,
+                    reason: Int,
+                ) {
+                    super.onMediaItemTransition(mediaItem, reason)
+                    mediaItem?.let {
+                        val newIndex = exoPlayer.currentMediaItemIndex
+                        val currentQueue = _musicQueue.value
+                        if (newIndex >= 0 && newIndex < currentQueue.items.size) {
+                            _musicQueue.value = currentQueue.copy(currentIndex = newIndex)
+                            _currentPlayedMusic.value = currentQueue.items[newIndex].music
+                        }
+                    }
                 }
             }
 
@@ -159,7 +172,8 @@ class PlayerEnvironment
             _musicQueue.value = queue.copy(currentIndex = index)
             _currentPlayedMusic.value = item.music
 
-            exoPlayer.setMediaItem(MediaItem.fromUri(item.music.audioPath.toUri()))
+            val mediaItems = queue.items.map { MediaItem.fromUri(it.music.audioPath.toUri()) }
+            exoPlayer.setMediaItems(mediaItems, index, 0L)
             exoPlayer.prepare()
             exoPlayer.play()
 

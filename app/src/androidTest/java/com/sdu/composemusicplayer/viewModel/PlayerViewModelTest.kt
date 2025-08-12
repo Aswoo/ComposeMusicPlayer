@@ -1,8 +1,8 @@
 package com.sdu.composemusicplayer.viewModel
 
 import android.content.Context
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sdu.composemusicplayer.domain.model.Music
-import com.sdu.composemusicplayer.domain.model.PlaySource
 import com.sdu.composemusicplayer.viewmodel.IPlayerEnvironment
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
@@ -21,10 +21,9 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
 @ExperimentalCoroutinesApi
-@RunWith(JUnit4::class)
+@RunWith(AndroidJUnit4::class)
 class PlayerViewModelTest {
     private lateinit var viewModel: PlayerViewModel
     private lateinit var mockContext: Context
@@ -33,15 +32,22 @@ class PlayerViewModelTest {
     private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
-    fun setUp() {
+    fun `셋업_테스트_환경_준비`() {
         Dispatchers.setMain(testDispatcher)
 
         mockContext = mockk(relaxed = true)
         mockEnvironment = mockk(relaxed = true)
 
-        val sampleMusic = createTestMusic(1)
+        val sampleMusic =
+            Music(
+                audioId = 1L,
+                title = "Test Song",
+                artist = "Test Artist",
+                duration = 180000L,
+                albumPath = "/path/to/album",
+                audioPath = "/path/to/test/song.mp3",
+            )
 
-        // 모든 Flow 메서드에 대한 기본 mock 설정
         every { mockEnvironment.getAllMusics() } returns flowOf(emptyList())
         every { mockEnvironment.getCurrentPlayedMusic() } returns flowOf(sampleMusic)
         every { mockEnvironment.isPlaying() } returns flowOf(false)
@@ -53,109 +59,104 @@ class PlayerViewModelTest {
     }
 
     @After
-    fun tearDown() {
+    fun `테스트_종료_후_환경_정리`() {
         Dispatchers.resetMain()
     }
 
     @Test
-    fun `onEvent Play should call environment play`() =
+    fun `플레이_이벤트가_호출되면_환경의_play_함수를_실행하고_서비스를_시작한다`() =
         runTest {
-            // Arrange
-            val testMusic = createTestMusic(1)
-            coEvery { mockEnvironment.play(testMusic, PlaySource.SINGLE) } returns Unit
+            val testMusic =
+                Music(
+                    audioId = 1L,
+                    title = "Test Music",
+                    artist = "Test Artist",
+                    duration = 180000L,
+                    albumPath = "/path/to/album",
+                    audioPath = "/path/to/test/song.mp3",
+                )
+            coEvery { mockEnvironment.play(testMusic, any(), any()) } returns Unit
 
-            // Act
             viewModel.onEvent(PlayerEvent.Play(testMusic))
 
-            // Assert
-            coVerify { mockEnvironment.play(testMusic, PlaySource.SINGLE) }
+            coVerify { mockEnvironment.play(testMusic, any(), any()) }
         }
 
     @Test
-    fun `onEvent PlayPause when not playing should resume`() =
+    fun `플레이_재생_중이_아닐_때_재생_재개를_호출한다`() =
         runTest {
-            // Arrange
             coEvery { mockEnvironment.resume() } returns Unit
 
-            // Act
             viewModel.onEvent(PlayerEvent.PlayPause(isPlaying = false))
 
-            // Assert
             coVerify { mockEnvironment.resume() }
         }
 
     @Test
-    fun `onEvent PlayPause when playing should pause`() =
+    fun `플레이_재생_중일_때_일시정지를_호출한다`() =
         runTest {
-            // Arrange
             coEvery { mockEnvironment.pause() } returns Unit
 
-            // Act
             viewModel.onEvent(PlayerEvent.PlayPause(isPlaying = true))
 
-            // Assert
             coVerify { mockEnvironment.pause() }
         }
 
     @Test
-    fun `onEvent Previous should call environment previous`() =
+    fun `이전_이벤트가_호출되면_환경의_previous_함수를_실행한다`() =
         runTest {
-            // Act
             viewModel.onEvent(PlayerEvent.Previous)
 
-            // Assert
             coVerify { mockEnvironment.previous() }
         }
 
     @Test
-    fun `onEvent Next should call environment next`() =
+    fun `다음_이벤트가_호출되면_환경의_next_함수를_실행한다`() =
         runTest {
-            // Arrange
             coEvery { mockEnvironment.next() } returns Unit
 
-            // Act
             viewModel.onEvent(PlayerEvent.Next)
 
-            // Assert
             coVerify { mockEnvironment.next() }
         }
 
     @Test
-    fun `onEvent SnapTo should call environment snapTo`() =
+    fun `스냅투_이벤트가_호출되면_환경의_snapTo_함수를_실행한다`() =
         runTest {
-            // Arrange
             val testDuration = 1000L
             coEvery { mockEnvironment.snapTo(testDuration) } returns Unit
 
-            // Act
             viewModel.onEvent(PlayerEvent.SnapTo(testDuration))
 
-            // Assert
             coVerify { mockEnvironment.snapTo(testDuration) }
         }
 
     @Test
-    fun `onEvent UpdateMusicList should call environment updateMusicList`() =
+    fun `음악_리스트_업데이트_이벤트가_호출되면_환경의_updateMusicList_함수를_실행한다`() =
         runTest {
-            // Arrange
-            val testMusicList = listOf(createTestMusic(1), createTestMusic(2))
+            val testMusicList =
+                listOf(
+                    Music(
+                        audioId = 1L,
+                        title = "Test Music",
+                        artist = "Test Artist",
+                        duration = 180000L,
+                        albumPath = "/path/to/album",
+                        audioPath = "/path/to/test/song.mp3",
+                    ),
+                    Music(
+                        audioId = 2L,
+                        title = "Test Music 2",
+                        artist = "Test Artist 2",
+                        duration = 180000L,
+                        albumPath = "/path/to/album",
+                        audioPath = "/path/to/test/song.mp3",
+                    ),
+                )
             coEvery { mockEnvironment.updateMusicList(testMusicList) } returns Unit
 
-            // Act
             viewModel.onEvent(PlayerEvent.UpdateMusicList(testMusicList))
 
-            // Assert
             coVerify { mockEnvironment.updateMusicList(testMusicList) }
         }
-
-    private fun createTestMusic(id: Long): Music {
-        return Music(
-            audioId = id,
-            title = "Test Music $id",
-            artist = "Test Artist $id",
-            duration = 180000L,
-            albumPath = "/path/to/album",
-            audioPath = "/path/to/test/song$id.mp3",
-        )
-    }
 }

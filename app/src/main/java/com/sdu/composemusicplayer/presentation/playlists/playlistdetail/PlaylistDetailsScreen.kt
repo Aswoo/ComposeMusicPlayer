@@ -1,6 +1,7 @@
 package com.sdu.composemusicplayer.presentation.playlists.playlistdetail
 
 import androidx.activity.compose.BackHandler
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -83,8 +84,9 @@ fun PlaylistDetailScreen(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
+@VisibleForTesting
 @Composable
-private fun PlaylistDetailContent(
+internal fun PlaylistDetailContent(
     modifier: Modifier,
     state: PlaylistDetailScreenState,
     playlistActions: PlaylistActions,

@@ -4,7 +4,9 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
-import androidx.annotation.OptIn
+import android.view.KeyEvent
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.Companion.PRIVATE
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
@@ -13,7 +15,13 @@ import androidx.media3.session.MediaSessionService
 import androidx.media3.ui.PlayerNotificationManager
 import com.sdu.composemusicplayer.mediaPlayer.mediaNotification.MediaNotificationManager
 import com.sdu.composemusicplayer.utils.AppStateUtil.isAppInForeground
+import com.sdu.composemusicplayer.viewmodel.IPlayerEnvironment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @UnstableApi
@@ -21,19 +29,20 @@ import javax.inject.Inject
 class MediaService : MediaSessionService() {
     lateinit var mediaSession: MediaSession
     lateinit var musicNotificationManager: MediaNotificationManager
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     @Inject
-    lateinit var exoPlayer: ExoPlayer // Hilt DI로 ExoPlayer 주입받기
+    lateinit var exoPlayer: ExoPlayer
 
-    @OptIn(UnstableApi::class)
+    @Inject
+    lateinit var playerEnvironment: IPlayerEnvironment
+
     override fun onCreate() {
         super.onCreate()
 
-        // Build a PendingIntent that can be used to launch the UI.
         val sessionActivityPendingIntent =
-            this
-                .packageManager
-                ?.getLaunchIntentForPackage(this.packageName)
+            packageManager
+                ?.getLaunchIntentForPackage(packageName)
                 ?.let { sessionIntent ->
                     PendingIntent.getActivity(
                         this,
@@ -43,14 +52,13 @@ class MediaService : MediaSessionService() {
                     )
                 }
 
-        // MediaSession 초기화
         mediaSession =
             MediaSession
                 .Builder(this, exoPlayer)
-                .setSessionActivity(sessionActivityPendingIntent!!) // Session activity 설정
+                .setSessionActivity(sessionActivityPendingIntent!!)
+                .setCallback(MediaButtonCallback())
                 .build()
 
-        // 미디어 세션에서 미디어 세션 서비스와 연동된 notification 설정
         musicNotificationManager =
             MediaNotificationManager(
                 context = this,
@@ -63,35 +71,18 @@ class MediaService : MediaSessionService() {
                             notification: Notification,
                             ongoing: Boolean,
                         ) {
+                            // 필요시 구현
                         }
 
-                        /**
-                         * 사용자 액션이나 [stopForeground]에 의해 알림이 취소되었을 때 호출됨
-                         *
-                         * 동작 과정:
-                         * 1. 앱의 현재 상태(백그라운드/포그라운드) 확인
-                         * 2. 포그라운드 취소 -> 재생 정지
-                         * 3. 백그라운드 취소 -> 서비스 종료
-                         *
-                         * @param notificationId 취소된 알림의 고유 식별자
-                         * @param dismissedByUser true: 사용자가 직접 알림을 닫음, false: 시스템이나 앱에 의해 알림이 닫힘
-                         *
-                         * @throws SecurityException 필요한 권한이 없는 경우 발생
-                         * @see isAppInForeground 앱 상태 확인 메서드
-                         */
                         override fun onNotificationCancelled(
                             notificationId: Int,
                             dismissedByUser: Boolean,
                         ) {
-                            // 완전 종료: 사용자가 앱을 명시적으로 닫는 경우  onTaskRemoved 호출
-//                    val isAppInForeground: Boolean
-//                        get() = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
-                            val isBackground = !isAppInForeground(this@MediaService)
-                            if (isBackground) {
-                                stopForeground(STOP_FOREGROUND_REMOVE) // 포그라운드 서비스 종료
-                                exoPlayer.release() // ExoPlayer 리소스 해제
-                                mediaSession.release() // MediaSession 해제
-                                stopSelf() // 서비스 종료
+                            if (!isAppInForeground(this@MediaService)) {
+                                stopForeground(STOP_FOREGROUND_REMOVE)
+                                exoPlayer.release()
+                                mediaSession.release()
+                                stopSelf()
                             } else {
                                 stopForeground(STOP_FOREGROUND_REMOVE)
                             }
@@ -100,23 +91,93 @@ class MediaService : MediaSessionService() {
             )
     }
 
-    @androidx.annotation.OptIn(
-        androidx
-            .media3
-            .common
-            .util
-            .UnstableApi::class,
-    )
+    internal fun handleMediaButtonSingleClick(keyCode: Int) {
+        serviceScope.launch {
+            val isPlaying = playerEnvironment.isPlaying().first()
+            if (isPlaying) playerEnvironment.pause() else playerEnvironment.resume()
+        }
+    }
+
+    internal fun handleMediaButtonDoubleClick() {
+        serviceScope.launch {
+            playerEnvironment.next()
+        }
+    }
+
+    internal fun handleMediaButtonNext() {
+        serviceScope.launch {
+            playerEnvironment.next()
+        }
+    }
+
+    internal fun handleMediaButtonPrevious() {
+        serviceScope.launch {
+            playerEnvironment.previous()
+        }
+    }
+
+    @VisibleForTesting(otherwise = PRIVATE)
+    internal inner class MediaButtonCallback : MediaSession.Callback {
+        private var lastClickTime: Long = 0
+        private var lastKeyCode: Int = -1
+        private val DOUBLE_CLICK_TIMEOUT = 500L
+
+        override fun onMediaButtonEvent(
+            mediaSession: MediaSession,
+            controllerInfo: MediaSession.ControllerInfo,
+            intent: Intent,
+        ): Boolean {
+            if (intent.action != Intent.ACTION_MEDIA_BUTTON) return false
+
+            val keyEvent = intent.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT) ?: return false
+            if (keyEvent.action != KeyEvent.ACTION_DOWN) return false
+
+            val currentTime = System.currentTimeMillis()
+            val keyCode = keyEvent.keyCode
+
+            when (keyCode) {
+                KeyEvent.KEYCODE_MEDIA_PLAY,
+                KeyEvent.KEYCODE_MEDIA_PAUSE,
+                KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
+                -> {
+                    val diff = currentTime - lastClickTime
+                    if (lastKeyCode == keyCode && diff < DOUBLE_CLICK_TIMEOUT) {
+                        // 더블 클릭
+                        handleMediaButtonDoubleClick()
+                        resetClickState()
+                    } else {
+                        // 싱글 클릭
+                        handleMediaButtonSingleClick(keyCode)
+                        lastClickTime = currentTime
+                        lastKeyCode = keyCode
+                    }
+                    return true
+                }
+                KeyEvent.KEYCODE_MEDIA_NEXT -> {
+                    handleMediaButtonNext()
+                    return true
+                }
+                KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
+                    handleMediaButtonPrevious()
+                    return true
+                }
+            }
+            return false
+        }
+
+        private fun resetClickState() {
+            lastClickTime = 0
+            lastKeyCode = -1
+        }
+    }
+
     override fun onStartCommand(
         intent: Intent?,
         flags: Int,
         startId: Int,
     ): Int {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            musicNotificationManager.startMusicNotificationService(
-                mediaSession = mediaSession,
-                mediaSessionService = this,
-            )
+            musicNotificationManager.startMusicNotificationService(this, mediaSession)
         }
         return super.onStartCommand(intent, flags, startId)
     }
@@ -125,9 +186,9 @@ class MediaService : MediaSessionService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        stopForeground(STOP_FOREGROUND_REMOVE) // 포그라운드 서비스 종료
-        exoPlayer.release() // ExoPlayer 리소스 해제
-        stopSelf() // 서비스 종료
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        exoPlayer.release()
+        stopSelf()
         musicNotificationManager.unregisterBluetoothReceiver()
         mediaSession.apply {
             release()

@@ -16,6 +16,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -115,16 +116,31 @@ fun MusicListContent(
         ) {
             val currentAudioId = musicUiState.currentPlayedMusic.audioId
 
-            items(musicUiState.musicList) { music ->
-                MusicItem(
-                    music = music,
-                    selected = (music.audioId == currentAudioId),
-                    isMusicPlaying = musicUiState.isPlaying,
-                    onClick = { onSelectedMusic(music) },
-                )
+            if (musicUiState.musicList.isEmpty()) {
+                item {
+                    Box(
+                        modifier =
+                            Modifier
+                                .fillParentMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = "음악을 찾을 수 없습니다.",
+                            color = Color.Gray,
+                            fontSize = 16.sp,
+                        )
+                    }
+                }
+            } else {
+                items(musicUiState.musicList) { music ->
+                    MusicItem(
+                        music = music,
+                        selected = (music.audioId == currentAudioId),
+                        isMusicPlaying = musicUiState.isPlaying,
+                        onClick = { onSelectedMusic(music) },
+                    )
+                }
             }
-
-            
         }
     }
 }
