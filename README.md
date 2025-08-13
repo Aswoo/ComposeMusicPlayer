@@ -90,3 +90,23 @@
 2. 로컬 기기에 오디오 파일이 존재해야 정상 동작
 3. `MediaSessionService`와 권한 설정 필요
 4. 가사 API Key 설정 필요 X
+
+---
+
+## ✨ Recent Changes
+블루투스 이어폰 연동 및 UI 동기화 개선
+기존 음악 재생 관리 로직을 개선하여, 블루투스 이어폰에서 발생하는 재생, 일시정지, 트랙 변경 등의 기능이 앱 UI와 정확하게 동기화되도록 수정했습니다.
+이를 통해 이어폰 버튼 조작 시 UI 상태와 실제 재생 상태가 일치하며, 오디오 파형(AudioWave) 관련 동작 에러도 함께 해결하여 재생 중 파형 표시가 안정적으로 작동합니다.
+
+TODO
+블루투스 이어폰 좌/우 두 번 클릭(더블탭) 기능 지원 여부 조사 및 대응
+
+인터넷 조사 결과, 삼성 갤럭시 버즈 시리즈에서는 좌/우 더블탭 기능에 대한 공식 지원이 제한적이며, 일부 사용자 커뮤니티에서도 기능이 불완전하거나 지원하지 않는 것으로 보고됨
+
+반면, 애플 에어팟은 더블탭을 통한 트랙 넘김, 재생/일시정지 기능이 명확히 지원됨
+
+참고 링크:
+
+Samsung Galaxy Buds Gesture Controls Limitations - Reddit Discussion
+
+Apple AirPods Gesture Controls Explained - Apple Support
