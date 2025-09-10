@@ -9,4 +9,5 @@ package com.sdu.composemusicplayer.core.model.lyrics
 enum class LyricsFetchSource {
     FROM_SONG_METADATA,
     FROM_INTERNET,
+    EXTERNAL,
 }
