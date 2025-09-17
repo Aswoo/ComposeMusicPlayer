@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalFoundationApi::class, ExperimentalFoundationApi::class)
+@file:OptIn(ExperimentalFoundationApi::class, ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 
 package com.sdu.composemusicplayer.presentation.playlists.playlist
 
@@ -8,6 +8,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,9 +29,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -56,6 +59,11 @@ import com.sdu.composemusicplayer.ui.theme.SpotiGray
 import com.sdu.composemusicplayer.ui.theme.SpotiGreen
 import com.sdu.composemusicplayer.ui.theme.SpotiWhite
 import kotlinx.coroutines.launch
+
+private val DIVIDER_START_PADDING = (12 + 36 + 8).dp
+private val DRAG_HANDLE_WIDTH = 40.dp
+private val DRAG_HANDLE_HEIGHT = 4.dp
+private val DRAG_HANDLE_SHAPE_RADIUS = 2.dp
 
 @Composable
 fun PlaylistsScreen(
@@ -100,38 +108,93 @@ fun PlaylistsScreen(
 
     var showSheet by remember { mutableStateOf(false) }
 
-    if (showSheet) {
-        ModalBottomSheet(
-            onDismissRequest = { showSheet = false },
+    PlaylistManagementBottomSheet(
+        config = PlaylistManagementBottomSheetConfig(
+            showSheet = showSheet,
             sheetState = sheetState,
+            selectedPlaylist = selectedPlaylist,
+            onDismissRequest = { showSheet = false },
+            onRenameClick = {
+                coroutineScope.launch {
+                    sheetState.hide()
+                    renameMode = true
+                }
+            },
+            onPinClick = { /* TODO */ },
+            onDeleteClick = {
+                deletePlaylistDialog.launch()
+                showSheet = false
+            }
+        )
+    )
+
+    PlaylistsScreenScaffold(
+        modifier = modifier,
+        topBarScrollBehavior = topBarScrollBehavior,
+        onCreatePlaylist = { createPlaylistsDialog.launch() }
+    ) { paddingValues ->
+        PlaylistsScreenContent(
+            modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
+            state = state,
+            topBarScrollBehavior = topBarScrollBehavior,
+            onPlaylistClicked = onPlaylistClicked,
+            onPlaylistLongClicked = {
+                selectedPlaylist = it
+                showSheet = true
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+data class PlaylistManagementBottomSheetConfig(
+    val showSheet: Boolean,
+    val sheetState: SheetState,
+    val selectedPlaylist: PlaylistInfo?,
+    val onDismissRequest: () -> Unit,
+    val onRenameClick: () -> Unit,
+    val onPinClick: () -> Unit,
+    val onDeleteClick: () -> Unit
+)
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PlaylistManagementBottomSheet(
+    config: PlaylistManagementBottomSheetConfig
+) {
+    if (config.showSheet) {
+        ModalBottomSheet(
+            onDismissRequest = config.onDismissRequest,
+            sheetState = config.sheetState,
             containerColor = SpotiDarkGray,
             dragHandle = {
                 Box(
                     Modifier
                         .padding(vertical = 8.dp)
-                        .size(width = 40.dp, height = 4.dp)
-                        .background(SpotiGray, shape = RoundedCornerShape(2.dp)),
+                        .size(width = DRAG_HANDLE_WIDTH, height = DRAG_HANDLE_HEIGHT)
+                        .background(SpotiGray, shape = RoundedCornerShape(DRAG_HANDLE_SHAPE_RADIUS)),
                 )
             },
         ) {
             PlaylistBottomSheet(
-                playlistName = selectedPlaylist?.name ?: "이름없는 플레이리스트",
-                onRenameClick = {
-                    coroutineScope.launch {
-                        sheetState.hide()
-                        renameMode = true
-                    }
-                },
-                onPinClick = { /* TODO */ },
-                onDeleteClick = {
-                    deletePlaylistDialog.launch()
-                    showSheet = false
-                },
-                onDismissRequest = { showSheet = false },
+                playlistName = config.selectedPlaylist?.name ?: "이름없는 플레이리스트",
+                onRenameClick = config.onRenameClick,
+                onPinClick = config.onPinClick,
+                onDeleteClick = config.onDeleteClick,
+                onDismissRequest = config.onDismissRequest,
             )
         }
     }
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PlaylistsScreenScaffold(
+    modifier: Modifier,
+    topBarScrollBehavior: TopAppBarScrollBehavior,
+    onCreatePlaylist: () -> Unit,
+    content: @Composable (PaddingValues) -> Unit
+) {
     Scaffold(
         modifier = modifier,
         containerColor = SpotiBackground,
@@ -145,7 +208,7 @@ fun PlaylistsScreen(
                     )
                 },
                 actions = {
-                    IconButton(onClick = { createPlaylistsDialog.launch() }) {
+                    IconButton(onClick = onCreatePlaylist) {
                         Icon(
                             imageVector = Icons.Rounded.Add,
                             contentDescription = null,
@@ -154,71 +217,72 @@ fun PlaylistsScreen(
                     }
                 },
                 scrollBehavior = topBarScrollBehavior,
-                colors =
-                    TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Black,
-                        titleContentColor = SpotiWhite,
-                        actionIconContentColor = SpotiWhite,
-                    ),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Black,
+                    titleContentColor = SpotiWhite,
+                    actionIconContentColor = SpotiWhite,
+                ),
             )
         },
-    ) { paddingValues ->
+        content = content
+    )
+}
 
-        if (state is PlaylistsScreenState.Loading) {
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxSize(),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator(color = SpotiGreen)
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun PlaylistsScreenContent(
+    modifier: Modifier,
+    state: PlaylistsScreenState,
+    topBarScrollBehavior: TopAppBarScrollBehavior,
+    onPlaylistClicked: (Int) -> Unit,
+    onPlaylistLongClicked: (PlaylistInfo) -> Unit
+) {
+    if (state is PlaylistsScreenState.Loading) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator(color = SpotiGreen)
+        }
+    } else {
+        val list = (state as PlaylistsScreenState.Success).playlists
+
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+                .nestedScroll(topBarScrollBehavior.nestedScrollConnection),
+        ) {
+            item {
+                Divider(Modifier.fillMaxWidth(), color = SpotiDivider)
             }
-        } else {
-            val list = (state as PlaylistsScreenState.Success).playlists
 
-            LazyColumn(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
-                        .padding(top = paddingValues.calculateTopPadding()),
-            ) {
-                item {
-                    Divider(Modifier.fillMaxWidth(), color = SpotiDivider)
+            items(list) {
+                var currentRenameId by remember { mutableStateOf<Int?>(null) }
+                BackHandler(currentRenameId != null) {
+                    currentRenameId = null
                 }
+                PlaylistRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .combinedClickable(
+                            onClick = { onPlaylistClicked(it.id) },
+                            onLongClick = { onPlaylistLongClicked(it) },
+                        ),
+                    playlistInfo = it,
+                )
 
-                items(list) {
-                    var currentRenameId by remember { mutableStateOf<Int?>(null) }
-                    BackHandler(currentRenameId != null) {
-                        currentRenameId = null
-                    }
-                    PlaylistRow(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .combinedClickable(
-                                    onClick = { onPlaylistClicked(it.id) },
-                                    onLongClick = {
-                                        selectedPlaylist = it
-                                        showSheet = true
-                                    },
-                                ),
-                        playlistInfo = it,
+                if (it != list.last()) {
+                    Divider(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = DIVIDER_START_PADDING),
+                        color = SpotiDivider,
                     )
-
-                    if (it != list.last()) {
-                        Divider(
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(start = (12 + 36 + 8).dp),
-                            color = SpotiDivider,
-                        )
-                    }
                 }
+            }
 
-                item {
-                    Spacer(modifier = Modifier.navigationBarsPadding())
-                }
+            item {
+                Spacer(modifier = Modifier.navigationBarsPadding())
             }
         }
     }

@@ -1,3 +1,4 @@
+@file:Suppress("ImplicitDefaultLocale")
 package com.sdu.composemusicplayer.utils
 
 fun Long.millisToTime(): String {

@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.sdu.composemusicplayer.ui.theme.SpotiWhite
 
 @Composable
+@Suppress("LongParameterList")
 fun RenameAbleTextView(
     modifier: Modifier,
     inRenameMode: Boolean,

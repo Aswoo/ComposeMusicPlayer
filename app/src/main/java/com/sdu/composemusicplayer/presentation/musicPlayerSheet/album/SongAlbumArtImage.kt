@@ -12,12 +12,12 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.transition.CrossfadeTransition
 import com.sdu.composemusicplayer.R
-import com.sdu.composemusicplayer.domain.model.SongAlbumArtModel
+import com.sdu.composemusicplayer.domain.model.MusicAlbumArtModel
 
 @Composable
 fun AlbumArtImage(
     modifier: Modifier,
-    songAlbumArtModel: SongAlbumArtModel,
+    songAlbumArtModel: MusicAlbumArtModel,
     crossFadeDuration: Int = 300,
 ) {
     val context = LocalContext.current

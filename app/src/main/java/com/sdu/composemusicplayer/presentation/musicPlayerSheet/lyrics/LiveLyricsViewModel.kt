@@ -1,10 +1,11 @@
+@file:Suppress("ImplicitDefaultLocale")
 package com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics
 
 import androidx.compose.ui.semantics.text
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sdu.composemusicplayer.core.database.LyricsRepository
+import com.sdu.composemusicplayer.domain.repository.LyricsRepository
 import com.sdu.composemusicplayer.core.database.model.LyricsResult
 import com.sdu.composemusicplayer.core.model.lyrics.LyricsFetchSource
 import com.sdu.composemusicplayer.core.model.lyrics.PlainLyrics
@@ -251,7 +252,7 @@ class LiveLyricsViewModel
 
                             else -> false
                         }
-                    // TODO: Show Toast or some feedback for success/failure
+                    
                 }
             }
         }

@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent.CustomSlider
+import com.sdu.composemusicplayer.presentation.musicPlayerSheet.component.CustomSlider
 import com.sdu.composemusicplayer.ui.theme.Inter
 import com.sdu.composemusicplayer.ui.theme.TextDefaultColor
 import kotlin.time.Duration.Companion.milliseconds

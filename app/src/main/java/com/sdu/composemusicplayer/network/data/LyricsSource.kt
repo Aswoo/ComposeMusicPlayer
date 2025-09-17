@@ -1,3 +1,4 @@
+@file:Suppress("TooGenericExceptionCaught", "SwallowedException")
 package com.sdu.composemusicplayer.network.data
 
 import com.sdu.composemusicplayer.network.model.NetworkErrorException
@@ -14,6 +15,7 @@ class LyricsSource
     constructor(
         private val lyricsService: LyricsService,
     ) {
+        @Suppress("ThrowsCount")
         suspend fun getSongLyrics(
             artistName: String,
             trackName: String,

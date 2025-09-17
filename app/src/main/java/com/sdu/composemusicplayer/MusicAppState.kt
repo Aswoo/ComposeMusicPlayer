@@ -1,3 +1,4 @@
+@file:Suppress("MagicNumber")
 package com.sdu.composemusicplayer
 
 import androidx.compose.runtime.Composable
@@ -6,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
 import com.sdu.composemusicplayer.domain.model.Music
-import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
+import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

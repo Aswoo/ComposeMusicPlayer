@@ -53,7 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sdu.composemusicplayer.domain.model.Music
-import com.sdu.composemusicplayer.domain.model.toSongAlbumArtModel
+import com.sdu.composemusicplayer.domain.model.toMusicAlbumArtModel
 import com.sdu.composemusicplayer.presentation.component.LocalCommonMusicAction
 import com.sdu.composemusicplayer.presentation.component.RenameAbleTextView
 import com.sdu.composemusicplayer.presentation.component.menu.buildPlayListMusicActions
@@ -61,6 +61,19 @@ import com.sdu.composemusicplayer.presentation.component.menu.removeFromPlaylist
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.AlbumArtImage
 import com.sdu.composemusicplayer.ui.theme.SpotiGreen
 import com.sdu.composemusicplayer.utils.millisToTime
+
+private val ALBUM_ART_SHAPE_RADIUS = 12.dp
+private val ALBUM_ART_SIZE = 100.dp
+private const val ALBUM_ART_CROSSFADE_DURATION = 150
+private val HEADER_HORIZONTAL_SPACING = 16.dp
+private const val RENAME_TEXT_FONT_SIZE = 24
+private val RENAME_TEXT_VERTICAL_SPACING = 6.dp
+private val TRACKS_INFO_FONT_SIZE = 13.sp
+private val ACTION_BUTTONS_VERTICAL_SPACING = 12.dp
+private const val PLAY_BUTTON_SHAPE_RADIUS = 50
+private val PLAY_BUTTON_ICON_SPACING = 4.dp
+private val ACTION_BUTTONS_HORIZONTAL_SPACING = 8.dp
+private val SHUFFLE_BUTTON_SIZE = 48.dp
 
 @Composable
 fun PlaylistDetailScreen(
@@ -86,6 +99,7 @@ fun PlaylistDetailScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @VisibleForTesting
 @Composable
+@Suppress("LongMethod", "LongParameterList")
 internal fun PlaylistDetailContent(
     modifier: Modifier,
     state: PlaylistDetailScreenState,
@@ -105,40 +119,44 @@ internal fun PlaylistDetailContent(
     BackHandler(inRenameMode) { inRenameMode = false }
 
     Scaffold(
-        modifier =
-            modifier
-                .background(Color.Black)
-                .pointerInput(Unit) {
-                    detectTapGestures { if (inRenameMode) inRenameMode = false }
-                },
+        modifier = 
+        modifier
+            .background(Color.Black)
+            .pointerInput(Unit) {
+                detectTapGestures { if (inRenameMode) inRenameMode = false }
+            },
         containerColor = Color.Black,
-    ) { paddingValues ->
+    ) {
         LazyColumn(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(top = paddingValues.calculateTopPadding())
-                    .nestedScroll(topBarScrollBehavior.nestedScrollConnection),
+            modifier = 
+            Modifier
+                .fillMaxSize()
+                .padding(top = paddingValues.calculateTopPadding())
+                .nestedScroll(topBarScrollBehavior.nestedScrollConnection),
             state = listState,
         ) {
             item {
                 PlaylistHeader(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
-                    name = loadedState.name,
-                    numberOfMusic = loadedState.music.size,
-                    songsDuration = loadedState.music.sumOf { it.duration },
-                    firstMusic = loadedState.music.firstOrNull(),
-                    inRenameMode = inRenameMode,
-                    onRename = {
-                        inRenameMode = false
-                        playlistActions.rename(it)
-                    },
-                    onEnableRenameMode = { inRenameMode = true },
-                    onPlay = playlistActions::play,
-                    onShuffle = playlistActions::shuffle,
+                    modifier = 
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
+                    info = PlaylistHeaderInfo(
+                        name = loadedState.name,
+                        numberOfMusic = loadedState.music.size,
+                        songsDuration = loadedState.music.sumOf { it.duration },
+                        firstMusic = loadedState.music.firstOrNull(),
+                        inRenameMode = inRenameMode,
+                    ),
+                    actions = PlaylistHeaderActions(
+                        onRename = {
+                            inRenameMode = false
+                            playlistActions.rename(it)
+                        },
+                        onEnableRenameMode = { inRenameMode = true },
+                        onPlay = playlistActions::play,
+                        onShuffle = playlistActions::shuffle,
+                    )
                 )
             }
             if (loadedState.music.isEmpty()) {
@@ -158,105 +176,128 @@ internal fun PlaylistDetailContent(
             }
             itemsIndexed(items = loadedState.music, key = { index, music -> music.audioId }) { _, music ->
                 PlayListMusicRow(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .clickable { onSongClicked(music) },
+                    modifier = 
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { onSongClicked(music) },
                     music = music,
-                    isPlaying =
-                        if (state.currentPlayingMusic != null &&
-                            state.currentPlayingMusic.audioId == music.audioId
-                        ) {
-                            true
-                        } else {
-                            false
-                        },
-                    menuOptions =
-                        buildPlayListMusicActions(
-                            music = music,
-                            context = context,
-                            shareAction = commonSongsActions.shareAction,
-                        ).apply {
-                            removeFromPlaylist {
-                                playlistActions.removeSongs(listOf(music.audioPath))
-                            }
-                        },
+                    isPlaying = 
+                    if (state.currentPlayingMusic != null &&
+                        state.currentPlayingMusic.audioId == music.audioId
+                    ) {
+                        true
+                    } else {
+                        false
+                    },
+                    menuOptions = 
+                    buildPlayListMusicActions(
+                        music = music,
+                        context = context,
+                        shareAction = commonSongsActions.shareAction,
+                    ).apply {
+                        removeFromPlaylist {
+                            playlistActions.removeSongs(listOf(music.audioPath))
+                        }
+                    },
                 )
             }
         }
     }
 }
 
+data class PlaylistHeaderInfo(
+    val name: String,
+    val numberOfMusic: Int,
+    val songsDuration: Long,
+    val firstMusic: Music?,
+    val inRenameMode: Boolean,
+)
+
+data class PlaylistHeaderActions(
+    val onRename: (String) -> Unit,
+    val onEnableRenameMode: () -> Unit,
+    val onPlay: () -> Unit,
+    val onShuffle: () -> Unit,
+)
+
 @Composable
 private fun PlaylistHeader(
     modifier: Modifier,
-    name: String,
-    numberOfMusic: Int,
-    songsDuration: Long,
-    firstMusic: Music?,
-    inRenameMode: Boolean,
-    onRename: (String) -> Unit,
-    onEnableRenameMode: () -> Unit,
-    onPlay: () -> Unit,
-    onShuffle: () -> Unit,
+    info: PlaylistHeaderInfo,
+    actions: PlaylistHeaderActions
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        firstMusic?.let {
+        info.firstMusic?.let {
             AlbumArtImage(
-                modifier =
-                    Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .size(100.dp),
-                songAlbumArtModel = it.toSongAlbumArtModel(),
-                crossFadeDuration = 150,
+                modifier = 
+                Modifier
+                    .clip(RoundedCornerShape(ALBUM_ART_SHAPE_RADIUS))
+                    .size(ALBUM_ART_SIZE),
+                songAlbumArtModel = it.toMusicAlbumArtModel(),
+                crossFadeDuration = ALBUM_ART_CROSSFADE_DURATION,
             )
         }
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(HEADER_HORIZONTAL_SPACING))
         Column(modifier = Modifier.weight(1f)) {
             RenameAbleTextView(
                 modifier = Modifier.fillMaxWidth(),
-                inRenameMode = inRenameMode,
-                text = name,
-                fontSize = 24,
+                inRenameMode = info.inRenameMode,
+                text = info.name,
+                fontSize = RENAME_TEXT_FONT_SIZE,
                 fontWeight = FontWeight.Bold,
-                onEnableRenameMode = onEnableRenameMode,
-                onRename = onRename,
+                onEnableRenameMode = actions.onEnableRenameMode,
+                onRename = actions.onRename,
                 enableLongPressToEdit = true,
             )
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(RENAME_TEXT_VERTICAL_SPACING))
             Text(
-                text = "$numberOfMusic tracks • ${songsDuration.millisToTime()}",
-                fontSize = 13.sp,
+                text = "${info.numberOfMusic} tracks • ${info.songsDuration.millisToTime()}",
+                fontSize = TRACKS_INFO_FONT_SIZE,
                 color = Color.LightGray,
             )
-            Spacer(modifier = Modifier.height(12.dp))
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Button(
-                    modifier = Modifier.weight(1f),
-                    onClick = onPlay,
-                    colors = ButtonDefaults.buttonColors(containerColor = SpotiGreen),
-                    shape = RoundedCornerShape(50),
-                    enabled = numberOfMusic > 0,
-                ) {
-                    Icon(imageVector = Icons.Rounded.PlayArrow, contentDescription = null)
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Play")
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Button(
-                    modifier = Modifier.size(48.dp),
-                    onClick = onShuffle,
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray),
-                    contentPadding = PaddingValues(0.dp),
-                    enabled = numberOfMusic > 0,
-                ) {
-                    Icon(imageVector = Icons.Rounded.Shuffle, contentDescription = null)
-                }
-            }
+            Spacer(modifier = Modifier.height(ACTION_BUTTONS_VERTICAL_SPACING))
+            PlaylistActionsButtons(
+                modifier = Modifier.fillMaxWidth(),
+                onPlay = actions.onPlay,
+                onShuffle = actions.onShuffle,
+                enabled = info.numberOfMusic > 0,
+            )
+        }
+    }
+}
+
+@Composable
+private fun PlaylistActionsButtons(
+    modifier: Modifier,
+    onPlay: () -> Unit,
+    onShuffle: () -> Unit,
+    enabled: Boolean
+) {
+    Row(modifier = modifier.fillMaxWidth()) {
+        Button(
+            modifier = Modifier.weight(1f),
+            onClick = onPlay,
+            colors = ButtonDefaults.buttonColors(containerColor = SpotiGreen),
+            shape = RoundedCornerShape(PLAY_BUTTON_SHAPE_RADIUS.toFloat()),
+            enabled = enabled,
+        ) {
+            Icon(imageVector = Icons.Rounded.PlayArrow, contentDescription = null)
+            Spacer(modifier = Modifier.width(PLAY_BUTTON_ICON_SPACING))
+            Text("Play")
+        }
+        Spacer(modifier = Modifier.width(ACTION_BUTTONS_HORIZONTAL_SPACING))
+        Button(
+            modifier = Modifier.size(SHUFFLE_BUTTON_SIZE),
+            onClick = onShuffle,
+            shape = CircleShape,
+            colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray),
+            contentPadding = PaddingValues(0.dp),
+            enabled = enabled,
+        ) {
+            Icon(imageVector = Icons.Rounded.Shuffle, contentDescription = null)
         }
     }
 }
@@ -269,7 +310,7 @@ fun rememberShouldShowTopBar(listState: androidx.compose.foundation.lazy.LazyLis
                 false
             } else {
                 listState.firstVisibleItemIndex > 0 ||
-                    listState.firstVisibleItemScrollOffset > listState.layoutInfo.visibleItemsInfo[0].size * 0.8f
+                        listState.firstVisibleItemScrollOffset > listState.layoutInfo.visibleItemsInfo[0].size * 0.8f
             }
         }
     }

@@ -1,5 +1,5 @@
 
-package com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent
+package com.sdu.composemusicplayer.presentation.musicPlayerSheet.component
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxWidth

@@ -35,17 +35,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.sdu.composemusicplayer.domain.model.toSongAlbumArtModel
+import com.sdu.composemusicplayer.domain.model.toMusicAlbumArtModel
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.CrossFadingAlbumArt
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.ErrorPainterType
 import com.sdu.composemusicplayer.ui.theme.SpotiDarkGray
 import com.sdu.composemusicplayer.ui.theme.SpotiGreen
 import com.sdu.composemusicplayer.ui.theme.SpotiLightGray
-import com.sdu.composemusicplayer.viewmodel.MusicUiState
+import com.sdu.composemusicplayer.presentation.player.MusicUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
 @Composable
+@Suppress("LongParameterList", "LongMethod")
 fun MiniPlayer(
     modifier: Modifier,
     state: MusicUiState,
@@ -74,7 +75,7 @@ fun MiniPlayer(
                     .shadow(2.dp, shape = RoundedCornerShape(4.dp))
                     .clip(RoundedCornerShape(8.dp)),
             containerModifier = Modifier.padding(start = 8.dp),
-            songAlbumArtModel = song.toSongAlbumArtModel(),
+            songAlbumArtModel = song.toMusicAlbumArtModel(),
             errorPainterType = ErrorPainterType.PLACEHOLDER,
         )
 

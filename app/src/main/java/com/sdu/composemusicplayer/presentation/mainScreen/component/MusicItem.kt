@@ -38,6 +38,74 @@ import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.ui.theme.Inter
 import com.sdu.composemusicplayer.ui.theme.SpotiGreen
 
+private val SELECTED_BACKGROUND_COLOR = Color(0xFF2A2A2A)
+private val ITEM_SHAPE_RADIUS = 8.dp
+private val HORIZONTAL_PADDING = 12.dp
+private val VERTICAL_PADDING = 8.dp
+private val ITEM_HEIGHT = 72.dp
+private val ALBUM_ART_SIZE = 56.dp
+private const val SELECTED_ARTIST_ALPHA = 0.8f
+private val ARTIST_FONT_SIZE = 13.sp
+
+@Composable
+private fun AlbumArt(music: Music) {
+    Image(
+        painter = rememberAsyncImagePainter(
+            ImageRequest.Builder(LocalContext.current)
+                .data(music.albumPath.toUri())
+                .error(R.drawable.ic_music_unknown)
+                .placeholder(R.drawable.ic_music_unknown)
+                .build(),
+        ),
+        contentDescription = null,
+        modifier = Modifier
+            .padding(VERTICAL_PADDING)
+            .size(ALBUM_ART_SIZE)
+            .clip(RoundedCornerShape(ITEM_SHAPE_RADIUS)),
+    )
+}
+
+@Composable
+private fun MusicDetails(music: Music, selected: Boolean) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .padding(start = HORIZONTAL_PADDING)
+            .weight(1f),
+    ) {
+        Text(
+            text = music.title,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = if (selected) SpotiGreen else Color.White,
+                fontWeight = FontWeight.SemiBold,
+            ),
+        )
+        Text(
+            text = music.artist,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.bodySmall.copy(
+                color = if (selected) SpotiGreen.copy(alpha = SELECTED_ARTIST_ALPHA) else Color.Gray,
+                fontFamily = Inter,
+                fontSize = ARTIST_FONT_SIZE,
+            ),
+        )
+    }
+}
+
+@Composable
+private fun PlayingIndicator(selected: Boolean, isMusicPlaying: Boolean) {
+    Box(
+        modifier = Modifier
+            .padding(end = VERTICAL_PADDING)
+            .alpha(if (selected) 1f else 0f),
+    ) {
+        AudioWave(isMusicPlaying = isMusicPlaying)
+    }
+}
+
 @Composable
 fun MusicItem(
     music: Music,
@@ -51,74 +119,18 @@ fun MusicItem(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 8.dp)
-                    .height(72.dp)
-                    .background(
-                        if (selected) Color(0xFF2A2A2A) else Color.Transparent,
-                        shape = RoundedCornerShape(8.dp),
-                    ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = HORIZONTAL_PADDING, vertical = VERTICAL_PADDING)
+                .height(ITEM_HEIGHT)
+                .background(
+                    if (selected) SELECTED_BACKGROUND_COLOR else Color.Transparent,
+                    shape = RoundedCornerShape(ITEM_SHAPE_RADIUS),
+                ),
         ) {
-            // 앨범 이미지
-            Image(
-                painter =
-                    rememberAsyncImagePainter(
-                        ImageRequest
-                            .Builder(LocalContext.current)
-                            .data(music.albumPath.toUri())
-                            .error(R.drawable.ic_music_unknown)
-                            .placeholder(R.drawable.ic_music_unknown)
-                            .build(),
-                    ),
-                contentDescription = null,
-                modifier =
-                    Modifier
-                        .padding(8.dp)
-                        .size(56.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-            )
-
-            // 제목 & 아티스트
-            Column(
-                verticalArrangement = Arrangement.Center,
-                modifier =
-                    Modifier
-                        .padding(start = 12.dp)
-                        .weight(1f),
-            ) {
-                Text(
-                    text = music.title,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style =
-                        MaterialTheme.typography.bodyMedium.copy(
-                            color = if (selected) SpotiGreen else Color.White,
-                            fontWeight = FontWeight.SemiBold,
-                        ),
-                )
-                Text(
-                    text = music.artist,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style =
-                        MaterialTheme.typography.bodySmall.copy(
-                            color = if (selected) SpotiGreen.copy(alpha = 0.8f) else Color.Gray,
-                            fontFamily = Inter,
-                            fontSize = 13.sp,
-                        ),
-                )
-            }
-
-            Box(
-                modifier =
-                    Modifier
-                        .padding(end = 8.dp)
-                        .alpha(if (selected) 1f else 0f),
-            ) {
-                AudioWave(isMusicPlaying = isMusicPlaying)
-            }
+            AlbumArt(music)
+            MusicDetails(music, selected)
+            PlayingIndicator(selected, isMusicPlaying)
         }
     }
 }

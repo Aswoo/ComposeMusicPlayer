@@ -11,37 +11,41 @@ data class SynchronizedLyrics(
     }
 
     companion object {
+        private const val MILLIS_IN_SECOND = 1000
+        private const val SECONDS_IN_MINUTE = 60
+        private const val CENTISECONDS_TO_MILLISECONDS = 10
+
         fun fromString(text: String?): SynchronizedLyrics? {
             if (text.isNullOrBlank()) return null
 
-            val segments = mutableListOf<SyncedLyricsSegment>()
-
-            val lines = text.split("\n")
-            for (line in lines) {
-                if (!line.startsWith("[")) {
-                    continue
-                }
-
-                val timeInfoLastIndex = line.indexOfFirst { it == ']' }
-                if (timeInfoLastIndex == -1) continue
-
-                val timeInfo = line.substring(1, timeInfoLastIndex)
-                val timeInfoArray = timeInfo.split(":")
-
-                val minutes = timeInfoArray[0].toIntOrNull() ?: continue
-
-                val secondsArray = timeInfoArray[1].split(".")
-                val seconds = secondsArray[0].toIntOrNull() ?: continue
-                val millis = secondsArray[1].toIntOrNull()?.times(10) ?: continue
-
-                SyncedLyricsSegment(
-                    line.substring(timeInfoLastIndex + 1).trim(),
-                    minutes * 60 * 1000 + seconds * 1000 + millis,
-                ).also { segments.add(it) }
-            }
+            val segments = text.lines()
+                .mapNotNull { parseLine(it) }
 
             if (segments.isEmpty()) return null
             return SynchronizedLyrics(segments)
+        }
+
+        private fun parseLine(line: String): SyncedLyricsSegment? {
+            if (!line.startsWith("[")) return null
+
+            val timeInfoLastIndex = line.indexOfFirst { it == ']' }
+            if (timeInfoLastIndex == -1) return null
+
+            val timeInfo = line.substring(1, timeInfoLastIndex)
+            val timeInfoArray = timeInfo.split(":")
+
+            val minutes = timeInfoArray.getOrNull(0)?.toIntOrNull() ?: return null
+
+            val secondsArray = timeInfoArray.getOrNull(1)?.split(".") ?: return null
+            val seconds = secondsArray.getOrNull(0)?.toIntOrNull() ?: return null
+            val millis = secondsArray.getOrNull(1)?.toIntOrNull()?.times(CENTISECONDS_TO_MILLISECONDS) ?: return null
+
+            val text = line.substring(timeInfoLastIndex + 1).trim()
+
+            return SyncedLyricsSegment(
+                text,
+                minutes * SECONDS_IN_MINUTE * MILLIS_IN_SECOND + seconds * MILLIS_IN_SECOND + millis,
+            )
         }
     }
 }

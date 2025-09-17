@@ -1,4 +1,4 @@
-@file:Suppress("ktlint:standard:no-wildcard-imports")
+@file:Suppress("ktlint:standard:no-wildcard-imports", "LongParameterList", "TooManyFunctions")
 
 package com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics
 
@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -88,9 +89,9 @@ fun LiveLyricsScreen(
     ) { paddingValues ->
         LiveLyricsContent(
             modifier =
-                Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize(),
+            Modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
             // LiveLyricsUiState에서 직접 값을 사용합니다.
             lyricsScreenState = uiState.lyricsScreenState,
             songProgressMillis = lyricsViewModel::getCurrentSongProgressMillis, // SyncedLyricsState에 필요
@@ -189,13 +190,14 @@ fun LyricsScreenTopAppBar(
             }
         },
         colors =
-            TopAppBarDefaults.topAppBarColors(
-                containerColor = Color(0xFF1E1E1E),
-            ),
+        TopAppBarDefaults.topAppBarColors(
+            containerColor = Color(0xFF1E1E1E),
+        ),
     )
 }
 
 @Composable
+@Suppress("LongParameterList", "LongMethod")
 fun LyricsScreenBottomControls(
     isPlaying: Boolean,
     onPlayPause: () -> Unit,
@@ -214,11 +216,11 @@ fun LyricsScreenBottomControls(
 
     Column(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(Color(0xFF1E1E1E))
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .padding(bottom = navBarHeightDp.dp),
+        Modifier
+            .fillMaxWidth()
+            .background(Color(0xFF1E1E1E))
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(bottom = navBarHeightDp.dp),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -229,15 +231,15 @@ fun LyricsScreenBottomControls(
                 value = progress,
                 onValueChange = onProgressChange,
                 modifier =
-                    Modifier
-                        .weight(1f)
-                        .padding(horizontal = 8.dp),
+                Modifier
+                    .weight(1f)
+                    .padding(horizontal = 8.dp),
                 colors =
-                    SliderDefaults.colors(
-                        thumbColor = Color.White,
-                        activeTrackColor = Color.White,
-                        inactiveTrackColor = Color.Gray.copy(alpha = 0.5f),
-                    ),
+                SliderDefaults.colors(
+                    thumbColor = Color.White,
+                    activeTrackColor = Color.White,
+                    inactiveTrackColor = Color.Gray.copy(alpha = 0.5f),
+                ),
             )
             Text(text = totalTime, color = Color.LightGray, fontSize = 12.sp)
         }
@@ -293,12 +295,8 @@ fun LyricsScreenBottomControls(
     }
 }
 
-// --- LyricLine, NoLyricsState, LoadingState, NotPlayingState, PlainLyricsState, SyncedLyricsState ---
-// 이 하위 Composable들은 변경된 매개변수가 없으므로 이전과 동일하게 유지됩니다.
-// 예를 들어, SyncedLyricsState는 여전히 synchronizedLyrics: SynchronizedLyrics를 직접 받습니다.
-// LiveLyricsContent에서 lyricsScreenState를 분해하여 필요한 데이터를 전달합니다.
-
 @Composable
+@Suppress("LongParameterList")
 fun LyricLine(
     modifier: Modifier,
     line: String,
@@ -326,10 +324,10 @@ fun LyricLine(
         }
         Text(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-                    .then(if (isShowingContextMenu) Modifier.shimmerLoadingAnimation() else Modifier),
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+                .then(if (isShowingContextMenu) Modifier.shimmerLoadingAnimation() else Modifier),
             text = line,
             fontSize = fontSize,
             fontWeight = fontWeight,
@@ -339,7 +337,6 @@ fun LyricLine(
     }
 }
 
-// Modifier.fadingEdge, LyricSynchronizerEffect 등은 기존 코드와 동일하게 유지됩니다.
 fun Modifier.fadingEdge(brush: Brush) =
     this
         .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
@@ -415,16 +412,16 @@ fun PlainLyricsState(
         itemsIndexed(plainLyrics.lines) { index, s ->
             LyricLine(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onLongPress = {
-                                    contextMenuShownIndex = index
-                                    vibrationManager.performHapticFeedback(HapticFeedbackType.LongPress)
-                                },
-                            ) {}
-                        },
+                Modifier
+                    .fillMaxWidth()
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onLongPress = {
+                                contextMenuShownIndex = index
+                                vibrationManager.performHapticFeedback(HapticFeedbackType.LongPress)
+                            },
+                        ) {}
+                    },
                 line = s,
                 isCurrentLine = true, // PlainLyrics에서는 항상 현재 라인처럼 표시
                 isShowingContextMenu = index == contextMenuShownIndex,
@@ -444,9 +441,6 @@ fun SyncedLyricsState(
 ) {
     var currentLyricIndex by remember(synchronizedLyrics) { mutableStateOf(-1) }
     val listState = rememberLazyListState()
-    val density = LocalDensity.current
-    val itemsSpacing = 8.dp
-    val itemsSpacingPx = with(density) { itemsSpacing.toPx() }
     val coroutineScope = rememberCoroutineScope()
     var listHeightPx by remember { mutableStateOf(0) }
     var contextMenuShownIndex by remember { mutableStateOf(-1) }
@@ -455,24 +449,11 @@ fun SyncedLyricsState(
         synchronizedLyrics = synchronizedLyrics,
         songProgressMillis = songProgressMillis,
     ) { calculatedIndex ->
-        if (currentLyricIndex == calculatedIndex) return@LyricSynchronizerEffect
-        currentLyricIndex = calculatedIndex
-        if (contextMenuShownIndex == -1 && listState.layoutInfo.totalItemsCount > 0 && currentLyricIndex >= 0 &&
-            currentLyricIndex < listState.layoutInfo.totalItemsCount
-        ) {
-            coroutineScope.launch {
-                val viewportHeight = listState.layoutInfo.viewportSize.height
-                val centerOffset = viewportHeight / 2
-                val targetItemInfo = listState.layoutInfo.visibleItemsInfo.find { it.index == currentLyricIndex }
-
-                if (targetItemInfo != null) {
-                    val currentItemCenter = targetItemInfo.offset + targetItemInfo.size / 2
-                    if (kotlin.math.abs(currentItemCenter - centerOffset) > targetItemInfo.size) { // 중앙에서 많이 벗어났을 때만 스크롤
-                        listState.animateScrollToItem(currentLyricIndex, scrollOffset = -centerOffset + targetItemInfo.size / 2)
-                    }
-                } else {
-                    // 현재 라인이 보이지 않으면 중앙으로 스크롤 (아이템 크기를 알 수 없으므로 대략적인 중앙으로)
-                    listState.animateScrollToItem(currentLyricIndex, scrollOffset = -(listHeightPx / 2 - itemsSpacingPx.toInt() / 2))
+        if (currentLyricIndex != calculatedIndex) {
+            currentLyricIndex = calculatedIndex
+            if (shouldScroll(contextMenuShownIndex, listState, currentLyricIndex)) {
+                coroutineScope.launch {
+                    scrollToCurrentLyric(listState, currentLyricIndex, listHeightPx)
                 }
             }
         }
@@ -481,39 +462,93 @@ fun SyncedLyricsState(
     val vibrationManager = LocalHapticFeedback.current
     Box(
         modifier =
-            modifier
-                .onGloballyPositioned { listHeightPx = it.size.height }
-                .padding(horizontal = 20.dp),
+        modifier
+            .onGloballyPositioned { listHeightPx = it.size.height }
+            .padding(horizontal = 20.dp),
     ) {
-        LazyColumn(
+        SyncedLyricsList(
             modifier = Modifier.fillMaxSize(),
-            state = listState,
-            contentPadding = PaddingValues(vertical = 16.dp),
-        ) {
-            itemsIndexed(synchronizedLyrics.segments) { index, segment ->
-                LyricLine(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .pointerInput(Unit) {
-                                detectTapGestures(
-                                    onLongPress = {
-                                        contextMenuShownIndex = index
-                                        vibrationManager.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    },
-                                ) {
-                                    onSeekToPositionMillis(segment.durationMillis.toLong())
-                                }
+            listState = listState,
+            synchronizedLyrics = synchronizedLyrics,
+            currentLyricIndex = currentLyricIndex,
+            contextMenuShownIndex = contextMenuShownIndex,
+            onContextMenuChange = { contextMenuShownIndex = it },
+            onSeekToPositionMillis = onSeekToPositionMillis
+        )
+    }
+}
+
+@Composable
+private fun SyncedLyricsList(
+    modifier: Modifier,
+    listState: LazyListState,
+    synchronizedLyrics: SynchronizedLyrics,
+    currentLyricIndex: Int,
+    contextMenuShownIndex: Int,
+    onContextMenuChange: (Int) -> Unit,
+    onSeekToPositionMillis: (Long) -> Unit
+) {
+    val vibrationManager = LocalHapticFeedback.current
+    val itemsSpacing = 8.dp
+
+    LazyColumn(
+        modifier = modifier,
+        state = listState,
+        contentPadding = PaddingValues(vertical = 16.dp),
+    ) {
+        itemsIndexed(synchronizedLyrics.segments) { index, segment ->
+            LyricLine(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onLongPress = {
+                                onContextMenuChange(index)
+                                vibrationManager.performHapticFeedback(HapticFeedbackType.LongPress)
                             },
-                    line = segment.text,
-                    isCurrentLine = index == currentLyricIndex && contextMenuShownIndex == -1,
-                    isPastLine = index < currentLyricIndex,
-                    isShowingContextMenu = index == contextMenuShownIndex,
-                    onDismissContextMenu = { contextMenuShownIndex = -1 },
-                )
-                Spacer(modifier = Modifier.height(itemsSpacing))
-            }
+                        ) {
+                            onSeekToPositionMillis(segment.durationMillis.toLong())
+                        }
+                    },
+                line = segment.text,
+                isCurrentLine = index == currentLyricIndex && contextMenuShownIndex == -1,
+                isPastLine = index < currentLyricIndex,
+                isShowingContextMenu = index == contextMenuShownIndex,
+                onDismissContextMenu = { onContextMenuChange(-1) },
+            )
+            Spacer(modifier = Modifier.height(itemsSpacing))
         }
+    }
+}
+
+private fun shouldScroll(
+    contextMenuShownIndex: Int,
+    listState: LazyListState,
+    currentLyricIndex: Int
+): Boolean {
+    return contextMenuShownIndex == -1 &&
+            listState.layoutInfo.totalItemsCount > 0 &&
+            currentLyricIndex >= 0 &&
+            currentLyricIndex < listState.layoutInfo.totalItemsCount
+}
+
+private suspend fun scrollToCurrentLyric(
+    listState: LazyListState,
+    currentLyricIndex: Int,
+    listHeightPx: Int
+) {
+    val viewportHeight = listState.layoutInfo.viewportSize.height
+    val centerOffset = viewportHeight / 2
+    val targetItemInfo = listState.layoutInfo.visibleItemsInfo.find { it.index == currentLyricIndex }
+
+    if (targetItemInfo != null) {
+        val currentItemCenter = targetItemInfo.offset + targetItemInfo.size / 2
+        if (kotlin.math.abs(currentItemCenter - centerOffset) > targetItemInfo.size) { // 중앙에서 많이 벗어났을 때만 스크롤
+            listState.animateScrollToItem(currentLyricIndex, scrollOffset = -centerOffset + targetItemInfo.size / 2)
+        }
+    } else {
+        // 현재 라인이 보이지 않으면 중앙으로 스크롤 (아이템 크기를 알 수 없으므로 대략적인 중앙으로)
+        listState.animateScrollToItem(currentLyricIndex, scrollOffset = -(listHeightPx / 2))
     }
 }
 

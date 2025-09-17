@@ -20,19 +20,17 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.sdu.composemusicplayer.R
-import com.sdu.composemusicplayer.domain.model.SongAlbumArtModel
+import com.sdu.composemusicplayer.domain.model.MusicAlbumArtModel
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.BlurTransformation
 
-enum class ErrorPainterType {
-    PLACEHOLDER,
-    SOLID_COLOR,
-}
+
 
 @Composable
+@Suppress("LongParameterList", "LongMethod")
 fun CrossFadingAlbumArt(
     modifier: Modifier,
     containerModifier: Modifier = Modifier,
-    songAlbumArtModel: SongAlbumArtModel,
+    songAlbumArtModel: MusicAlbumArtModel,
     errorPainterType: ErrorPainterType,
     colorFilter: ColorFilter? = null,
     blurTransformation: BlurTransformation? = null,

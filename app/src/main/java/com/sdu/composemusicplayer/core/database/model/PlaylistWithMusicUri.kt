@@ -1,3 +1,4 @@
+@file:Suppress("MaxLineLength")
 package com.sdu.composemusicplayer.core.database.model
 
 import androidx.room.Embedded
@@ -10,5 +11,5 @@ data class PlaylistWithMusicUri(
     @Embedded
     val playlistEntity: PlaylistEntity,
     @Relation(entity = PlaylistsMusicEntity::class, parentColumn = PLAYLIST_ID_COLUMN, entityColumn = PLAYLIST_ID_COLUMN)
-    val songUris: List<PlaylistsMusicEntity>,
+    val musicUris: List<PlaylistsMusicEntity>,
 )

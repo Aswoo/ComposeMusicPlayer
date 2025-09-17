@@ -2,7 +2,8 @@ package com.sdu.composemusicplayer.presentation.component.dialog
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sdu.composemusicplayer.core.model.playlist.PlaylistsRepository
+import com.sdu.composemusicplayer.domain.repository.PlaylistsRepository
+import com.sdu.composemusicplayer.domain.usecase.playlist.AddMusicToPlaylistUseCase
 import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.PlaylistInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +19,7 @@ class AddToPlaylistViewModel
     @Inject
     constructor(
         private val playlistsRepository: PlaylistsRepository,
+        private val addMusicToPlaylistUseCase: AddMusicToPlaylistUseCase,
     ) : ViewModel() {
         val state =
             playlistsRepository
@@ -37,9 +39,11 @@ class AddToPlaylistViewModel
         }
 
         fun clearAllPlaylists() {
+            // TODO: Implement this
         }
 
         fun onCreateNewPlaylist() {
+            // TODO: Implement this
         }
 
         fun selectPlayList(playListId: Int) {
@@ -52,7 +56,7 @@ class AddToPlaylistViewModel
 
         fun onComplete(musicUri: String) {
             if (selectedPlaylistId.value != null) {
-                playlistsRepository.addMusicToPlaylist(musicUri, selectedPlayListId = selectedPlaylistId.value!!)
+                addMusicToPlaylistUseCase(musicUri, selectedPlaylistId.value!!)
             }
         }
     }

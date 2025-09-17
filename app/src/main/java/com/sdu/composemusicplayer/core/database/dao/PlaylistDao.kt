@@ -1,3 +1,4 @@
+@file:Suppress("MaxLineLength")
 package com.sdu.composemusicplayer.core.database.dao
 
 import androidx.room.Dao
@@ -17,6 +18,7 @@ import com.sdu.composemusicplayer.core.model.playlist.PlaylistWithMusicUri
 import kotlinx.coroutines.flow.Flow
 
 @Dao
+@Suppress("TooManyFunctions")
 interface PlaylistDao {
     @Query(
         "SELECT P.*, S.music_uri FROM $PLAYLIST_ENTITY P LEFT OUTER JOIN $PLAYLIST_MUSIC_ENTITY S " +

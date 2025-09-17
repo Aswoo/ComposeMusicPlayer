@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.sdu.composemusicplayer.R
 import com.sdu.composemusicplayer.domain.model.Music
-import com.sdu.composemusicplayer.domain.model.toSongAlbumArtModel
+import com.sdu.composemusicplayer.domain.model.toMusicAlbumArtModel
 import com.sdu.composemusicplayer.presentation.component.menu.MenuActionItem
 import com.sdu.composemusicplayer.presentation.component.menu.MusicDropdownMenu
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.LocalEfficientThumbnailImageLoader
@@ -67,7 +67,7 @@ fun PlayListMusicRow(
                     .padding(8.dp)
                     .size(60.dp)
                     .clip(RoundedCornerShape(12.dp)),
-            model = music.toSongAlbumArtModel(),
+            model = music.toMusicAlbumArtModel(),
             imageLoader = LocalEfficientThumbnailImageLoader.current,
             contentDescription = "Album Art",
             contentScale = ContentScale.Crop,

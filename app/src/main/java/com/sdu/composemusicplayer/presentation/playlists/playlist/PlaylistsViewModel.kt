@@ -2,7 +2,9 @@ package com.sdu.composemusicplayer.presentation.playlists.playlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sdu.composemusicplayer.core.model.playlist.PlaylistsRepository
+import com.sdu.composemusicplayer.domain.repository.PlaylistsRepository
+import com.sdu.composemusicplayer.domain.usecase.playlist.DeletePlaylistUseCase
+import com.sdu.composemusicplayer.domain.usecase.playlist.RenamePlaylistUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -15,6 +17,8 @@ class PlaylistsViewModel
     @Inject
     constructor(
         private val playlistsRepository: PlaylistsRepository,
+        private val deletePlaylistUseCase: DeletePlaylistUseCase,
+        private val renamePlaylistUseCase: RenamePlaylistUseCase,
     ) : ViewModel() {
         val state: StateFlow<PlaylistsScreenState> =
             playlistsRepository
@@ -24,14 +28,14 @@ class PlaylistsViewModel
                 }.stateIn(viewModelScope, SharingStarted.Eagerly, PlaylistsScreenState.Loading)
 
         fun onDelete(id: Int) {
-            playlistsRepository.deletePlaylist(id)
+            deletePlaylistUseCase(id)
         }
 
         fun onRename(
             id: Int,
             name: String,
         ) {
-            playlistsRepository.renamePlaylist(id, name)
+            renamePlaylistUseCase(id, name)
         }
 
 //    override fun shufflePlaylistNext(playlistId: Int) {

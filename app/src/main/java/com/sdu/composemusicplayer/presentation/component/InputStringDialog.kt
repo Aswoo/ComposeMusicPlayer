@@ -20,6 +20,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
+@Suppress("LongParameterList")
 fun InputStringDialog(
     title: String,
     placeholder: String? = null,

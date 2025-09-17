@@ -1,3 +1,4 @@
+@file:Suppress("LongParameterList", "LongMethod")
 package com.sdu.composemusicplayer.presentation.musicPlayerSheet
 
 import android.app.Activity
@@ -60,12 +61,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent.ExpandedMusicPlayerContent
-import com.sdu.composemusicplayer.viewmodel.MusicUiState
+import com.sdu.composemusicplayer.presentation.musicPlayerSheet.component.ExpandedMusicPlayerContent
+import com.sdu.composemusicplayer.presentation.player.MusicUiState
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
-import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
+import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
 
 @Composable
+@Suppress("LongParameterList")
 fun PlayerScreen(
     modifier: Modifier,
     nowPlayingBarPadding: PaddingValues,
@@ -113,6 +115,7 @@ fun PlayerScreen(
 }
 
 @Composable
+@Suppress("LongParameterList")
 internal fun PlayerScreen(
     modifier: Modifier,
     nowPlayingBarPadding: PaddingValues,
@@ -146,11 +149,11 @@ internal fun PlayerScreen(
             }
             FullScreenNowPlaying(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .graphicsLayer {
-                            alpha = ((progressProvider() - 0.15f) * 2.0f).coerceIn(0.0f, 1.0f)
-                        },
+                Modifier
+                    .fillMaxSize()
+                    .graphicsLayer {
+                        alpha = ((progressProvider() - 0.15f) * 2.0f).coerceIn(0.0f, 1.0f)
+                    },
                 onOpenQueue = showAddToPlaylistDialog,
                 onCloseQueue = { isShowingQueue = true },
                 progressProvider = progressProvider,
@@ -163,15 +166,15 @@ internal fun PlayerScreen(
             }
             MiniPlayer(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(barHeight)
-                        .padding(nowPlayingBarPadding)
-                        .pointerInput(Unit) {
-                            detectTapGestures { onExpandNowPlaying() }
-                        }.graphicsLayer {
-                            alpha = (1 - (progressProvider() * 6.66f).coerceAtMost(1.0f))
-                        }.testTag("miniPlayer"),
+                Modifier
+                    .fillMaxWidth()
+                    .height(barHeight)
+                    .padding(nowPlayingBarPadding)
+                    .pointerInput(Unit) {
+                        detectTapGestures { onExpandNowPlaying() }
+                    }.graphicsLayer {
+                        alpha = (1 - (progressProvider() * 6.66f).coerceAtMost(1.0f))
+                    }.testTag("miniPlayer"),
                 state = uiState,
                 showExtraControls = true,
                 songProgressProvider = {
@@ -190,6 +193,7 @@ internal fun PlayerScreen(
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
+@Suppress("LongParameterList", "LongMethod")
 fun FullScreenNowPlaying(
     modifier: Modifier,
     isShowingQueue: Boolean,
@@ -215,7 +219,7 @@ fun FullScreenNowPlaying(
         ) {
 //            CrossFadingAlbumArt(
 //                modifier = Modifier.fillMaxSize(),
-//                songAlbumArtModel = song.toSongAlbumArtModel(),
+//                songAlbumArtModel = song.toMusicAlbumArtModel(),
 //                errorPainterType = ErrorPainterType.SOLID_COLOR,
 //                blurTransformation = remember { BlurTransformation(radius = 40, scale = 0.15f) },
 //                colorFilter = remember {
@@ -289,15 +293,20 @@ fun FullScreenNowPlaying(
     }
 }
 
+data class SongControlsActions(
+    val onPrevious: () -> Unit,
+    val onTogglePlayback: () -> Unit,
+    val onNext: () -> Unit,
+    val onJumpForward: () -> Unit,
+    val onJumpBackward: () -> Unit,
+)
+
 @Composable
+@Suppress("LongMethod")
 fun SongControls(
     modifier: Modifier,
     isPlaying: Boolean,
-    onPrevious: () -> Unit,
-    onTogglePlayback: () -> Unit,
-    onNext: () -> Unit,
-    onJumpForward: () -> Unit,
-    onJumpBackward: () -> Unit,
+    actions: SongControlsActions
 ) {
     Row(
         modifier = modifier,
@@ -306,24 +315,24 @@ fun SongControls(
     ) {
         ControlButton(
             modifier =
-                Modifier
-                    .size(34.dp)
-                    .clip(RoundedCornerShape(4.dp)),
+            Modifier
+                .size(34.dp)
+                .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.SkipPrevious,
             "Previous", // Changed from "Skip Previous"
-            onPrevious,
+            actions.onPrevious,
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
         ControlButton(
             modifier =
-                Modifier
-                    .size(34.dp)
-                    .clip(RoundedCornerShape(4.dp)),
+            Modifier
+                .size(34.dp)
+                .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.FastRewind,
             "Rewind", // Changed from "Jump Back"
-            onJumpBackward,
+            actions.onJumpBackward,
         )
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -335,36 +344,36 @@ fun SongControls(
 
         ControlButton(
             modifier =
-                Modifier
-                    .size(64.dp)
-                    .clip(CircleShape),
+            Modifier
+                .size(64.dp)
+                .clip(CircleShape),
             icon = pausePlayButton,
             "Play/Pause", // Changed from "Skip Previous"
-            onTogglePlayback,
+            actions.onTogglePlayback,
         )
 
         Spacer(modifier = Modifier.width(16.dp))
 
         ControlButton(
             modifier =
-                Modifier
-                    .size(36.dp)
-                    .clip(RoundedCornerShape(4.dp)),
+            Modifier
+                .size(36.dp)
+                .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.FastForward,
             "Forward", // Changed from "Jump Forward"
-            onJumpForward,
+            actions.onJumpForward,
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
         ControlButton(
             modifier =
-                Modifier
-                    .size(36.dp)
-                    .clip(RoundedCornerShape(4.dp)),
+            Modifier
+                .size(36.dp)
+                .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.SkipNext,
             "Next", // Changed from "Skip To Next"
-            onNext,
+            actions.onNext,
         )
     }
 }

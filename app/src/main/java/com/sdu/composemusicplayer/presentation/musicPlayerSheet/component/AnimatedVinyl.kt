@@ -1,4 +1,4 @@
-package com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent
+package com.sdu.composemusicplayer.presentation.musicPlayerSheet.component
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing

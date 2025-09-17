@@ -4,6 +4,7 @@ import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.PlaySource
 import kotlinx.coroutines.flow.Flow
 
+@Suppress("TooManyFunctions")
 interface IPlayerEnvironment {
     // 🎵 상태 관련
     fun getAllMusics(): Flow<List<Music>> // 전체 음악 목록

@@ -1,3 +1,4 @@
+@file:Suppress("MagicNumber")
 package com.sdu.composemusicplayer.network.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory

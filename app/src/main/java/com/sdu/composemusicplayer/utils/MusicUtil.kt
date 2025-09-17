@@ -14,6 +14,7 @@ import kotlin.time.Duration.Companion.milliseconds
 object MusicUtil {
     
 
+    @Suppress("TooGenericExceptionThrown")
     suspend fun getSongPath(
         context: Context,
         uri: Uri,

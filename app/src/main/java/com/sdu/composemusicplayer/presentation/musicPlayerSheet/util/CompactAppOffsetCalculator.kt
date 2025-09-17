@@ -22,72 +22,71 @@ import com.sdu.composemusicplayer.presentation.musicPlayerSheet.BarState
  * (ie. the bottom bar is shown and the NowPlayingScreen is above it)
  */
 class CompactAppOffsetCalculator
+@OptIn(ExperimentalFoundationApi::class)
+constructor(
+    private val config: CompactAppOffsetCalculatorConfig
+) {
+    /**
+     * Returns the offset of the NowPlaying screen
+     * taking into consideration the drag commands of the user
+     * and the visibility of the bottomBar
+     */
     @OptIn(ExperimentalFoundationApi::class)
-    constructor(
-        private val playerAnchors: AnchoredDraggableState<BarState>,
-        private val bottomBarOffsetAnimation: State<Int>,
-        private val scrollProvider: () -> Float,
-        private val navigationInsets: WindowInsets,
-        private val bottomBarHeightPx: Int,
-        private val density: Density,
-        private val isPlayerVisible: Boolean,
-        private val isPinnedMode: Boolean,
-    ) {
-        /**
-         * Returns the offset of the NowPlaying screen
-         * taking into consideration the drag commands of the user
-         * and the visibility of the bottomBar
-         */
-        @OptIn(ExperimentalFoundationApi::class)
-        fun getNowPlayingOffset(): IntOffset {
-            val navigationInsetPx = getBottomNavInsetsPx()
+    fun getNowPlayingOffset(): IntOffset {
+        val navigationInsetPx = getBottomNavInsetsPx()
 
-            val dragProgress = scrollProvider()
-            val dragOffset = playerAnchors.requireOffset().toInt()
+        val dragProgress = config.scrollProvider()
+        val dragOffset = config.playerAnchors.requireOffset().toInt()
 
-            val baseOffset = dragOffset - navigationInsetPx * (1 - dragProgress)
-            val bottomBarOffset =
-                (getBottomBarOffset().y)
-                    .coerceIn(0, bottomBarHeightPx) * (1 - dragProgress)
+        val baseOffset = dragOffset - navigationInsetPx * (1 - dragProgress)
+        val bottomBarOffset =
+            (getBottomBarOffset().y)
+                .coerceIn(0, config.bottomBarHeightPx) * (1 - dragProgress)
 
-            val y = baseOffset.toInt() + bottomBarOffset.toInt()
-            return IntOffset(0, y)
-        }
-
-        /**
-         * Returns the bottom bar offset when it slides out and into
-         * the screen
-         */
-        fun getBottomBarOffset(): IntOffset {
-            val navigationInsetsPx = getBottomNavInsetsPx()
-            val totalBarHeightPx = bottomBarHeightPx + navigationInsetsPx
-
-            val nowPlayingExpansionProgress = scrollProvider().coerceIn(0.0f, 1.0f)
-            var y: Float = bottomBarOffsetAnimation.value.toFloat()
-
-            if (isPlayerVisible) {
-                y += totalBarHeightPx * nowPlayingExpansionProgress
-            }
-
-            return IntOffset(0, y.toInt())
-        }
-
-        private fun getBottomNavInsetsPx() = navigationInsets.getBottom(density)
-
-        val bottomBarAlpha: Float
-            get() = 1 - scrollProvider()
+        val y = baseOffset.toInt() + bottomBarOffset.toInt()
+        return IntOffset(0, y)
     }
+
+    /**
+     * Returns the bottom bar offset when it slides out and into
+     * the screen
+     */
+    fun getBottomBarOffset(): IntOffset {
+        val navigationInsetsPx = getBottomNavInsetsPx()
+        val totalBarHeightPx = config.bottomBarHeightPx + navigationInsetsPx
+
+        val nowPlayingExpansionProgress = config.scrollProvider().coerceIn(0.0f, 1.0f)
+        var y: Float = config.bottomBarOffsetAnimation.value.toFloat()
+
+        if (config.isPlayerVisible) {
+            y += totalBarHeightPx * nowPlayingExpansionProgress
+        }
+
+        return IntOffset(0, y.toInt())
+    }
+
+    private fun getBottomNavInsetsPx() = config.navigationInsets.getBottom(config.density)
+
+    val bottomBarAlpha: Float
+        get() = 1 - config.scrollProvider()
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+data class CompactAppOffsetCalculatorConfig(
+    val playerAnchors: AnchoredDraggableState<BarState>,
+    val bottomBarOffsetAnimation: State<Int>,
+    val scrollProvider: () -> Float,
+    val navigationInsets: WindowInsets,
+    val bottomBarHeightPx: Int,
+    val density: Density,
+    val isPlayerVisible: Boolean,
+    val isPinnedMode: Boolean,
+)
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun rememberCompactScreenUiState(
-    screenHeightPx: Int,
-    playerAnchors: AnchoredDraggableState<BarState>,
-    scrollProvider: () -> Float,
-    bottomBarHeightPx: Int,
-    density: Density,
-    isPinnedMode: Boolean,
-    isPlayerVisible: Boolean,
+    config: CompactScreenUiStateConfig
 ): CompactAppOffsetCalculator {
     val navigationInsets = WindowInsets.navigationBars
 
@@ -99,23 +98,36 @@ fun rememberCompactScreenUiState(
         )
 
     return remember(
-        screenHeightPx,
-        scrollProvider,
+        config.screenHeightPx,
+        config.scrollProvider,
         navigationInsets,
-        bottomBarHeightPx,
-        density,
-        isPinnedMode,
-        isPlayerVisible,
+        config.bottomBarHeightPx,
+        config.density,
+        config.isPinnedMode,
+        config.isPlayerVisible,
     ) {
         CompactAppOffsetCalculator(
-            playerAnchors,
-            bottomNavBarOffsetPx,
-            scrollProvider,
-            navigationInsets,
-            bottomBarHeightPx,
-            density,
-            isPlayerVisible,
-            isPinnedMode,
+            CompactAppOffsetCalculatorConfig(
+                playerAnchors = config.playerAnchors,
+                bottomBarOffsetAnimation = bottomNavBarOffsetPx,
+                scrollProvider = config.scrollProvider,
+                navigationInsets = navigationInsets,
+                bottomBarHeightPx = config.bottomBarHeightPx,
+                density = config.density,
+                isPlayerVisible = config.isPlayerVisible,
+                isPinnedMode = config.isPinnedMode,
+            )
         )
     }
 }
+
+@OptIn(ExperimentalFoundationApi::class)
+data class CompactScreenUiStateConfig(
+    val screenHeightPx: Int,
+    val playerAnchors: AnchoredDraggableState<BarState>,
+    val scrollProvider: () -> Float,
+    val bottomBarHeightPx: Int,
+    val density: Density,
+    val isPinnedMode: Boolean,
+    val isPlayerVisible: Boolean,
+)

@@ -31,7 +31,7 @@ import com.sdu.composemusicplayer.R
 )
 class MediaNotificationManager(
     private val context: Context,
-    private val sessionToken: SessionToken,
+    @Suppress("UnusedPrivateMember") private val sessionToken: SessionToken,
     private val player: Player,
     private val notificationListener: PlayerNotificationManager.NotificationListener,
 ) {

@@ -18,15 +18,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.sdu.composemusicplayer.MusicAppState
 import com.sdu.composemusicplayer.presentation.mainScreen.MainScreen
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.BarState
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.CompactAppScaffold
+import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
 import com.sdu.composemusicplayer.presentation.playlists.playlist.PlaylistsScreen
 import com.sdu.composemusicplayer.presentation.playlists.playlistdetail.PlaylistDetailScreen
 import com.sdu.composemusicplayer.presentation.setting.Setting
 import com.sdu.composemusicplayer.rememberMusicAppState
-import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
 import navigateToTopLevelDestination
+
+private val VELOCITY_THRESHOLD = 70.dp
+private const val POSITIONAL_THRESHOLD_FACTOR = 0.5f
 
 val topLevelDestinations =
     listOf(
@@ -48,61 +52,38 @@ fun SetupNavigation(
         remember {
             AnchoredDraggableState(
                 initialValue = BarState.COLLAPSED,
-                anchors =
-                    DraggableAnchors {
-                        BarState.COLLAPSED at 0f
-                        BarState.EXPANDED at 1f
-                    },
-                positionalThreshold = { distance: Float -> 0.5f * distance },
-                velocityThreshold = { with(density) { 70.dp.toPx() } },
+                anchors = DraggableAnchors {
+                    BarState.COLLAPSED at 0f
+                    BarState.EXPANDED at 1f
+                },
+                positionalThreshold = { distance: Float -> POSITIONAL_THRESHOLD_FACTOR * distance },
+                velocityThreshold = { with(density) { VELOCITY_THRESHOLD.toPx() } },
                 snapAnimationSpec = tween(),
                 decayAnimationSpec = decaySpec,
             )
         }
 
-    val appState =
-        rememberMusicAppState(
-            playerViewModel = playerVM,
-            playerScreenOffset = {
-                if (playerScreenAnchors.anchors.size > 0) {
-                    playerScreenAnchors.requireOffset()
-                } else {
-                    0.0f
-                }
-            },
-            navHostController = navController,
-        )
-    val navHost =
-        remember {
-            movableContentOf<Modifier, MutableState<Modifier>> { navHostModifier, contentModifier ->
-                NavHost(
-                    modifier = navHostModifier,
-                    navController = appState.navHostController,
-                    startDestination = Routes.Main.route,
-                ) {
-                    composable(Routes.Main.route) {
-                        MainScreen(
-                            navController = navController,
-                            playerVM = playerVM,
-                        )
-                    }
-                    composable(Routes.PLAYLISTS.route) {
-                        PlaylistsScreen(
-                            modifier = Modifier,
-                            onNavigateToPlaylist = { playlistId ->
-                                navController.navigate("playlist_detail/$playlistId")
-                            },
-                        )
-                    }
-                    composable(Routes.SETTINGS.route) {
-                        Setting()
-                    }
-                    composable("playlist_detail/{id}") { backStackEntry ->
-                        PlaylistDetailScreen(modifier = Modifier, onBackPressed = { navController.popBackStack() })
-                    }
-                }
+    val appState = rememberMusicAppState(
+        playerViewModel = playerVM,
+        playerScreenOffset = {
+            if (playerScreenAnchors.anchors.size > 0) {
+                playerScreenAnchors.requireOffset()
+            } else {
+                0.0f
             }
+        },
+        navHostController = navController,
+    )
+    val navHost = remember {
+        movableContentOf<Modifier, MutableState<Modifier>> { navHostModifier, contentModifier ->
+            AppNavHost(
+                appState = appState,
+                playerVM = playerVM,
+                navController = navController,
+                modifier = navHostModifier.then(contentModifier.value)
+            )
         }
+    }
     CompactAppScaffold(
         appState = appState,
         modifier = modifier,
@@ -112,4 +93,39 @@ fun SetupNavigation(
         currentDestination = navController.currentBackStackEntryAsState().value?.destination,
         onDestinationSelected = { navController.navigateToTopLevelDestination(it) },
     )
+}
+
+@Composable
+private fun AppNavHost(
+    appState: MusicAppState,
+    playerVM: PlayerViewModel,
+    navController: NavHostController,
+    modifier: Modifier
+) {
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = Routes.Main.route,
+    ) {
+        composable(Routes.Main.route) {
+            MainScreen(
+                navController = navController,
+                playerVM = playerVM,
+            )
+        }
+        composable(Routes.PLAYLISTS.route) {
+            PlaylistsScreen(
+                modifier = Modifier,
+                onNavigateToPlaylist = { playlistId ->
+                    navController.navigate("playlist_detail/$playlistId")
+                },
+            )
+        }
+        composable(Routes.SETTINGS.route) {
+            Setting()
+        }
+        composable("playlist_detail/{id}") { backStackEntry ->
+            PlaylistDetailScreen(modifier = Modifier, onBackPressed = { navController.popBackStack() })
+        }
+    }
 }

@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent
+package com.sdu.composemusicplayer.presentation.musicPlayerSheet.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

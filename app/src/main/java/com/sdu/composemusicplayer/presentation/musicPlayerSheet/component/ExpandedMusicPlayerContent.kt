@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalAnimationApi::class)
 
-package com.sdu.composemusicplayer.presentation.musicPlayerSheet.compoenent
+package com.sdu.composemusicplayer.presentation.musicPlayerSheet.component
 
 import PlayingProgress
 import androidx.compose.animation.AnimatedContent
@@ -62,9 +62,10 @@ import com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics.LiveLyric
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics.fadingEdge
 import com.sdu.composemusicplayer.ui.theme.SpotiGreen
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
-import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
+import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
 
 @Composable
+@Suppress("LongMethod")
 fun ExpandedMusicPlayerContent(
     playerVM: PlayerViewModel,
     modifier: Modifier = Modifier,

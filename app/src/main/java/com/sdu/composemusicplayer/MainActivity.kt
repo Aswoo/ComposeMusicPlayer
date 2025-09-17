@@ -12,14 +12,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.sdu.composemusicplayer.core.media.MediaRepository
+import com.sdu.composemusicplayer.domain.repository.MediaRepository
 import com.sdu.composemusicplayer.navigation.SetupNavigation
 import com.sdu.composemusicplayer.presentation.component.LocalCommonMusicAction
 import com.sdu.composemusicplayer.presentation.component.rememberCommonMusicActions
 import com.sdu.composemusicplayer.presentation.permission.CheckAndRequestPermissions
 import com.sdu.composemusicplayer.ui.theme.ComposeMusicPlayerTheme
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
-import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
+import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

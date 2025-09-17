@@ -1,3 +1,4 @@
+@file:Suppress("VariableNaming")
 package com.sdu.composemusicplayer.viewmodel
 
 import android.content.Context
@@ -6,8 +7,8 @@ import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import com.sdu.composemusicplayer.core.database.MusicRepository
-import com.sdu.composemusicplayer.core.database.QueueRepository
+import com.sdu.composemusicplayer.domain.repository.MusicRepository
+import com.sdu.composemusicplayer.domain.repository.QueueRepository
 import com.sdu.composemusicplayer.core.database.entity.MusicEntity
 import com.sdu.composemusicplayer.core.database.mapper.toDomain
 import com.sdu.composemusicplayer.domain.model.Music
@@ -29,12 +30,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
+@Suppress("TooManyFunctions")
 class PlayerEnvironment
     @Inject
     constructor(
-        @ApplicationContext private val context: Context,
         private val musicRepository: MusicRepository,
-        private val queueRepository: QueueRepository,
         private val serviceManager: PlayerServiceManager,
         private val exoPlayer: ExoPlayer,
         private val handler: Handler,
@@ -81,12 +81,14 @@ class PlayerEnvironment
 
         override fun isBottomMusicPlayerShowed(): Flow<Boolean> = _isBottomMusicPlayerShowed.asStateFlow()
 
+        private const val DURATION_UPDATE_INTERVAL = 1000L
+
         private val updateRunnable =
             object : Runnable {
                 override fun run() {
                     val position = exoPlayer.currentPosition.takeIf { exoPlayer.duration != -1L } ?: 0L
                     _currentDuration.value = position
-                    handler.postDelayed(this, 1000)
+                    handler.postDelayed(this, DURATION_UPDATE_INTERVAL)
                 }
             }
 
@@ -262,8 +264,5 @@ class PlayerEnvironment
             handler.post(updateRunnable)
         }
 
-        private fun stopDurationUpdates() {
-            handler.removeCallbacks(updateRunnable)
-            _currentDuration.value = 0L
-        }
+        
     }

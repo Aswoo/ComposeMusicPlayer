@@ -1,3 +1,4 @@
+@file:Suppress("ThrowingExceptionsWithoutMessageOrCause")
 package com.sdu.composemusicplayer.presentation.musicPlayerSheet.album
 
 import android.content.Context

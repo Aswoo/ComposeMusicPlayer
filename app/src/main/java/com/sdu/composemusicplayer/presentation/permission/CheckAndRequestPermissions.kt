@@ -36,14 +36,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.sdu.composemusicplayer.ui.theme.Dimens
 import com.google.accompanist.permissions.PermissionsRequired
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.kolee.composemusicexoplayer.ui.theme.Dimens
 import com.sdu.composemusicplayer.R
 import com.sdu.composemusicplayer.ui.theme.TextDefaultColor
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
+@Suppress("LongMethod")
 fun CheckAndRequestPermissions(
     permissions: MutableList<String>,
     onPermissionsGranted: () -> Unit,

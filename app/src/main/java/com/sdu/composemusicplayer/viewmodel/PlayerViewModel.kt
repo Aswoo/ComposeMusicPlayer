@@ -6,6 +6,9 @@ import com.sdu.composemusicplayer.domain.model.PlaySource
 import com.sdu.composemusicplayer.domain.model.SortDirection
 import com.sdu.composemusicplayer.domain.model.SortOption
 import com.sdu.composemusicplayer.domain.model.SortState
+import com.sdu.composemusicplayer.viewmodel.IPlayerEnvironment
+import com.sdu.composemusicplayer.viewmodel.PlayerEvent
+import com.sdu.composemusicplayer.viewmodel.StatefulViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -15,7 +18,6 @@ import javax.inject.Inject
 class PlayerViewModel
     @Inject
     constructor(
-        @ApplicationContext private val context: Context,
         private val environment: IPlayerEnvironment,
     ) : StatefulViewModel<MusicUiState>(MusicUiState()) {
         fun updateSort(sortType: SortState) {
@@ -82,11 +84,7 @@ class PlayerViewModel
                     updateState { copy(isPaused = isPaused) }
                 }
             }
-            viewModelScope.launch {
-//                environment.observeQueue().collect { queue ->
-//                    updateState { copy(queue = queue) }
-//                }
-            }
+            
         }
 
         fun onEvent(
@@ -107,12 +105,6 @@ class PlayerViewModel
                         } else {
                             environment.resume()
                         }
-                    }
-                }
-
-                is PlayerEvent.SetShowBottomPlayer -> {
-                    viewModelScope.launch {
-//                        environment.setShowBottomMusicPlayer(event.isShow)
                     }
                 }
 
@@ -152,22 +144,7 @@ class PlayerViewModel
                     }
                 }
 
-                is PlayerEvent.AddToQueue -> {
-                    viewModelScope.launch {
-//                        environment.addToQueue(event.music)
-                    }
-                }
-
-                is PlayerEvent.PlayPlaylist -> {
-//                    viewModelScope.launch {
-//                        environment.loadPlaylist(event.playlistId)
-//                        environment.playFromPlaylist()
-//                    }
-                }
-
-                else -> {
-                    println("Else Event")
-                }
+                else -> Unit
             }
         }
     }

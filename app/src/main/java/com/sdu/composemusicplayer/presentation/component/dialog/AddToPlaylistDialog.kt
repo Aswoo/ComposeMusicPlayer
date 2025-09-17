@@ -30,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sdu.composemusicplayer.domain.model.Music
@@ -66,10 +65,6 @@ fun AddToPlaylistDialog(
             }
         }
 
-    val context = LocalContext.current
-
-    val createPlaylistDialog = rememberCreatePlaylistDialog()
-
     AlertDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
@@ -92,55 +87,66 @@ fun AddToPlaylistDialog(
             }
         },
         text = {
-            if (state is AddToPlaylistState.Loading) {
-                Box {
-                    CircularProgressIndicator()
-                }
-            } else {
-                LazyColumn {
-                    itemsIndexed(dialogEntries.entries) { index, entry ->
-                        Row(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .clip(RoundedCornerShape(4.dp))
-                                    .clickable { dialogEntries.toggle(index) },
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Checkbox(
-                                checked = entry.isSelected,
-                                onCheckedChange = { dialogEntries.toggle(index) },
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = entry.playlist.name)
-                        }
-                    }
-
-                    item {
-                        HorizontalDivider()
-                    }
-
-                    item {
-                        Row(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .clip(RoundedCornerShape(4.dp))
-                                    .clickable(onClick = createPlaylistDialog::launch)
-                                    .padding(8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Icon(imageVector = Icons.Rounded.Add, contentDescription = null)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = "Create a new playlist")
-                        }
-                    }
-                }
-            }
+            AddToPlaylistDialogContent(
+                state = state,
+                dialogEntries = dialogEntries,
+                onCreatePlaylist = createPlaylistsDialog::launch
+            )
         },
         title = { Text(text = "Add to Playlists") },
         icon = { Icon(imageVector = Icons.Rounded.PlaylistAdd, contentDescription = null) },
     )
+}
+
+@Composable
+private fun AddToPlaylistDialogContent(
+    state: AddToPlaylistState,
+    dialogEntries: AddToPlaylistDialogState,
+    onCreatePlaylist: () -> Unit
+) {
+    if (state is AddToPlaylistState.Loading) {
+        Box {
+            CircularProgressIndicator()
+        }
+    } else {
+        LazyColumn {
+            itemsIndexed(dialogEntries.entries) { index, entry ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(4.dp))
+                        .clickable { dialogEntries.toggle(index) },
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Checkbox(
+                        checked = entry.isSelected,
+                        onCheckedChange = { dialogEntries.toggle(index) },
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = entry.playlist.name)
+                }
+            }
+
+            item {
+                HorizontalDivider()
+            }
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(4.dp))
+                        .clickable(onClick = onCreatePlaylist)
+                        .padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(imageVector = Icons.Rounded.Add, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = "Create a new playlist")
+                }
+            }
+        }
+    }
 }
 
 @Composable

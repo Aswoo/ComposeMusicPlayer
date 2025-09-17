@@ -48,6 +48,7 @@ private val COMPACT_NOW_PLAYING_BAR_HEIGHT = 56.dp
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
+@Suppress("LongParameterList", "LongMethod")
 fun CompactAppScaffold(
     appState: MusicAppState,
     modifier: Modifier,

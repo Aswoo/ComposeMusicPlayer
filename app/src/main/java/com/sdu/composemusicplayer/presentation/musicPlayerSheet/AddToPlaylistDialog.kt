@@ -100,6 +100,7 @@ fun AddToPlaylistDialog(
 }
 
 @Composable
+@Suppress("LongParameterList", "LongMethod")
 fun AddToPlaylistContent(
     playlists: List<PlaylistInfo>,
     selectedPlaylistId: Int?,

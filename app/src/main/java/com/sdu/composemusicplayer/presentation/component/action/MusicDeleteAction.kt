@@ -13,7 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import com.sdu.composemusicplayer.core.media.MediaRepository
+import com.sdu.composemusicplayer.domain.repository.MediaRepository
 import com.sdu.composemusicplayer.domain.model.Music
 
 fun interface MusicDeleteAction {

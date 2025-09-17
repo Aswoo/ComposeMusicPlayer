@@ -5,14 +5,14 @@ import android.net.Uri
 import androidx.compose.runtime.Stable
 
 @Stable
-data class SongAlbumArtModel(
+data class MusicAlbumArtModel(
     val albumId: Long? = null,
     val uri: Uri,
 )
 
-fun Music?.toSongAlbumArtModel() =
+fun Music?.toMusicAlbumArtModel(): MusicAlbumArtModel =
     if (this == null) {
-        SongAlbumArtModel(null, Uri.EMPTY)
+        MusicAlbumArtModel(null, Uri.EMPTY)
     } else {
-        SongAlbumArtModel(albumId = audioId, uri = Uri.parse(albumPath))
+        MusicAlbumArtModel(albumId = audioId, uri = Uri.parse(albumPath))
     }

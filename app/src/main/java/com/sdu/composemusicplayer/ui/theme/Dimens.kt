@@ -1,4 +1,4 @@
-package com.kolee.composemusicexoplayer.ui.theme
+package com.sdu.composemusicplayer.ui.theme
 
 import androidx.compose.ui.unit.dp
 

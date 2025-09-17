@@ -24,91 +24,75 @@ import kotlinx.coroutines.launch
 import kotlin.math.PI
 import kotlin.math.sin
 
+private const val BAR_ANIMATION_DELAY_MS = 2L
+private val BAR_WIDTH = 4.dp
+private val WAVE_WIDTH = 24.dp
+private val WAVE_HEIGHT = 20.dp
+private const val BAR_CORNER_RADIUS = 100
+
+data class BarAnimation(
+    val initialFraction: Float,
+    val animationDelay: Long,
+    val animationDuration: Int,
+    val amplitude: Float,
+    val resetDuration: Int = 150
+)
+
 @Composable
-fun AudioWave(isMusicPlaying: Boolean) {
-    // 가장 간단하고 확실한 방법
-    var fraction1 by remember { mutableFloatStateOf(0.3f) }
-    var fraction2 by remember { mutableFloatStateOf(0.5f) }
-    var fraction3 by remember { mutableFloatStateOf(0.4f) }
+private fun animateBarFraction(
+    isMusicPlaying: Boolean,
+    animation: BarAnimation
+): Float {
+    var fraction by remember { mutableFloatStateOf(animation.initialFraction) }
 
     LaunchedEffect(isMusicPlaying) {
         if (isMusicPlaying) {
             launch {
+                delay(animation.animationDelay)
                 while (isMusicPlaying) {
-                    // 첫 번째 막대 애니메이션
-                    repeat(1000) { step ->
+                    repeat(animation.animationDuration) { step ->
                         if (!isMusicPlaying) return@launch
-                        val progress = step / 1000f
-                        fraction1 = 0.3f + (sin(progress * 2 * PI) * 0.35f).toFloat()
-                        delay(2) // 2ms마다 업데이트 = 부드러운 애니메이션
-                    }
-                }
-            }
-
-            launch {
-                delay(300) // 약간의 위상 차이
-                while (isMusicPlaying) {
-                    // 두 번째 막대 애니메이션
-                    repeat(800) { step ->
-                        if (!isMusicPlaying) return@launch
-                        val progress = step / 800f
-                        fraction2 = 0.2f + (sin(progress * 2 * PI) * 0.4f).toFloat()
-                        delay(2)
-                    }
-                }
-            }
-
-            launch {
-                delay(600) // 더 큰 위상 차이
-                while (isMusicPlaying) {
-                    // 세 번째 막대 애니메이션
-                    repeat(1200) { step ->
-                        if (!isMusicPlaying) return@launch
-                        val progress = step / 1200f
-                        fraction3 = 0.4f + (sin(progress * 2 * PI) * 0.3f).toFloat()
-                        delay(2)
+                        val progress = step / animation.animationDuration.toFloat()
+                        fraction = animation.initialFraction + (sin(progress * 2 * PI) * animation.amplitude).toFloat()
+                        delay(BAR_ANIMATION_DELAY_MS)
                     }
                 }
             }
         } else {
-            // 정지 시 원래 위치로 복귀
             launch {
-                val start1 = fraction1
-                val start2 = fraction2
-                val start3 = fraction3
-
-                repeat(150) { step ->
-                    // 300ms 동안
-                    val progress = step / 150f
-                    fraction1 = start1 + (0.3f - start1) * progress
-                    fraction2 = start2 + (0.5f - start2) * progress
-                    fraction3 = start3 + (0.4f - start3) * progress
-                    delay(2)
+                val start = fraction
+                repeat(animation.resetDuration) { step ->
+                    val progress = step / animation.resetDuration.toFloat()
+                    fraction = start + (animation.initialFraction - start) * progress
+                    delay(BAR_ANIMATION_DELAY_MS)
                 }
-                // 최종 값 보장
-                fraction1 = 0.3f
-                fraction2 = 0.5f
-                fraction3 = 0.4f
+                fraction = animation.initialFraction
             }
         }
     }
+    return fraction
+}
+
+@Composable
+fun AudioWave(isMusicPlaying: Boolean) {
+    val fraction1 = animateBarFraction(isMusicPlaying, BarAnimation(0.3f, 0, 1000, 0.35f))
+    val fraction2 = animateBarFraction(isMusicPlaying, BarAnimation(0.5f, 300, 800, 0.4f))
+    val fraction3 = animateBarFraction(isMusicPlaying, BarAnimation(0.4f, 600, 1200, 0.3f))
 
     Row(
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier =
-            Modifier
-                .width(24.dp)
-                .height(20.dp),
+        modifier = Modifier
+            .width(WAVE_WIDTH)
+            .height(WAVE_HEIGHT),
     ) {
         listOf(fraction1, fraction2, fraction3).forEach { fraction ->
             Box(
-                modifier =
-                    Modifier
-                        .width(4.dp)
-                        .fillMaxHeight(fraction.coerceIn(0f, 1f))
-                        .clip(RoundedCornerShape(100))
-                        .background(MaterialTheme.colorScheme.primary),
+                modifier = Modifier
+                    .width(BAR_WIDTH)
+                    .fillMaxHeight(fraction.coerceIn(0f, 1f))
+                    .clip(RoundedCornerShape(BAR_CORNER_RADIUS))
+                    .background(MaterialTheme.colorScheme.primary),
             )
         }
     }

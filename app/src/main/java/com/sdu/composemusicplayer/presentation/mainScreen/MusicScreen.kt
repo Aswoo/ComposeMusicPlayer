@@ -32,11 +32,11 @@ import com.sdu.composemusicplayer.domain.model.SortOption
 import com.sdu.composemusicplayer.domain.model.SortState
 import com.sdu.composemusicplayer.presentation.mainScreen.component.MusicItem
 import com.sdu.composemusicplayer.ui.theme.SpotiBackground
-import com.sdu.composemusicplayer.viewmodel.MusicUiState
+import com.sdu.composemusicplayer.presentation.player.MusicUiState
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
-import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
+import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
 
-private val TAG = "MusicScreen"
+private const val TAG = "MusicScreen"
 
 @Composable
 fun MainScreen(
@@ -132,7 +132,7 @@ fun MusicListContent(
                     }
                 }
             } else {
-                items(musicUiState.musicList) { music ->
+                items(musicUiState.musicList, key = { music -> music.audioId }) { music ->
                     MusicItem(
                         music = music,
                         selected = (music.audioId == currentAudioId),

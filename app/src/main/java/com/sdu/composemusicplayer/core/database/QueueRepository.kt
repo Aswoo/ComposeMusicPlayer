@@ -12,26 +12,27 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
+import com.sdu.composemusicplayer.domain.repository.QueueRepository as QueueRepositoryContract
 
 @Singleton
-class QueueRepository
+class QueueRepositoryImpl
     @Inject
     constructor(
         private val queueDao: QueueDao,
-    ) {
+    ) : QueueRepositoryContract {
         private val scope = CoroutineScope(Dispatchers.IO)
 
-        suspend fun getQueue(): List<DBQueueItem> =
+        override suspend fun getQueue(): List<DBQueueItem> =
             queueDao
                 .getQueue()
                 .map { it.toDBQueueItem() }
 
-        fun observeQueueUris(): Flow<List<String>> =
+        override fun observeQueueUris(): Flow<List<String>> =
             queueDao
                 .getQueueFlow()
                 .map { it.map { queueItem -> queueItem.songUri } }
 
-        fun saveQueueFromDBQueueItems(songs: List<DBQueueItem>) {
+        override fun saveQueueFromDBQueueItems(songs: List<DBQueueItem>) {
             scope.launch {
                 queueDao.changeQueue(songs.map { it.toQueueEntity() })
             }

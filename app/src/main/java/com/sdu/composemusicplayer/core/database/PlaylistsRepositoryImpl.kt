@@ -1,10 +1,11 @@
-package com.sdu.composemusicplayer.core.model.playlist
+package com.sdu.composemusicplayer.core.database
 
-import com.sdu.composemusicplayer.core.database.MusicRepository
+import com.sdu.composemusicplayer.domain.repository.MusicRepository
 import com.sdu.composemusicplayer.core.database.dao.PlaylistDao
 import com.sdu.composemusicplayer.core.database.entity.PlaylistEntity
 import com.sdu.composemusicplayer.core.database.mapper.toDomain
 import com.sdu.composemusicplayer.core.database.model.PlaylistInfoWithNumberOfMusic
+import com.sdu.composemusicplayer.core.model.playlist.MusicUriMapper
 import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.Playlist
 import com.sdu.composemusicplayer.domain.model.PlaylistInfo
@@ -19,31 +20,33 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
+import com.sdu.composemusicplayer.domain.repository.PlaylistsRepository as PlaylistsRepositoryContract
 
 @Singleton
-class PlaylistsRepository
+@Suppress("TooManyFunctions")
+class PlaylistsRepositoryImpl
     @Inject
     constructor(
         private val playlistsDao: PlaylistDao,
         private val musicRepository: MusicRepository,
-    ) {
+    ) : PlaylistsRepositoryContract {
         private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 
-        val playlistsWithInfoFlows =
+        override val playlistsWithInfoFlows =
             playlistsDao
                 .getPlaylistsInfoFlow()
                 .map {
                     it.toDomainPlaylists()
                 }.stateIn(coroutineScope, SharingStarted.WhileSubscribed(5000), listOf())
 
-        fun createPlaylist(name: String) {
+        override fun createPlaylist(name: String) {
             coroutineScope.launch {
                 val playlist = PlaylistEntity(name = name)
                 playlistsDao.createPlaylist(playlist)
             }
         }
 
-        fun createPlaylistAndAddSongs(
+        override fun createPlaylistAndAddSongs(
             name: String,
             songUris: List<String>,
         ) {
@@ -52,7 +55,7 @@ class PlaylistsRepository
             }
         }
 
-        fun addMusicToPlaylists(
+        override fun addMusicToPlaylists(
             songsUris: List<String>,
             playlists: List<PlaylistInfo>,
         ) {
@@ -61,7 +64,7 @@ class PlaylistsRepository
             }
         }
 
-        fun addMusicToPlaylist(
+        override fun addMusicToPlaylist(
             musicUri: String,
             selectedPlayListId: Int,
         ) {
@@ -70,13 +73,13 @@ class PlaylistsRepository
             }
         }
 
-        fun deletePlaylist(id: Int) {
+        override fun deletePlaylist(id: Int) {
             coroutineScope.launch {
                 playlistsDao.deletePlaylistWithSongs(id)
             }
         }
 
-        fun renamePlaylist(
+        override fun renamePlaylist(
             id: Int,
             newName: String,
         ) {
@@ -85,7 +88,7 @@ class PlaylistsRepository
             }
         }
 
-        fun removeMusicFromPlaylist(
+        override fun removeMusicFromPlaylist(
             id: Int,
             songsUris: List<String>,
         ) {
@@ -94,7 +97,7 @@ class PlaylistsRepository
             }
         }
 
-        suspend fun getPlaylistSongs(id: Int): List<Music> {
+        override suspend fun getPlaylistSongs(id: Int): List<Music> {
             val songUris = playlistsDao.getPlaylistSongs(id)
             val musicList =
                 musicRepository.getAllMusics().first().map {
@@ -104,7 +107,7 @@ class PlaylistsRepository
             return musicMapper.getMusicByUris(songUris)
         }
 
-        fun getPlaylistWithSongsFlow(playlistId: Int): Flow<Playlist> =
+        override fun getPlaylistWithSongsFlow(playlistId: Int): Flow<Playlist> =
             combine(
                 musicRepository.getAllMusics(),
                 playlistsDao.getPlaylistWithSongsFlow(playlistId),
@@ -119,7 +122,7 @@ class PlaylistsRepository
                 val musicMap = musicMapper.musicList.associateBy { it.audioPath }
 
                 // The uris of the song
-                val playlistSongsUriStrings = playlistWithSongs.songUris
+                val playlistSongsUriStrings = playlistWithSongs.musicUris
 
                 val playlistSongs = mutableListOf<Music>()
                 for (uriString in playlistSongsUriStrings.map { it.musicUriString }) {

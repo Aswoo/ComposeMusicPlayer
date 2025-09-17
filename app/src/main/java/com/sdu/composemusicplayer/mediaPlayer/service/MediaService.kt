@@ -1,3 +1,4 @@
+@file:Suppress("VariableNaming")
 package com.sdu.composemusicplayer.mediaPlayer.service
 
 import android.app.Notification
@@ -117,7 +118,7 @@ class MediaService : MediaSessionService() {
     }
 
     @VisibleForTesting(otherwise = PRIVATE)
-    internal inner class MediaButtonCallback : MediaSession.Callback {
+    internal inner class MediaButtonCallback @Suppress("VariableNaming") constructor() : MediaSession.Callback {
         private var lastClickTime: Long = 0
         private var lastKeyCode: Int = -1
         private val DOUBLE_CLICK_TIMEOUT = 500L

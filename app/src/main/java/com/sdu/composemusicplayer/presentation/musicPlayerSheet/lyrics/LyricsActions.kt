@@ -28,6 +28,7 @@ import com.sdu.composemusicplayer.core.model.lyrics.LyricsFetchSource
  * are fetched from API or from the song metadata
  */
 @Composable
+@Suppress("LongParameterList")
 fun LyricsActions(
     modifier: Modifier,
     isShown: Boolean,

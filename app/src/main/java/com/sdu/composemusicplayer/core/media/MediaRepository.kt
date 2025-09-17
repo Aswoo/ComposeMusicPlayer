@@ -16,6 +16,27 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
+import com.sdu.composemusicplayer.domain.repository.MediaRepository as MediaRepositoryContract
+
+@file:Suppress("TooGenericExceptionCaught", "TooGenericExceptionThrown")
+
+import android.annotation.TargetApi
+import android.content.Context
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import android.util.Log
+import com.sdu.composemusicplayer.domain.model.Music
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
+import com.sdu.composemusicplayer.domain.repository.MediaRepository as MediaRepositoryContract
 
 private const val TAG = "MediaRepository"
 
@@ -26,18 +47,18 @@ private const val TAG = "MediaRepository"
  * Also, it provides methods to delete songs, and change their tags.
  */
 @Singleton
-class MediaRepository
+class MediaRepositoryImpl
     @Inject
     constructor(
         @ApplicationContext private val context: Context,
-    ) {
+    ) : MediaRepositoryContract {
         private var mediaSyncJob: Job? = null
         private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
         private lateinit var permissionListener: PermissionListener
 
         @TargetApi(29)
-        fun deleteMusic(music: Music) {
+        override fun deleteMusic(music: Music) {
             Log.d("MediaRepository", "Deleting song $music")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 println("Attempting to delete song in R or Higher. Use Activity Contracts instead")
@@ -56,7 +77,7 @@ class MediaRepository
             }
         }
 
-        suspend fun getSongPath(uri: Uri): String =
+        override suspend fun getSongPath(uri: Uri): String =
             withContext(Dispatchers.IO) {
                 val projection =
                     arrayOf(
@@ -85,7 +106,7 @@ class MediaRepository
          * Called by the MainActivity to inform the repo that the user
          * granted the READ permission, in order to refresh the music library
          */
-        fun onPermissionAccepted() {
+        override fun onPermissionAccepted() {
             permissionListener.onPermissionGranted()
         }
 

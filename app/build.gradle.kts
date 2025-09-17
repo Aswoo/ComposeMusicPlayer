@@ -219,3 +219,7 @@ dependencies {
 
     implementation(libs.annotations)
 }
+
+detekt {
+    config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+}

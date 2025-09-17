@@ -28,6 +28,7 @@ class BlurTransformation(
     override fun hashCode(): Int = radius.hashCode()
 }
 
+@Suppress("LongMethod", "ComplexMethod", "CognitiveComplexMethod", "MagicNumber")
 private suspend fun Bitmap.blur(
     scale: Float,
     radius: Int,
