@@ -45,10 +45,17 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
+private const val DARK_BACKGROUND_COLOR = 0xFF121212
+private const val DARK_GRAY_COLOR = 0xFF1E1E1E
+private const val LIGHT_GRAY_ALPHA = 0.5f
+private const val CURRENT_LINE_ALPHA = 0.7f
+private const val PAST_LINE_ALPHA = 0.5f
+private const val SYNC_DELAY = 100L
+private const val SCROLL_OFFSET_FACTOR = 2
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LiveLyricsScreen(
-    modifier: Modifier = Modifier,
     onSwap: () -> Unit, // 이 콜백은 화면 전환과 관련될 수 있으므로 유지
     onBack: () -> Unit, // 화면 닫기와 관련될 수 있으므로 유지
     lyricsViewModel: LiveLyricsViewModel = hiltViewModel(),
@@ -85,7 +92,7 @@ fun LiveLyricsScreen(
                 )
             }
         },
-        containerColor = Color(0xFF121212), // 어두운 배경색
+        containerColor = Color(DARK_BACKGROUND_COLOR.toLong()), // 어두운 배경색
     ) { paddingValues ->
         LiveLyricsContent(
             modifier =
@@ -191,7 +198,7 @@ fun LyricsScreenTopAppBar(
         },
         colors =
         TopAppBarDefaults.topAppBarColors(
-            containerColor = Color(0xFF1E1E1E),
+            containerColor = Color(DARK_GRAY_COLOR.toLong()),
         ),
     )
 }
@@ -218,7 +225,7 @@ fun LyricsScreenBottomControls(
         modifier =
         Modifier
             .fillMaxWidth()
-            .background(Color(0xFF1E1E1E))
+            .background(Color(DARK_GRAY_COLOR.toLong()))
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .padding(bottom = navBarHeightDp.dp),
     ) {
@@ -238,7 +245,7 @@ fun LyricsScreenBottomControls(
                 SliderDefaults.colors(
                     thumbColor = Color.White,
                     activeTrackColor = Color.White,
-                    inactiveTrackColor = Color.Gray.copy(alpha = 0.5f),
+                    inactiveTrackColor = Color.Gray.copy(alpha = LIGHT_GRAY_ALPHA),
                 ),
             )
             Text(text = totalTime, color = Color.LightGray, fontSize = 12.sp)
@@ -277,7 +284,7 @@ fun LyricsScreenBottomControls(
                 DropdownMenu(
                     expanded = showMoreActions,
                     onDismissRequest = { showMoreActions = false },
-                    modifier = Modifier.background(Color(0xFF2C2C2C)),
+                    modifier = Modifier.background(Color(DARK_GRAY_COLOR.toLong())),
                 ) {
                     if (lyricsFetchSource == LyricsFetchSource.EXTERNAL) {
                         DropdownMenuItem(
@@ -303,7 +310,6 @@ fun LyricLine(
     isCurrentLine: Boolean = false,
     isPastLine: Boolean = false,
     isShowingContextMenu: Boolean = false,
-    onDismissContextMenu: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val localClipboardManager = LocalClipboardManager.current
@@ -311,8 +317,8 @@ fun LyricLine(
     val textColor =
         when {
             isCurrentLine -> Color.White
-            isPastLine -> Color.Gray.copy(alpha = 0.7f)
-            else -> Color.Gray.copy(alpha = 0.5f)
+            isPastLine -> Color.Gray.copy(alpha = CURRENT_LINE_ALPHA)
+            else -> Color.Gray.copy(alpha = PAST_LINE_ALPHA)
         }
     val fontSize = if (isCurrentLine) 26.sp else 24.sp
     val fontWeight = if (isCurrentLine) FontWeight.Bold else FontWeight.Normal
@@ -363,7 +369,7 @@ fun NoLyricsState(
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     onClick = onBack,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF333333)),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(DARK_GRAY_COLOR.toLong())),
                 ) {
                     Text(text = "Go Back", color = Color.White)
                 }
@@ -373,7 +379,7 @@ fun NoLyricsState(
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
                     onClick = onRetry,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF333333)),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(DARK_GRAY_COLOR.toLong())),
                 ) {
                     Text(text = "Try Again", color = Color.White)
                 }
@@ -425,7 +431,6 @@ fun PlainLyricsState(
                 line = s,
                 isCurrentLine = true, // PlainLyrics에서는 항상 현재 라인처럼 표시
                 isShowingContextMenu = index == contextMenuShownIndex,
-                onDismissContextMenu = { contextMenuShownIndex = -1 },
             )
             Spacer(modifier = Modifier.height(itemsSpacing))
         }
@@ -514,7 +519,6 @@ private fun SyncedLyricsList(
                 isCurrentLine = index == currentLyricIndex && contextMenuShownIndex == -1,
                 isPastLine = index < currentLyricIndex,
                 isShowingContextMenu = index == contextMenuShownIndex,
-                onDismissContextMenu = { onContextMenuChange(-1) },
             )
             Spacer(modifier = Modifier.height(itemsSpacing))
         }
@@ -538,7 +542,7 @@ private suspend fun scrollToCurrentLyric(
     listHeightPx: Int
 ) {
     val viewportHeight = listState.layoutInfo.viewportSize.height
-    val centerOffset = viewportHeight / 2
+    val centerOffset = viewportHeight / SCROLL_OFFSET_FACTOR
     val targetItemInfo = listState.layoutInfo.visibleItemsInfo.find { it.index == currentLyricIndex }
 
     if (targetItemInfo != null) {
@@ -594,7 +598,7 @@ fun LyricSynchronizerEffect(
                 onCurrentLyricIndexChanged(currentIndex)
                 previousCalculatedIndex = currentIndex
             }
-            delay(100) // 동기화 주기
+            delay(SYNC_DELAY) // 동기화 주기
         }
     }
 }

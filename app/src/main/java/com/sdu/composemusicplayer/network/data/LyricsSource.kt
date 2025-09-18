@@ -6,6 +6,7 @@ import com.sdu.composemusicplayer.network.model.NotFoundException
 import com.sdu.composemusicplayer.network.model.SongLyricsNetwork
 import com.sdu.composemusicplayer.network.service.LyricsService
 import retrofit2.HttpException
+import java.net.HttpURLConnection
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -25,7 +26,7 @@ class LyricsSource
             return try {
                 lyricsService.getSongLyrics(artistName, trackName, albumName, durationSeconds)
             } catch (e: HttpException) {
-                if (e.code() == 404) {
+                if (e.code() == HttpURLConnection.HTTP_NOT_FOUND) {
                     throw NotFoundException("Lyrics not found")
                 } else {
                     throw NetworkErrorException(e.message())

@@ -1,4 +1,3 @@
-@file:Suppress("MagicNumber")
 package com.sdu.composemusicplayer.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,12 +11,13 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.sdu.composemusicplayer.utils.AndroidConstants
 
 val Shapes =
     Shapes(
-        small = RoundedCornerShape(4.dp),
-        medium = RoundedCornerShape(4.dp),
-        large = RoundedCornerShape(0.dp),
+        small = RoundedCornerShape(AndroidConstants.Dp.SMALL.dp),
+        medium = RoundedCornerShape(AndroidConstants.Dp.SMALL.dp),
+        large = RoundedCornerShape(AndroidConstants.Dp.ZERO.dp),
     )
 
 val roundedShape =
@@ -29,9 +29,16 @@ val roundedShape =
         ): Outline {
             val p1 =
                 Path().apply {
-                    addOval(Rect(4f, 3f, size.width - 1, size.height - 1))
+                    addOval(
+                        Rect(
+                            AndroidConstants.Dp.SMALL.toFloat(), 
+                            AndroidConstants.Misc.SHAPE_OFFSET_Y, 
+                            size.width - AndroidConstants.Dp.SMALL, 
+                            size.height - AndroidConstants.Dp.SMALL
+                        )
+                    )
                 }
-            val thickness = size.height / 2.10f
+            val thickness = size.height / AndroidConstants.Misc.SHAPE_THICKNESS_DIVISOR
             val p2 =
                 Path().apply {
                     addOval(

@@ -60,10 +60,11 @@ import com.sdu.composemusicplayer.ui.theme.SpotiGreen
 import com.sdu.composemusicplayer.ui.theme.SpotiWhite
 import kotlinx.coroutines.launch
 
-private val DIVIDER_START_PADDING = (12 + 36 + 8).dp
+private val DIVIDER_START_PADDING = 56.dp
 private val DRAG_HANDLE_WIDTH = 40.dp
 private val DRAG_HANDLE_HEIGHT = 4.dp
 private val DRAG_HANDLE_SHAPE_RADIUS = 2.dp
+private val DRAG_HANDLE_VERTICAL_PADDING = 8.dp
 
 @Composable
 fun PlaylistsScreen(
@@ -78,7 +79,6 @@ fun PlaylistsScreen(
         state = state,
         onPlaylistClicked = onNavigateToPlaylist,
         onDeletePlaylist = playlistsViewModel::onDelete,
-        onRenamePlaylist = playlistsViewModel::onRename,
     )
 }
 
@@ -89,7 +89,6 @@ fun PlaylistsScreen(
     state: PlaylistsScreenState,
     onPlaylistClicked: (Int) -> Unit,
     onDeletePlaylist: (Int) -> Unit,
-    onRenamePlaylist: (Int, String) -> Unit,
 ) {
     val createPlaylistsDialog = rememberCreatePlaylistDialog()
     val coroutineScope = rememberCoroutineScope()
@@ -170,7 +169,7 @@ private fun PlaylistManagementBottomSheet(
             dragHandle = {
                 Box(
                     Modifier
-                        .padding(vertical = 8.dp)
+                        .padding(vertical = DRAG_HANDLE_VERTICAL_PADDING)
                         .size(width = DRAG_HANDLE_WIDTH, height = DRAG_HANDLE_HEIGHT)
                         .background(SpotiGray, shape = RoundedCornerShape(DRAG_HANDLE_SHAPE_RADIUS)),
                 )

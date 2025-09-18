@@ -1,5 +1,7 @@
 package com.sdu.composemusicplayer.domain.model
 
+import com.sdu.composemusicplayer.utils.AndroidConstants
+
 data class Music(
     val audioId: Long,
     val title: String,
@@ -11,10 +13,10 @@ data class Music(
     companion object {
         val default =
             Music(
-                audioId = -1,
+                audioId = AndroidConstants.Misc.DEFAULT_ID,
                 title = "",
                 artist = "<unknown>",
-                duration = 0L,
+                duration = AndroidConstants.Misc.DEFAULT_DURATION,
                 albumPath = "",
                 audioPath = "",
             )

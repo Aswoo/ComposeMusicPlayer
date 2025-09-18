@@ -47,6 +47,8 @@ import com.sdu.composemusicplayer.presentation.component.dialog.AddToPlaylistVie
 import com.sdu.composemusicplayer.presentation.component.dialog.rememberCreatePlaylistDialog
 import com.sdu.composemusicplayer.ui.theme.SpotiGreen
 
+private const val COMPLETE_BUTTON_WIDTH_FRACTION = 0.4f
+
 @Composable
 fun AddToPlaylistDialog(
     musicUri: String,
@@ -194,7 +196,7 @@ fun AddToPlaylistContent(
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 16.dp)
                     .height(48.dp)
-                    .fillMaxWidth(0.4f),
+                    .fillMaxWidth(COMPLETE_BUTTON_WIDTH_FRACTION),
             shape = MaterialTheme.shapes.large,
             colors = ButtonDefaults.buttonColors(containerColor = SpotiGreen),
         ) {

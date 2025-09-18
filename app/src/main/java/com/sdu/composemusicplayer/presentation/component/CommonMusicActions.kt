@@ -15,11 +15,12 @@ data class CommonMusicActions(
     val deleteAction: MusicDeleteAction,
 )
 
-val LocalCommonMusicAction = staticCompositionLocalOf<CommonMusicActions> { throw IllegalArgumentException("not implemented") }
+val LocalCommonMusicAction = staticCompositionLocalOf<CommonMusicActions> { 
+    throw IllegalArgumentException("not implemented") 
+}
 
 @Composable
 fun rememberCommonMusicActions(mediaRepository: MediaRepository): CommonMusicActions {
-    val context = LocalContext.current
     val shareAction = MusicSharer
     val deleteAction = rememberSongDeleter(mediaRepository = mediaRepository)
 

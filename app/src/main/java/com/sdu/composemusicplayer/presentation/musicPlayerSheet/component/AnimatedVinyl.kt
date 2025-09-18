@@ -27,6 +27,12 @@ import coil.request.ImageRequest
 import com.sdu.composemusicplayer.R
 import com.sdu.composemusicplayer.ui.theme.roundedShape
 
+private const val ROTATION_DEGREES = 360f
+private const val ANIMATION_DURATION = 3000
+private const val PAUSE_ROTATION_DEGREES = 50f
+private const val PAUSE_ANIMATION_DURATION = 1250
+private const val VINYL_SCALE = 0.5f
+
 @Composable
 fun AnimatedVinyl(
     modifier: Modifier = Modifier,
@@ -45,10 +51,10 @@ fun AnimatedVinyl(
     LaunchedEffect(isPlaying) {
         if (isPlaying) {
             rotation.animateTo(
-                targetValue = currentRotation + 360f,
+                targetValue = currentRotation + ROTATION_DEGREES,
                 animationSpec =
                     infiniteRepeatable(
-                        animation = tween(3000, easing = LinearEasing),
+                        animation = tween(ANIMATION_DURATION, easing = LinearEasing),
                         repeatMode = RepeatMode.Restart,
                     ),
             ) {
@@ -57,10 +63,10 @@ fun AnimatedVinyl(
         } else {
             if (currentRotation > 0f) {
                 rotation.animateTo(
-                    targetValue = currentRotation + 50,
+                    targetValue = currentRotation + PAUSE_ROTATION_DEGREES,
                     animationSpec =
                         tween(
-                            1250,
+                            PAUSE_ANIMATION_DURATION,
                             easing = LinearOutSlowInEasing,
                         ),
                 ) {
@@ -99,7 +105,7 @@ fun Vinyl(
         Image(
             modifier =
                 Modifier
-                    .fillMaxSize(0.5f)
+                    .fillMaxSize(VINYL_SCALE)
                     .rotate(rotationDegrees)
                     .aspectRatio(1.0f)
                     .align(Alignment.Center)

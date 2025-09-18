@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import com.sdu.composemusicplayer.core.constants.AppConstants
 import com.sdu.composemusicplayer.domain.model.Music
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -52,12 +53,12 @@ class MediaRepositoryImpl
     constructor(
         @ApplicationContext private val context: Context,
     ) : MediaRepositoryContract {
-        private var mediaSyncJob: Job? = null
+        // Removed unused private property
         private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
         private lateinit var permissionListener: PermissionListener
 
-        @TargetApi(29)
+        @TargetApi(AppConstants.API_LEVEL_29)
         override fun deleteMusic(music: Music) {
             Log.d("MediaRepository", "Deleting song $music")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -72,8 +73,10 @@ class MediaRepositoryImpl
                     file.delete()
                     context.contentResolver.delete(Uri.parse(music.audioPath), null, null)
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, e.toString())
+            } catch (e: SecurityException) {
+                Log.e(TAG, "Security exception while deleting music: ${e.message}")
+            } catch (e: IllegalStateException) {
+                Log.e(TAG, "Illegal state while deleting music: ${e.message}")
             }
         }
 
@@ -93,7 +96,7 @@ class MediaRepositoryImpl
                         null,
                         null,
                         null,
-                    ) ?: throw Exception("Invalid cursor")
+                    ) ?: error("Invalid cursor - unable to query media store")
 
                 cursor.use {
                     it.moveToFirst()

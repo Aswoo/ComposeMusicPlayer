@@ -571,10 +571,20 @@ style:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**', '**/*.kts']
     ignoreNumbers:
-      - '-1'
-      - '0'
-      - '1'
-      - '2'
+      - '-1'    # 기본값
+      - '0'     # 기본값
+      - '1'     # 기본값
+      - '2'     # 기본값
+      - '4'     # dp 기본값
+      - '8'     # dp 기본값
+      - '16'    # dp 기본값
+      - '24'    # dp 기본값
+      - '48'    # dp 기본값
+      - '1000'  # 밀리초
+      - '60'    # 초/분
+      - '30'    # 타임아웃
+      - '100'   # 퍼센트
+      - '255'   # 색상 최대값
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: false
     ignoreLocalVariableDeclaration: false
@@ -582,8 +592,8 @@ style:
     ignoreCompanionObjectPropertyDeclaration: true
     ignoreAnnotation: false
     ignoreNamedArgument: true
-    ignoreEnums: false
-    ignoreRanges: false
+    ignoreEnums: true
+    ignoreRanges: true
     ignoreExtensionFunctions: true
   MandatoryBracesIfStatements:
     active: false

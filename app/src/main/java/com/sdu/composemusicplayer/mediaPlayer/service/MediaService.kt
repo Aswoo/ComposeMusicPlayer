@@ -25,6 +25,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val DOUBLE_CLICK_TIMEOUT = 500L
+
 @UnstableApi
 @AndroidEntryPoint
 class MediaService : MediaSessionService() {
@@ -92,7 +94,7 @@ class MediaService : MediaSessionService() {
             )
     }
 
-    internal fun handleMediaButtonSingleClick(keyCode: Int) {
+    internal fun handleMediaButtonSingleClick() {
         serviceScope.launch {
             val isPlaying = playerEnvironment.isPlaying().first()
             if (isPlaying) playerEnvironment.pause() else playerEnvironment.resume()
@@ -121,7 +123,6 @@ class MediaService : MediaSessionService() {
     internal inner class MediaButtonCallback @Suppress("VariableNaming") constructor() : MediaSession.Callback {
         private var lastClickTime: Long = 0
         private var lastKeyCode: Int = -1
-        private val DOUBLE_CLICK_TIMEOUT = 500L
 
         override fun onMediaButtonEvent(
             mediaSession: MediaSession,
@@ -148,7 +149,7 @@ class MediaService : MediaSessionService() {
                         resetClickState()
                     } else {
                         // 싱글 클릭
-                        handleMediaButtonSingleClick(keyCode)
+                        handleMediaButtonSingleClick()
                         lastClickTime = currentTime
                         lastKeyCode = keyCode
                     }

@@ -7,7 +7,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.sdu.composemusicplayer.core.database.MusicRepository
 import com.sdu.composemusicplayer.core.database.QueueRepository
 import com.sdu.composemusicplayer.domain.model.Music
-import com.sdu.composemusicplayer.domain.model.MusicQueue
 import com.sdu.composemusicplayer.domain.model.QueueItem
 import com.sdu.composemusicplayer.mediaPlayer.service.PlayerServiceManager
 import com.sdu.composemusicplayer.viewmodel.PlayerEnvironment
@@ -61,11 +60,24 @@ class PlayerEnvironmentTest {
         runTest {
             val musicList =
                 listOf(
-                    Music(audioId = 1, title = "Song 1", artist = "Artist 1", albumPath = "1", duration = 1000, audioPath = "path1"),
-                    Music(audioId = 2, title = "Song 2", artist = "Artist 2", albumPath = "2", duration = 2000, audioPath = "path2"),
+                    Music(
+                        audioId = 1,
+                        title = "Song 1",
+                        artist = "Artist 1",
+                        albumPath = "1",
+                        duration = 1000,
+                        audioPath = "path1"
+                    ),
+                    Music(
+                        audioId = 2,
+                        title = "Song 2",
+                        artist = "Artist 2",
+                        albumPath = "2",
+                        duration = 2000,
+                        audioPath = "path2"
+                    ),
                 )
-            val queueItems = musicList.mapIndexed { index, music -> QueueItem(music, index) }.toMutableList()
-            val musicQueue = MusicQueue(items = queueItems, currentIndex = 0)
+            // Removed unused queueItems variable
 
             playerEnvironment.updateQueue(musicList)
 
@@ -82,8 +94,22 @@ class PlayerEnvironmentTest {
         runTest {
             val musicList =
                 listOf(
-                    Music(audioId = 1, title = "Song 1", artist = "Artist 1", albumPath = "1", duration = 1000, audioPath = "path1"),
-                    Music(audioId = 2, title = "Song 2", artist = "Artist 2", albumPath = "2", duration = 2000, audioPath = "path2"),
+                    Music(
+                        audioId = 1,
+                        title = "Song 1",
+                        artist = "Artist 1",
+                        albumPath = "1",
+                        duration = 1000,
+                        audioPath = "path1"
+                    ),
+                    Music(
+                        audioId = 2,
+                        title = "Song 2",
+                        artist = "Artist 2",
+                        albumPath = "2",
+                        duration = 2000,
+                        audioPath = "path2"
+                    ),
                 )
             playerEnvironment.updateQueue(musicList)
 

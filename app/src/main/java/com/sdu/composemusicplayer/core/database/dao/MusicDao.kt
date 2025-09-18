@@ -14,8 +14,11 @@ interface MusicDao {
     fun getAllMusices(): Flow<List<MusicEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(vararg music: MusicEntity)
+    suspend fun insert(music: MusicEntity)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(music: List<MusicEntity>)
 
     @Delete
-    suspend fun delete(vararg music: MusicEntity)
+    suspend fun delete(music: List<MusicEntity>)
 }

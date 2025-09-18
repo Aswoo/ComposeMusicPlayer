@@ -71,6 +71,7 @@ private val RENAME_TEXT_VERTICAL_SPACING = 6.dp
 private val TRACKS_INFO_FONT_SIZE = 13.sp
 private val ACTION_BUTTONS_VERTICAL_SPACING = 12.dp
 private const val PLAY_BUTTON_SHAPE_RADIUS = 50
+private const val SCROLL_THRESHOLD_RATIO = 0.8f
 private val PLAY_BUTTON_ICON_SPACING = 4.dp
 private val ACTION_BUTTONS_HORIZONTAL_SPACING = 8.dp
 private val SHUFFLE_BUTTON_SIZE = 48.dp
@@ -104,15 +105,13 @@ internal fun PlaylistDetailContent(
     modifier: Modifier,
     state: PlaylistDetailScreenState,
     playlistActions: PlaylistActions,
-    onBackPressed: () -> Unit,
     onSongClicked: (Music) -> Unit,
-    onEdit: () -> Unit,
 ) {
     if (state is PlaylistDetailScreenState.Loading) return
     val loadedState = state as PlaylistDetailScreenState.Loaded
     val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listState = rememberLazyListState()
-    val shouldShowTopBarTitle by rememberShouldShowTopBar(listState = listState)
+    // Removed unused shouldShowTopBarTitle
     val commonSongsActions = LocalCommonMusicAction.current
     val context = LocalContext.current
     var inRenameMode by remember { mutableStateOf(false) }
@@ -310,7 +309,8 @@ fun rememberShouldShowTopBar(listState: androidx.compose.foundation.lazy.LazyLis
                 false
             } else {
                 listState.firstVisibleItemIndex > 0 ||
-                        listState.firstVisibleItemScrollOffset > listState.layoutInfo.visibleItemsInfo[0].size * 0.8f
+                        listState.firstVisibleItemScrollOffset > 
+                        listState.layoutInfo.visibleItemsInfo[0].size * SCROLL_THRESHOLD_RATIO
             }
         }
     }

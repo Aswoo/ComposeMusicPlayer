@@ -18,11 +18,13 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 
+private const val ROTATION_DEGREES = 360f
+
 @Composable
 fun AnimatedAddToPlaylistButton() {
     var isAdded by remember { mutableStateOf(false) }
     val rotation by animateFloatAsState(
-        targetValue = if (isAdded) 360f else 0f,
+        targetValue = if (isAdded) ROTATION_DEGREES else 0f,
         animationSpec = tween(durationMillis = 500),
     )
     val iconAlpha by animateFloatAsState(

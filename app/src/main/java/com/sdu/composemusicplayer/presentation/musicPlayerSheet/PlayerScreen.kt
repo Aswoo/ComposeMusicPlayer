@@ -61,6 +61,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.sdu.composemusicplayer.core.constants.AppConstants
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.component.ExpandedMusicPlayerContent
 import com.sdu.composemusicplayer.presentation.player.MusicUiState
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
@@ -152,7 +153,7 @@ internal fun PlayerScreen(
                 Modifier
                     .fillMaxSize()
                     .graphicsLayer {
-                        alpha = ((progressProvider() - 0.15f) * 2.0f).coerceIn(0.0f, 1.0f)
+                        alpha = ((progressProvider() - AppConstants.FADE_ALPHA) * 2.0f).coerceIn(0.0f, 1.0f)
                     },
                 onOpenQueue = showAddToPlaylistDialog,
                 onCloseQueue = { isShowingQueue = true },
@@ -173,7 +174,7 @@ internal fun PlayerScreen(
                     .pointerInput(Unit) {
                         detectTapGestures { onExpandNowPlaying() }
                     }.graphicsLayer {
-                        alpha = (1 - (progressProvider() * 6.66f).coerceAtMost(1.0f))
+                        alpha = (1 - (progressProvider() * AppConstants.DEFAULT_ALPHA).coerceAtMost(1.0f))
                     }.testTag("miniPlayer"),
                 state = uiState,
                 showExtraControls = true,
@@ -197,16 +198,11 @@ internal fun PlayerScreen(
 fun FullScreenNowPlaying(
     modifier: Modifier,
     isShowingQueue: Boolean,
-    onCloseQueue: () -> Unit,
     onOpenQueue: () -> Unit,
     progressProvider: () -> Float,
-    uiState: MusicUiState,
     playerViewModel: PlayerViewModel,
 ) {
-    val music =
-        remember(uiState.currentPlayedMusic) {
-            uiState.currentPlayedMusic
-        }
+    // Removed unused music variable
 
     Box(
         modifier = modifier,
@@ -238,8 +234,10 @@ fun FullScreenNowPlaying(
 
         val screenSize =
             when {
-                heightClass == WindowHeightSizeClass.Compact && widthClass == WindowWidthSizeClass.Compact -> NowPlayingScreenSize.COMPACT
-                heightClass == WindowHeightSizeClass.Compact && widthClass != WindowWidthSizeClass.Compact -> NowPlayingScreenSize.LANDSCAPE
+                heightClass == WindowHeightSizeClass.Compact && 
+                widthClass == WindowWidthSizeClass.Compact -> NowPlayingScreenSize.COMPACT
+                heightClass == WindowHeightSizeClass.Compact && 
+                widthClass != WindowWidthSizeClass.Compact -> NowPlayingScreenSize.LANDSCAPE
                 else -> NowPlayingScreenSize.PORTRAIT
             }
 
@@ -257,7 +255,7 @@ fun FullScreenNowPlaying(
                 Modifier
                     .fillMaxSize()
                     .graphicsLayer {
-                        alpha = ((progressProvider() - 0.15f) * 2.0f).coerceIn(0.0f, 1.0f)
+                        alpha = ((progressProvider() - AppConstants.FADE_ALPHA) * 2.0f).coerceIn(0.0f, 1.0f)
                     }.then(paddingModifier)
                     .statusBarsPadding()
             }

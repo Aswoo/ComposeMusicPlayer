@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.sdu.composemusicplayer.core.constants.AppConstants
 import com.sdu.composemusicplayer.ui.theme.Dimens
 import com.google.accompanist.permissions.PermissionsRequired
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -50,7 +51,6 @@ fun CheckAndRequestPermissions(
     onPermissionsGranted: () -> Unit,
     appContent: @Composable () -> Unit,
 ) {
-    val context = LocalContext.current
     val activity = LocalContext.current as Activity
 
     val permissionState = rememberMultiplePermissionsState(permissions = permissions)
@@ -80,7 +80,7 @@ fun CheckAndRequestPermissions(
                     contentScale = ContentScale.Crop,
                     modifier =
                         Modifier
-                            .size(200.dp)
+                            .size(AppConstants.DEFAULT_ALBUM_ART_SIZE.dp)
                             .background(color = Color.Yellow),
                 )
                 Spacer(modifier = Modifier.height(Dimens.Six))

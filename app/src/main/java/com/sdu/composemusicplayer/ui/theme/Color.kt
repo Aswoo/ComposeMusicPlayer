@@ -1,32 +1,52 @@
-@file:Suppress("MagicNumber")
 package com.sdu.composemusicplayer.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.sdu.composemusicplayer.utils.AndroidConstants
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
-val Gray200 = Color(0xEEEEEE)
-val Gray500 = Color(0xFF9E9E9E)
-val Gray600 = Color(0xFF757575)
-val Gray700 = Color(0xFF616161)
+// Material Design 색상들
+private const val PURPLE_200_HEX = 0xFFBB86FC
+private const val PURPLE_500_HEX = 0xFF6200EE
+private const val PURPLE_700_HEX = 0xFF3700B3
+private const val TEAL_200_HEX = 0xFF03DAC5
+private const val GRAY_200_HEX = 0xEEEEEE
+private const val GRAY_500_HEX = 0xFF9E9E9E
+private const val GRAY_600_HEX = 0xFF757575
+private const val GRAY_700_HEX = 0xFF616161
 
-val SpotiGreen = Color(0xFF1DB954)
-val SpotiBlack = Color(0xFF616161)
-val SpotiBlackBar = Color(0xFF121212)
-val SpotiBackground = Color(0xFF121212)
-val SpotiWhite = Color(0xFFF5F5F5)
-val SpotiDarkGray = Color(0xFF282828)
-val SpotiGray = Color(0xFFB3B3B3)
-val SpotiDivider = Color(0xFF404040)
-val SpotiLightGray = Color(0xFFB3B3B3)
+val Purple200 = Color(PURPLE_200_HEX)
+val Purple500 = Color(PURPLE_500_HEX)
+val Purple700 = Color(PURPLE_700_HEX)
+val Teal200 = Color(TEAL_200_HEX)
+val Gray200 = Color(GRAY_200_HEX)
+val Gray500 = Color(GRAY_500_HEX)
+val Gray600 = Color(GRAY_600_HEX)
+val Gray700 = Color(GRAY_700_HEX)
 
-val LightRed = Color(0xFFED4956)
+// Spotify 테마 색상들
+val SpotiGreen = Color(AndroidConstants.Color.SPOTIFY_GREEN)
+val SpotiBlack = Color(GRAY_700_HEX)
+val SpotiBlackBar = Color(AndroidConstants.Color.SPOTIFY_BLACK)
+val SpotiBackground = Color(AndroidConstants.Color.SPOTIFY_BLACK)
+val SpotiWhite = Color(AndroidConstants.Color.SPOTIFY_WHITE)
+val SpotiDarkGray = Color(AndroidConstants.Color.SPOTIFY_DARK_GRAY)
+val SpotiGray = Color(AndroidConstants.Color.SPOTIFY_GRAY)
+val SpotiDivider = Color(AndroidConstants.Color.SPOTIFY_DIVIDER)
+val SpotiLightGray = Color(AndroidConstants.Color.SPOTIFY_LIGHT_GRAY)
+
+val LightRed = Color(AndroidConstants.Color.LIGHT_RED)
 
 val TextDefaultColor: Color
-    @Composable get() = if (!isSystemInDarkTheme()) Color(0xFF4B4B4B) else Color(0xFFEEEEEE)
+    @Composable get() = if (!isSystemInDarkTheme()) {
+        Color(AndroidConstants.Color.TEXT_DEFAULT_LIGHT)
+    } else {
+        Color(AndroidConstants.Color.TEXT_DEFAULT_DARK)
+    }
+
 val TintDefaultColor: Color
-    @Composable get() = if (!isSystemInDarkTheme()) Color(0xFF4B4B4B) else Color(0xFFEEEEEE)
+    @Composable get() = if (!isSystemInDarkTheme()) {
+        Color(AndroidConstants.Color.TEXT_DEFAULT_LIGHT)
+    } else {
+        Color(AndroidConstants.Color.TEXT_DEFAULT_DARK)
+    }

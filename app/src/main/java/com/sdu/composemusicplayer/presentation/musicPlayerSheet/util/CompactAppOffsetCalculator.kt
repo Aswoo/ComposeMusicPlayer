@@ -15,6 +15,8 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.BarState
 
+private const val ANIMATION_DURATION = 400
+
 /**
  * This class is responsible to calculate the offsets
  * of the components (bottom bar, NowPlayingScreen) in the Compact App Screen.
@@ -93,7 +95,7 @@ fun rememberCompactScreenUiState(
     val bottomNavBarOffsetPx =
         animateIntAsState(
             targetValue = 0,
-            animationSpec = tween(400),
+            animationSpec = tween(ANIMATION_DURATION),
             label = "",
         )
 

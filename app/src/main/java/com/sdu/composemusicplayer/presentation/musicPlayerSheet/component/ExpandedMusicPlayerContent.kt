@@ -50,50 +50,38 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics.LiveLyricsScreen
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics.fadingEdge
 import com.sdu.composemusicplayer.ui.theme.SpotiGreen
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
 
+// Removed unused fade constants
+private const val BLUR_RADIUS = 80
+private const val BACKGROUND_ALPHA = 0.2f
+private const val TITLE_WIDTH_FRACTION = 0.8f
+private const val ARTIST_NAME_COLOR = 0xFFB3B3B3
+
 @Composable
 @Suppress("LongMethod")
 fun ExpandedMusicPlayerContent(
     playerVM: PlayerViewModel,
-    modifier: Modifier = Modifier,
     openAddToPlaylistDialog: () -> Unit,
 ) {
     val musicUiState by playerVM.uiState.collectAsState()
-    val context = LocalContext.current
     val screenState = remember { mutableStateOf(true) }
 
     val accentColor = SpotiGreen
 
     if (!screenState.value) {
-        val fadeBrush =
-            remember {
-                Brush.verticalGradient(
-                    0.0f to accentColor,
-                    0.7f to accentColor,
-                    1.0f to Color.Transparent,
-                )
-            }
+        // Removed unused fadeBrush
         LiveLyricsScreen(
-            modifier =
-                modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .fadingEdge(fadeBrush)
-                    .padding(horizontal = 8.dp, vertical = 18.dp),
             onSwap = {
                 screenState.value = !screenState.value
             },
@@ -116,8 +104,8 @@ fun ExpandedMusicPlayerContent(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .blur(80.dp)
-                    .alpha(0.2f),
+                    .blur(BLUR_RADIUS.dp)
+                    .alpha(BACKGROUND_ALPHA),
         )
 
         Column(
@@ -155,19 +143,19 @@ fun ExpandedMusicPlayerContent(
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.fillMaxWidth(0.8f),
+                    modifier = Modifier.fillMaxWidth(TITLE_WIDTH_FRACTION),
                 )
 
                 Text(
                     text = musicUiState.currentPlayedMusic.artist,
                     style =
                         MaterialTheme.typography.bodyMedium.copy(
-                            color = Color(0xFFB3B3B3),
+                            color = Color(ARTIST_NAME_COLOR),
                         ),
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.fillMaxWidth(0.8f),
+                    modifier = Modifier.fillMaxWidth(TITLE_WIDTH_FRACTION),
                 )
             }
 

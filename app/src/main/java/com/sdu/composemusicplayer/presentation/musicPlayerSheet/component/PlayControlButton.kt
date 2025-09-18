@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import com.sdu.composemusicplayer.R
 import com.sdu.composemusicplayer.ui.theme.TintDefaultColor
 
+private const val BUTTON_ROW_WIDTH_FRACTION = 0.8f
+
 @Composable
 fun PlayControlButton(
     isPlaying: Boolean,
@@ -32,7 +34,7 @@ fun PlayControlButton(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier.fillMaxWidth(0.8f),
+        modifier = Modifier.fillMaxWidth(BUTTON_ROW_WIDTH_FRACTION),
     ) {
         IconButton(onClick = onPrevious) {
             Icon(
@@ -52,9 +54,13 @@ fun PlayControlButton(
         ) {
             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                 Icon(
-                    painter =
+                    painter = 
                         painterResource(
-                            id = if (!isPlaying) R.drawable.ic_play_filled_rounded else R.drawable.ic_pause_filled_rounded,
+                            id = if (!isPlaying) {
+                                R.drawable.ic_play_filled_rounded
+                            } else {
+                                R.drawable.ic_pause_filled_rounded
+                            },
                         ),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,

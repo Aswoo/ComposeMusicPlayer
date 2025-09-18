@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.sdu.composemusicplayer.core.constants.AppConstants
 import com.sdu.composemusicplayer.domain.model.toMusicAlbumArtModel
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.CrossFadingAlbumArt
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.ErrorPainterType
@@ -71,7 +72,7 @@ fun MiniPlayer(
                 Modifier
                     .fillMaxHeight()
                     .aspectRatio(1.0f)
-                    .scale(0.7f)
+                    .scale(AppConstants.DEFAULT_ALPHA)
                     .shadow(2.dp, shape = RoundedCornerShape(4.dp))
                     .clip(RoundedCornerShape(8.dp)),
             containerModifier = Modifier.padding(start = 8.dp),
@@ -154,7 +155,7 @@ fun SongCircularProgressIndicator(
         while (isActive) {
             val newProgress = songProgressProvider()
             progress.animateTo(newProgress)
-            delay(1000)
+            delay(AppConstants.LYRICS_UPDATE_INTERVAL_MS)
         }
     }
 

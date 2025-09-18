@@ -6,6 +6,8 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import coil.ImageLoader
 import kotlinx.coroutines.Dispatchers
 
+private const val PARALLELISM_LEVEL = 5
+
 fun Context.efficientAlbumArtImageLoader() =
     ImageLoader
         .Builder(this)
@@ -17,7 +19,7 @@ fun Context.efficientAlbumArtImageLoader() =
 fun Context.inefficientAlbumArtImageLoader() =
     ImageLoader
         .Builder(this)
-        .dispatcher(Dispatchers.IO.limitedParallelism(5))
+        .dispatcher(Dispatchers.IO.limitedParallelism(PARALLELISM_LEVEL))
         .components {
             add(SongKeyer())
             add(AlbumArtFetcher.Factory())

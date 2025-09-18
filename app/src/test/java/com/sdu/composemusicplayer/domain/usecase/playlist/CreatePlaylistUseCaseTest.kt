@@ -25,7 +25,7 @@ class CreatePlaylistUseCaseTest {
         createPlaylistUseCase(playlistName)
 
         // Then
-        val playlists = fakeRepository.playlistsWithInfoFlows
+        // Removed unused playlists variable
         // Note: In a real test, you'd collect the flow and verify the playlist was added
         // This is a simplified example
     }

@@ -40,7 +40,6 @@ private const val TAG = "MusicScreen"
 
 @Composable
 fun MainScreen(
-    navController: NavController,
     playerVM: PlayerViewModel,
 ) {
     val musicUiState by playerVM.uiState.collectAsState()

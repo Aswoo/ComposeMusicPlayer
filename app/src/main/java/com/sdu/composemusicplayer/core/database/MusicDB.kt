@@ -14,10 +14,11 @@ import com.sdu.composemusicplayer.core.database.entity.MusicEntity
 import com.sdu.composemusicplayer.core.database.entity.PlaylistEntity
 import com.sdu.composemusicplayer.core.database.entity.PlaylistsMusicEntity
 import com.sdu.composemusicplayer.core.database.entity.QueueEntity
+import com.sdu.composemusicplayer.utils.AndroidConstants
 
 @Database(
     entities = [MusicEntity::class, LyricsEntity::class, QueueEntity::class, PlaylistEntity::class, PlaylistsMusicEntity::class],
-    version = 4,
+    version = AndroidConstants.Database.VERSION,
 )
 abstract class MusicDB : RoomDatabase() {
     abstract fun musicDao(): MusicDao
@@ -43,7 +44,7 @@ abstract class MusicDB : RoomDatabase() {
                 .databaseBuilder(
                     context,
                     MusicDB::class.java,
-                    "music_db_0903",
+                    AndroidConstants.Database.NAME,
                 ).allowMainThreadQueries()
                 .fallbackToDestructiveMigration() // for Test
                 .build()

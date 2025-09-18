@@ -16,6 +16,8 @@ import com.sdu.composemusicplayer.ui.theme.Inter
 import com.sdu.composemusicplayer.ui.theme.TextDefaultColor
 import kotlin.time.Duration.Companion.milliseconds
 
+private const val SECONDS_IN_MINUTE = 60
+
 @Composable
 fun PlayingProgress(
     maxDuration: Long,
@@ -26,7 +28,7 @@ fun PlayingProgress(
 
     fun formatTime(duration: Long): String {
         val minutes = (duration.milliseconds.inWholeMinutes).toString().padStart(2, '0')
-        val seconds = (duration.milliseconds.inWholeSeconds % 60).toString().padStart(2, '0')
+        val seconds = (duration.milliseconds.inWholeSeconds % SECONDS_IN_MINUTE).toString().padStart(2, '0')
         return "$minutes:$seconds"
     }
 

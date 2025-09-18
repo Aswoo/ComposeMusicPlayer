@@ -28,6 +28,8 @@ import com.sdu.composemusicplayer.domain.model.SortDirection
 import com.sdu.composemusicplayer.domain.model.SortOption
 import com.sdu.composemusicplayer.domain.model.SortState
 
+private const val TAB_CORNER_RADIUS = 50
+
 @Composable
 fun SortHeader(
     currentSort: SortState,
@@ -49,7 +51,7 @@ fun SortHeader(
                 Box(
                     modifier =
                         Modifier
-                            .clip(RoundedCornerShape(50))
+                            .clip(RoundedCornerShape(TAB_CORNER_RADIUS))
                             .background(if (isSelected) Color.White else Color.DarkGray)
                             .clickable {
                                 selectedTab = option

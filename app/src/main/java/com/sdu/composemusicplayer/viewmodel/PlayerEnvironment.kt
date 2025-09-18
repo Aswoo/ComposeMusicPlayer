@@ -16,6 +16,7 @@ import com.sdu.composemusicplayer.domain.model.MusicQueue
 import com.sdu.composemusicplayer.domain.model.PlaySource
 import com.sdu.composemusicplayer.domain.model.QueueItem
 import com.sdu.composemusicplayer.mediaPlayer.service.PlayerServiceManager
+import com.sdu.composemusicplayer.utils.AndroidConstants
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -81,7 +82,7 @@ class PlayerEnvironment
 
         override fun isBottomMusicPlayerShowed(): Flow<Boolean> = _isBottomMusicPlayerShowed.asStateFlow()
 
-        private const val DURATION_UPDATE_INTERVAL = 1000L
+        private const val DURATION_UPDATE_INTERVAL = AndroidConstants.Time.DURATION_UPDATE_INTERVAL_MS
 
         private val updateRunnable =
             object : Runnable {

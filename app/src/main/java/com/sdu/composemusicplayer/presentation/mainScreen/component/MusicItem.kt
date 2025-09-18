@@ -34,11 +34,12 @@ import androidx.core.net.toUri
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.sdu.composemusicplayer.R
+import com.sdu.composemusicplayer.core.constants.AppConstants
 import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.ui.theme.Inter
 import com.sdu.composemusicplayer.ui.theme.SpotiGreen
 
-private val SELECTED_BACKGROUND_COLOR = Color(0xFF2A2A2A)
+private val SELECTED_BACKGROUND_COLOR = Color(AppConstants.SELECTED_BACKGROUND_COLOR)
 private val ITEM_SHAPE_RADIUS = 8.dp
 private val HORIZONTAL_PADDING = 12.dp
 private val VERTICAL_PADDING = 8.dp

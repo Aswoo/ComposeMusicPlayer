@@ -5,6 +5,7 @@ import androidx.compose.ui.semantics.text
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sdu.composemusicplayer.core.constants.AppConstants
 import com.sdu.composemusicplayer.domain.repository.LyricsRepository
 import com.sdu.composemusicplayer.core.database.model.LyricsResult
 import com.sdu.composemusicplayer.core.model.lyrics.LyricsFetchSource
@@ -71,7 +72,7 @@ class LiveLyricsViewModel
                     }
                 }.stateIn(
                     scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5000),
+                    started = SharingStarted.WhileSubscribed(AppConstants.LYRICS_CACHE_DURATION_MS),
                     initialValue = PlayerDependentData(),
                 )
 
@@ -112,7 +113,7 @@ class LiveLyricsViewModel
                 )
             }.stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000),
+                started = SharingStarted.WhileSubscribed(AppConstants.LYRICS_CACHE_DURATION_MS),
                 initialValue = LiveLyricsUiState(),
             )
 
@@ -165,7 +166,7 @@ class LiveLyricsViewModel
                             song.title,
                             song.albumPath,
                             cleanedArtist,
-                            song.duration.toInt() / 1000,
+                            song.duration.toInt() / AppConstants.LYRICS_UPDATE_INTERVAL_MS,
                         )
 
                 val newState =
@@ -226,13 +227,13 @@ class LiveLyricsViewModel
                 val currentMusic = playerDependentState.value.currentPlayedMusic
 
                 if (currentMusic != null && currentMusic != Music.default) {
-                    val success =
-                        when (currentLyricsState) {
+                    when (currentLyricsState) {
                             is LyricsScreenState.TextLyrics -> {
                                 if (currentLyricsState.lyricsSource == LyricsFetchSource.EXTERNAL) {
 //                                    lyricsRepository.saveLyricsToFile(
 //                                        currentMusic.audioPath.toUri(),
-//                                        currentLyricsState.plainLyrics.constructStringForSaving(), // 모델에 저장용 문자열 변환 함수 필요
+//                                        currentLyricsState.plainLyrics.constructStringForSaving(), 
+//                                        // 모델에 저장용 문자열 변환 함수 필요
 //                                    )
                                 } else {
                                     false
@@ -243,7 +244,8 @@ class LiveLyricsViewModel
                                 if (currentLyricsState.lyricsSource == LyricsFetchSource.EXTERNAL) {
 //                                    lyricsRepository.saveLyricsToFile(
 //                                        currentMusic.audioPath.toUri(),
-//                                        currentLyricsState.syncedLyrics.constructStringForSaving(), // 모델에 저장용 문자열 변환 함수 필요 (LRC)
+//                                        currentLyricsState.syncedLyrics.constructStringForSaving(), 
+//                                        // 모델에 저장용 문자열 변환 함수 필요 (LRC)
 //                                    )
                                 } else {
                                     false
@@ -295,13 +297,16 @@ fun SynchronizedLyrics.constructStringForSaving(): String {
     // LRC 형식으로 변환하는 로직 구현
     // 예: return segments.joinToString("\n") { "[${formatMillisToLrcTime(it.durationMillis)}]${it.text}" }
     // formatMillisToLrcTime 함수는 LRC 시간 형식 (mm:ss.xx)으로 변환해야 함
-    return this.segments.joinToString("\n") { "[${formatMillisToLrcTime(it.durationMillis.toLong())}]${it.text}" } // 예시, 실제 구현 필요
+    return this.segments.joinToString("\n") { 
+        "[${formatMillisToLrcTime(it.durationMillis.toLong())}]${it.text}" 
+    } // 예시, 실제 구현 필요
 }
 
 private fun formatMillisToLrcTime(millis: Long): String {
     if (millis < 0) return "00:00.00"
     val minutes = TimeUnit.MILLISECONDS.toMinutes(millis)
     val seconds = TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(minutes)
-    val hundredths = (TimeUnit.MILLISECONDS.toMillis(millis) - TimeUnit.SECONDS.toMillis(TimeUnit.MILLISECONDS.toSeconds(millis))) / 10
+    val hundredths = (TimeUnit.MILLISECONDS.toMillis(millis) - 
+        TimeUnit.SECONDS.toMillis(TimeUnit.MILLISECONDS.toSeconds(millis))) / AppConstants.LYRICS_UPDATE_INTERVAL_MS
     return String.format("%02d:%02d.%02d", minutes, seconds, hundredths)
 }

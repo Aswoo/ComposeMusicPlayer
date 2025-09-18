@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import com.sdu.composemusicplayer.core.constants.AppConstants
 import com.sdu.composemusicplayer.domain.repository.MediaRepository
 import com.sdu.composemusicplayer.domain.model.Music
 
@@ -24,14 +25,14 @@ class AndroidRAboveDeleter(
     private val activityResultLauncher: ActivityResultLauncher<IntentSenderRequest>,
     private val context: Context,
 ) : MusicDeleteAction {
-    @RequiresApi(30)
+    @RequiresApi(AppConstants.API_LEVEL_30)
     override fun deleteMusic(songs: List<Music>) {
         if (songs.isEmpty()) return
         val senderRequest = getIntentSenderRequest(context, Uri.parse(songs[0].audioPath))
         activityResultLauncher.launch(senderRequest)
     }
 
-    @RequiresApi(30)
+    @RequiresApi(AppConstants.API_LEVEL_30)
     private fun getIntentSenderRequest(
         context: Context,
         uri: Uri,

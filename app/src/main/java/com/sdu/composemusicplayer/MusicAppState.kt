@@ -1,4 +1,3 @@
-@file:Suppress("MagicNumber")
 package com.sdu.composemusicplayer
 
 import androidx.compose.runtime.Composable
@@ -8,6 +7,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
 import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
+import com.sdu.composemusicplayer.utils.AndroidConstants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -53,7 +53,9 @@ class MusicAppState(
             }.distinctUntilChanged()
             .stateIn(
                 scope = coroutineScope,
-                started = SharingStarted.WhileSubscribed(5000),
+                started = SharingStarted.WhileSubscribed(
+                    AndroidConstants.Time.MILLIS_IN_SECOND * AndroidConstants.Misc.SUBSCRIPTION_TIMEOUT_SECONDS
+                ),
                 initialValue = false,
             )
 }

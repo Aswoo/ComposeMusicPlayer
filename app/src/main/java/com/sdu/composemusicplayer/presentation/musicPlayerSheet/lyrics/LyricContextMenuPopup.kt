@@ -36,6 +36,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupPositionProvider
 
+private const val POPUP_OFFSET = 40
+
 fun Modifier.shimmerLoadingAnimation(
     widthOfShadowBrush: Int = 600,
     angleOfAxisY: Float = 270f,
@@ -94,7 +96,7 @@ class ContextMenuPopupProvider : PopupPositionProvider {
 
         val availableHeight = anchorBounds.topLeft.y
 
-        return if (availableHeight >= popupHeight + 40) {
+        return if (availableHeight >= popupHeight + POPUP_OFFSET) {
             return IntOffset(
                 anchorBounds.topLeft.x,
                 anchorBounds.topLeft.y - popupHeight,

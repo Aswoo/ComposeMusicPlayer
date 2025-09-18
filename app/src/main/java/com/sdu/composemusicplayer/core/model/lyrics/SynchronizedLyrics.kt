@@ -1,5 +1,7 @@
 package com.sdu.composemusicplayer.core.model.lyrics
 
+import com.sdu.composemusicplayer.utils.AndroidConstants
+
 /**
  * Synced Lyrics containing a list of [SyncedLyricsSegment]s
  */
@@ -11,8 +13,6 @@ data class SynchronizedLyrics(
     }
 
     companion object {
-        private const val MILLIS_IN_SECOND = 1000
-        private const val SECONDS_IN_MINUTE = 60
         private const val CENTISECONDS_TO_MILLISECONDS = 10
 
         fun fromString(text: String?): SynchronizedLyrics? {
@@ -42,10 +42,12 @@ data class SynchronizedLyrics(
 
             val text = line.substring(timeInfoLastIndex + 1).trim()
 
-            return SyncedLyricsSegment(
-                text,
-                minutes * SECONDS_IN_MINUTE * MILLIS_IN_SECOND + seconds * MILLIS_IN_SECOND + millis,
-            )
+            val minutesInMillis = minutes * AndroidConstants.Time.SECONDS_IN_MINUTE * 
+                AndroidConstants.Time.MILLIS_IN_SECOND
+            val secondsInMillis = seconds * AndroidConstants.Time.MILLIS_IN_SECOND
+            val totalMillis = minutesInMillis + secondsInMillis + millis
+            
+            return SyncedLyricsSegment(text, totalMillis)
         }
     }
 }

@@ -97,7 +97,6 @@ fun SetupNavigation(
 
 @Composable
 private fun AppNavHost(
-    appState: MusicAppState,
     playerVM: PlayerViewModel,
     navController: NavHostController,
     modifier: Modifier
@@ -109,7 +108,6 @@ private fun AppNavHost(
     ) {
         composable(Routes.Main.route) {
             MainScreen(
-                navController = navController,
                 playerVM = playerVM,
             )
         }

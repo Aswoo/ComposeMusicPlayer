@@ -10,6 +10,10 @@ import com.sdu.composemusicplayer.core.database.entity.PlaylistsMusicEntity
 data class PlaylistWithMusicUri(
     @Embedded
     val playlistEntity: PlaylistEntity,
-    @Relation(entity = PlaylistsMusicEntity::class, parentColumn = PLAYLIST_ID_COLUMN, entityColumn = PLAYLIST_ID_COLUMN)
+    @Relation(
+        entity = PlaylistsMusicEntity::class,
+        parentColumn = PLAYLIST_ID_COLUMN,
+        entityColumn = PLAYLIST_ID_COLUMN
+    )
     val musicUris: List<PlaylistsMusicEntity>,
 )

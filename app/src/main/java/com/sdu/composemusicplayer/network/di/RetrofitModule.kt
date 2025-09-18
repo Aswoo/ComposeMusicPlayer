@@ -1,8 +1,8 @@
-@file:Suppress("MagicNumber")
 package com.sdu.composemusicplayer.network.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.sdu.composemusicplayer.network.service.LyricsService
+import com.sdu.composemusicplayer.utils.AndroidConstants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,8 +32,8 @@ object RetrofitModule {
         OkHttpClient
             .Builder()
             .addInterceptor(loggingInterceptor)
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(AndroidConstants.Network.CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .readTimeout(AndroidConstants.Network.READ_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .build()
 
     @Provides

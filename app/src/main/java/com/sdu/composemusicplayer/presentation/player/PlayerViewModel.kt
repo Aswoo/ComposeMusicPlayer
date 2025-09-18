@@ -18,7 +18,6 @@ import javax.inject.Inject
 class PlayerViewModel
     @Inject
     constructor(
-        @ApplicationContext private val context: Context,
         private val environment: IPlayerEnvironment,
     ) : StatefulViewModel<MusicUiState>(MusicUiState()) {
         fun updateSort(sortType: SortState) {

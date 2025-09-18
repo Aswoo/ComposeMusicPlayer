@@ -30,6 +30,21 @@ private val WAVE_WIDTH = 24.dp
 private val WAVE_HEIGHT = 20.dp
 private const val BAR_CORNER_RADIUS = 100
 
+private const val BAR_1_INITIAL_FRACTION = 0.3f
+private const val BAR_1_ANIMATION_DELAY = 0L
+private const val BAR_1_ANIMATION_DURATION = 1000
+private const val BAR_1_AMPLITUDE = 0.35f
+
+private const val BAR_2_INITIAL_FRACTION = 0.5f
+private const val BAR_2_ANIMATION_DELAY = 300L
+private const val BAR_2_ANIMATION_DURATION = 800
+private const val BAR_2_AMPLITUDE = 0.4f
+
+private const val BAR_3_INITIAL_FRACTION = 0.4f
+private const val BAR_3_ANIMATION_DELAY = 600L
+private const val BAR_3_ANIMATION_DURATION = 1200
+private const val BAR_3_AMPLITUDE = 0.3f
+
 data class BarAnimation(
     val initialFraction: Float,
     val animationDelay: Long,
@@ -75,9 +90,33 @@ private fun animateBarFraction(
 
 @Composable
 fun AudioWave(isMusicPlaying: Boolean) {
-    val fraction1 = animateBarFraction(isMusicPlaying, BarAnimation(0.3f, 0, 1000, 0.35f))
-    val fraction2 = animateBarFraction(isMusicPlaying, BarAnimation(0.5f, 300, 800, 0.4f))
-    val fraction3 = animateBarFraction(isMusicPlaying, BarAnimation(0.4f, 600, 1200, 0.3f))
+    val fraction1 = animateBarFraction(
+        isMusicPlaying,
+        BarAnimation(
+            BAR_1_INITIAL_FRACTION,
+            BAR_1_ANIMATION_DELAY,
+            BAR_1_ANIMATION_DURATION,
+            BAR_1_AMPLITUDE
+        )
+    )
+    val fraction2 = animateBarFraction(
+        isMusicPlaying,
+        BarAnimation(
+            BAR_2_INITIAL_FRACTION,
+            BAR_2_ANIMATION_DELAY,
+            BAR_2_ANIMATION_DURATION,
+            BAR_2_AMPLITUDE
+        )
+    )
+    val fraction3 = animateBarFraction(
+        isMusicPlaying,
+        BarAnimation(
+            BAR_3_INITIAL_FRACTION,
+            BAR_3_ANIMATION_DELAY,
+            BAR_3_ANIMATION_DURATION,
+            BAR_3_AMPLITUDE
+        )
+    )
 
     Row(
         verticalAlignment = Alignment.Bottom,

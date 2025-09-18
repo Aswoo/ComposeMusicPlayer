@@ -45,6 +45,8 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 private val COMPACT_NOW_PLAYING_BAR_HEIGHT = 56.dp
+private const val ANIMATION_DURATION = 600
+private const val INITIAL_OFFSET_Y_MULTIPLIER = 2
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -123,12 +125,12 @@ fun CompactAppScaffold(
             visible = shouldShowPlayerBar,
             enter =
                 slideInVertically(
-                    tween(600),
-                    initialOffsetY = { playerBarHeightPx.roundToInt() * 2 },
+                    tween(ANIMATION_DURATION),
+                    initialOffsetY = { playerBarHeightPx.roundToInt() * INITIAL_OFFSET_Y_MULTIPLIER },
                 ),
             exit =
                 slideOutVertically(
-                    tween(600),
+                    tween(ANIMATION_DURATION),
                     targetOffsetY = { -playerBarHeightPx.roundToInt() },
                 ),
         ) {
@@ -136,12 +138,12 @@ fun CompactAppScaffold(
             visible = shouldShowPlayerBar,
             enter =
                 slideInVertically(
-                    tween(600),
-                    initialOffsetY = { playerBarHeightPx.roundToInt() * 2 },
+                    tween(ANIMATION_DURATION),
+                    initialOffsetY = { playerBarHeightPx.roundToInt() * INITIAL_OFFSET_Y_MULTIPLIER },
                 ),
             exit =
                 slideOutVertically(
-                    tween(600),
+                    tween(ANIMATION_DURATION),
                     targetOffsetY = { -playerBarHeightPx.roundToInt() },
                 ),
         ) {
