@@ -15,8 +15,8 @@ import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.SortState
 import com.sdu.composemusicplayer.domain.model.SortOption
 import com.sdu.composemusicplayer.ui.theme.SpotiBackground
-import com.sdu.composemusicplayer.viewmodel.MusicUiState
-import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
+import com.sdu.composemusicplayer.presentation.player.MusicUiState
+import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -191,5 +191,90 @@ class MusicScreenTest {
 
         // Assert
         verify { updateSortStateMock(currentSortState.copy(option = SortOption.TITLE)) }
+    }
+
+    @Test
+    fun `음악_목록이_비어있을_때_빈_상태가_표시된다`() {
+        // Arrange
+        val uiState =
+            MusicUiState(
+                musicList = emptyList(),
+                sortState = SortState(),
+            )
+        every { mockPlayerViewModel.uiState } returns MutableStateFlow(uiState)
+
+        // Act
+        composeTestRule.setContent {
+            MaterialTheme {
+                TestableMusicScreen(
+                    playerVM = mockPlayerViewModel,
+                    onSelectedMusic = {},
+                    updateSortState = {},
+                )
+            }
+        }
+
+        // Assert
+        composeTestRule.onNodeWithText("마이 라이브러리").assertIsDisplayed()
+        composeTestRule.onNodeWithText("TITLE").assertIsDisplayed()
+        composeTestRule.onNodeWithText("ARTIST").assertIsDisplayed()
+    }
+
+    @Test
+    fun `음악_아이템을_클릭하면_onSelectedMusic이_호출된다`() {
+        // Arrange
+        val uiState =
+            MusicUiState(
+                musicList = mockMusicList,
+                sortState = SortState(),
+            )
+        every { mockPlayerViewModel.uiState } returns MutableStateFlow(uiState)
+        var selectedMusic: Music? = null
+        val onSelectedMusic: (Music) -> Unit = { music -> selectedMusic = music }
+
+        // Act
+        composeTestRule.setContent {
+            MaterialTheme {
+                TestableMusicScreen(
+                    playerVM = mockPlayerViewModel,
+                    onSelectedMusic = onSelectedMusic,
+                    updateSortState = {},
+                )
+            }
+        }
+        composeTestRule.onNodeWithText("Song 1").performClick()
+
+        // Assert
+        assert(selectedMusic != null)
+        assert(selectedMusic?.title == "Song 1")
+    }
+
+    @Test
+    fun `현재_재생중인_음악이_올바르게_표시된다`() {
+        // Arrange
+        val currentMusic = mockMusicList.first()
+        val uiState =
+            MusicUiState(
+                musicList = mockMusicList,
+                sortState = SortState(),
+                currentPlayedMusic = currentMusic,
+                isPlaying = true,
+            )
+        every { mockPlayerViewModel.uiState } returns MutableStateFlow(uiState)
+
+        // Act
+        composeTestRule.setContent {
+            MaterialTheme {
+                TestableMusicScreen(
+                    playerVM = mockPlayerViewModel,
+                    onSelectedMusic = {},
+                    updateSortState = {},
+                )
+            }
+        }
+
+        // Assert
+        composeTestRule.onNodeWithText("Song 1").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Artist 1").assertIsDisplayed()
     }
 }

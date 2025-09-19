@@ -8,7 +8,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
-import androidx.compose.foundation.Image
+import coil.compose.AsyncImage
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -118,8 +118,8 @@ fun ExpandedMusicPlayerContent(
             Spacer(modifier = Modifier.height(64.dp))
 
             // Album Cover
-            Image(
-                painter = rememberAsyncImagePainter(musicUiState.currentPlayedMusic.albumPath),
+            AsyncImage(
+                model = musicUiState.currentPlayedMusic.albumPath,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier =

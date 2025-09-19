@@ -155,12 +155,10 @@ internal fun PlayerScreen(
                     .graphicsLayer {
                         alpha = ((progressProvider() - AppConstants.FADE_ALPHA) * 2.0f).coerceIn(0.0f, 1.0f)
                     },
-                onOpenQueue = showAddToPlaylistDialog,
-                onCloseQueue = { isShowingQueue = true },
-                progressProvider = progressProvider,
-                uiState = uiState,
-                playerViewModel = viewModel,
                 isShowingQueue = isShowingQueue,
+                onOpenQueue = showAddToPlaylistDialog,
+                progressProvider = progressProvider,
+                playerViewModel = viewModel,
             )
             LaunchedEffect(key1 = isExpanded) {
                 if (!isExpanded) isShowingQueue = false
@@ -283,7 +281,6 @@ fun FullScreenNowPlaying(
             } else {
                 ExpandedMusicPlayerContent(
                     playerVM = playerViewModel,
-                    modifier = playerScreenModifier.navigationBarsPadding(),
                     openAddToPlaylistDialog = onOpenQueue,
                 )
             }

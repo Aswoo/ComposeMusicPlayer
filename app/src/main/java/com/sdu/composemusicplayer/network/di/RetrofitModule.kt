@@ -32,8 +32,8 @@ object RetrofitModule {
         OkHttpClient
             .Builder()
             .addInterceptor(loggingInterceptor)
-            .connectTimeout(AndroidConstants.Network.CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .readTimeout(AndroidConstants.Network.READ_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .connectTimeout(AndroidConstants.Network.CONNECT_TIMEOUT_SECONDS.toLong(), TimeUnit.SECONDS)
+            .readTimeout(AndroidConstants.Network.READ_TIMEOUT_SECONDS.toLong(), TimeUnit.SECONDS)
             .build()
 
     @Provides

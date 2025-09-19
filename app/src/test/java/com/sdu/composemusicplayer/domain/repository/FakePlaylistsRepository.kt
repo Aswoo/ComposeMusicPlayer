@@ -3,6 +3,7 @@ package com.sdu.composemusicplayer.domain.repository
 import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.Playlist
 import com.sdu.composemusicplayer.domain.model.PlaylistInfo
+import com.sdu.composemusicplayer.utils.AndroidConstants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +17,7 @@ class FakePlaylistsRepository : PlaylistsRepository {
 
     override fun createPlaylist(name: String) {
         val newId = playlists.size + 1
-        playlists.add(PlaylistInfo(newId, name, 0))
+        playlists.add(PlaylistInfo(newId, name, AndroidConstants.Misc.DEFAULT_INDEX))
         _playlistsWithInfoFlows.value = playlists.toList()
     }
 
@@ -40,7 +41,7 @@ class FakePlaylistsRepository : PlaylistsRepository {
 
     override fun renamePlaylist(id: Int, newName: String) {
         val index = playlists.indexOfFirst { it.id == id }
-        if (index != -1) {
+        if (index != AndroidConstants.Misc.INVALID_INDEX) {
             val playlist = playlists[index]
             playlists[index] = playlist.copy(name = newName)
             _playlistsWithInfoFlows.value = playlists.toList()
@@ -58,6 +59,6 @@ class FakePlaylistsRepository : PlaylistsRepository {
     override fun getPlaylistWithSongsFlow(playlistId: Int): Flow<Playlist> {
         val playlistInfo = playlists.find { it.id == playlistId }
         val music = playlistMusics[playlistId] ?: emptyList()
-        return MutableStateFlow(Playlist(playlistInfo ?: PlaylistInfo(0, "", 0), music)).asStateFlow()
+        return MutableStateFlow(Playlist(playlistInfo ?: PlaylistInfo(AndroidConstants.Misc.DEFAULT_INDEX, "", AndroidConstants.Misc.DEFAULT_INDEX), music)).asStateFlow()
     }
 }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,8 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
+import coil.compose.AsyncImage
 import com.sdu.composemusicplayer.R
 import com.sdu.composemusicplayer.core.constants.AppConstants
 import com.sdu.composemusicplayer.domain.model.Music
@@ -50,14 +50,8 @@ private val ARTIST_FONT_SIZE = 13.sp
 
 @Composable
 private fun AlbumArt(music: Music) {
-    Image(
-        painter = rememberAsyncImagePainter(
-            ImageRequest.Builder(LocalContext.current)
-                .data(music.albumPath.toUri())
-                .error(R.drawable.ic_music_unknown)
-                .placeholder(R.drawable.ic_music_unknown)
-                .build(),
-        ),
+    AsyncImage(
+        model = music.albumPath.toUri(),
         contentDescription = null,
         modifier = Modifier
             .padding(VERTICAL_PADDING)
@@ -67,7 +61,7 @@ private fun AlbumArt(music: Music) {
 }
 
 @Composable
-private fun MusicDetails(music: Music, selected: Boolean) {
+private fun RowScope.MusicDetails(music: Music, selected: Boolean) {
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier

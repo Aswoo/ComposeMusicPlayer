@@ -166,7 +166,7 @@ class LiveLyricsViewModel
                             song.title,
                             song.albumPath,
                             cleanedArtist,
-                            song.duration.toInt() / AppConstants.LYRICS_UPDATE_INTERVAL_MS,
+                            (song.duration / AppConstants.LYRICS_UPDATE_INTERVAL_MS).toInt(),
                         )
 
                 val newState =

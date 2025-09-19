@@ -54,9 +54,7 @@ class PlaylistDetailScreenTest {
                     modifier = Modifier,
                     state = state,
                     playlistActions = playlistActions,
-                    onBackPressed = onBackPressed,
                     onSongClicked = onSongClicked,
-                    onEdit = onEdit,
                 )
             }
         }

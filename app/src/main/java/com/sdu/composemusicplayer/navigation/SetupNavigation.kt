@@ -77,7 +77,6 @@ fun SetupNavigation(
     val navHost = remember {
         movableContentOf<Modifier, MutableState<Modifier>> { navHostModifier, contentModifier ->
             AppNavHost(
-                appState = appState,
                 playerVM = playerVM,
                 navController = navController,
                 modifier = navHostModifier.then(contentModifier.value)

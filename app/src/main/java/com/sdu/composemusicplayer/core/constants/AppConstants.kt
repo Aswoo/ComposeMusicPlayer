@@ -45,9 +45,6 @@ object AppConstants {
     const val DEFAULT_ANIMATION_DURATION_MS = 300L
     const val FAST_ANIMATION_DURATION_MS = 150L
     const val SLOW_ANIMATION_DURATION_MS = 500L
-    const val LYRICS_UPDATE_INTERVAL_MS = 1000L
-    const val LYRICS_SYNC_THRESHOLD_MS = 500L
-    const val LYRICS_CACHE_DURATION_MS = 300000L // 5 minutes
     
     // Scroll and interaction constants
     const val SCROLL_THRESHOLD_RATIO = 0.8f

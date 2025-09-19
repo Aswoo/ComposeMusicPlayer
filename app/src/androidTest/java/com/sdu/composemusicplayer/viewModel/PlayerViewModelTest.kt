@@ -55,7 +55,7 @@ class PlayerViewModelTest {
         every { mockEnvironment.getCurrentDuration() } returns flowOf(0L)
         every { mockEnvironment.isPaused() } returns flowOf(true)
 
-        viewModel = PlayerViewModel(mockContext, mockEnvironment)
+        viewModel = PlayerViewModel(mockEnvironment)
     }
 
     @After

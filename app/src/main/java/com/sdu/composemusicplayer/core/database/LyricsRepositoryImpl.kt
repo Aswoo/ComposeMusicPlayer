@@ -120,7 +120,7 @@ class LyricsRepositoryImpl
             } catch (e: NotFoundException) {
                 e.printStackTrace()
                 LyricsResult.NotFound
-            } @Suppress("TooGenericExceptionCaught") catch (e: Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
                 LyricsResult.NetworkError
             }

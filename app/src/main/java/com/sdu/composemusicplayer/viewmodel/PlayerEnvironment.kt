@@ -82,7 +82,7 @@ class PlayerEnvironment
 
         override fun isBottomMusicPlayerShowed(): Flow<Boolean> = _isBottomMusicPlayerShowed.asStateFlow()
 
-        private const val DURATION_UPDATE_INTERVAL = AndroidConstants.Time.DURATION_UPDATE_INTERVAL_MS
+        private val DURATION_UPDATE_INTERVAL = AndroidConstants.Time.DURATION_UPDATE_INTERVAL_MS
 
         private val updateRunnable =
             object : Runnable {

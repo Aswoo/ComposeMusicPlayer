@@ -3,9 +3,10 @@ package com.sdu.composemusicplayer.viewModel
 import android.content.Context
 import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.PlaySource
+import com.sdu.composemusicplayer.utils.AndroidConstants
 import com.sdu.composemusicplayer.viewmodel.IPlayerEnvironment
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
-import com.sdu.composemusicplayer.viewmodel.PlayerViewModel
+import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -46,10 +47,10 @@ class PlayerViewModelTest {
         every { mockEnvironment.getCurrentPlayedMusic() } returns flowOf(sampleMusic)
         every { mockEnvironment.isPlaying() } returns flowOf(false)
         every { mockEnvironment.isBottomMusicPlayerShowed() } returns flowOf(false)
-        every { mockEnvironment.getCurrentDuration() } returns flowOf(0L)
+        every { mockEnvironment.getCurrentDuration() } returns flowOf(AndroidConstants.Misc.DEFAULT_DURATION)
         every { mockEnvironment.isPaused() } returns flowOf(true)
 
-        viewModel = PlayerViewModel(mockContext, mockEnvironment)
+        viewModel = PlayerViewModel(mockEnvironment)
     }
 
     @After
@@ -58,7 +59,7 @@ class PlayerViewModelTest {
     }
 
     @Test
-    fun `onEvent Play should call environment play`() =
+    fun `Play_이벤트시_환경의_play가_호출된다`() =
         runTest {
             // Arrange
             val testMusic = createTestMusic(1)
@@ -72,7 +73,7 @@ class PlayerViewModelTest {
         }
 
     @Test
-    fun `onEvent PlayPause when not playing should resume`() =
+    fun `재생중이_아닐때_PlayPause_이벤트시_재생이_재개된다`() =
         runTest {
             // Arrange
             coEvery { mockEnvironment.resume() } returns Unit
@@ -85,7 +86,7 @@ class PlayerViewModelTest {
         }
 
     @Test
-    fun `onEvent PlayPause when playing should pause`() =
+    fun `재생중일때_PlayPause_이벤트시_일시정지된다`() =
         runTest {
             // Arrange
             coEvery { mockEnvironment.pause() } returns Unit
@@ -98,7 +99,7 @@ class PlayerViewModelTest {
         }
 
     @Test
-    fun `onEvent Previous should call environment previous`() =
+    fun `Previous_이벤트시_환경의_previous가_호출된다`() =
         runTest {
             // Act
             viewModel.onEvent(PlayerEvent.Previous)
@@ -108,7 +109,7 @@ class PlayerViewModelTest {
         }
 
     @Test
-    fun `onEvent Next should call environment next`() =
+    fun `Next_이벤트시_환경의_next가_호출된다`() =
         runTest {
             // Arrange
             coEvery { mockEnvironment.next() } returns Unit
@@ -121,10 +122,10 @@ class PlayerViewModelTest {
         }
 
     @Test
-    fun `onEvent SnapTo should call environment snapTo`() =
+    fun `SnapTo_이벤트시_환경의_snapTo가_호출된다`() =
         runTest {
             // Arrange
-            val testDuration = 1000L
+            val testDuration = AndroidConstants.Time.MILLIS_IN_SECOND.toLong()
             coEvery { mockEnvironment.snapTo(testDuration) } returns Unit
 
             // Act
@@ -135,7 +136,7 @@ class PlayerViewModelTest {
         }
 
     @Test
-    fun `onEvent UpdateMusicList should call environment updateMusicList`() =
+    fun `UpdateMusicList_이벤트시_환경의_updateMusicList가_호출된다`() =
         runTest {
             // Arrange
             val testMusicList = listOf(createTestMusic(1), createTestMusic(2))
@@ -153,7 +154,7 @@ class PlayerViewModelTest {
             audioId = id,
             title = "Test Music $id",
             artist = "Test Artist $id",
-            duration = 180000L,
+                duration = AndroidConstants.Time.SECONDS_IN_MINUTE * 3L * AndroidConstants.Time.MILLIS_IN_SECOND, // 3분
             albumPath = "/path/to/album",
             audioPath = "/path/to/test/song$id.mp3",
         )

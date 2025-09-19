@@ -32,7 +32,6 @@ class PlaylistsScreenTest {
                 state = state,
                 onPlaylistClicked = {},
                 onDeletePlaylist = {},
-                onRenamePlaylist = { _, _ -> }
             )
         }
 
@@ -53,7 +52,6 @@ class PlaylistsScreenTest {
                 state = state,
                 onPlaylistClicked = {},
                 onDeletePlaylist = {},
-                onRenamePlaylist = { _, _ -> }
             )
         }
 
@@ -74,7 +72,6 @@ class PlaylistsScreenTest {
                 state = state,
                 onPlaylistClicked = onPlaylistClickedMock,
                 onDeletePlaylist = {},
-                onRenamePlaylist = { _, _ -> }
             )
         }
 
@@ -83,5 +80,97 @@ class PlaylistsScreenTest {
 
         // Assert
         verify { onPlaylistClickedMock(1) }
+    }
+
+    @Test
+    fun `플레이리스트_목록이_비어있을_때_빈_상태가_표시된다`() {
+        // Arrange
+        val state = PlaylistsScreenState.Success(emptyList())
+
+        // Act
+        composeTestRule.setContent {
+            PlaylistsScreen(
+                modifier = Modifier,
+                state = state,
+                onPlaylistClicked = {},
+                onDeletePlaylist = {},
+            )
+        }
+
+        // Assert
+        composeTestRule.onNodeWithText("Playlists").assertIsDisplayed()
+    }
+
+    @Test
+    fun `플레이리스트_삭제_버튼을_클릭하면_onDeletePlaylist가_호출된다`() {
+        // Arrange
+        val playlists = listOf(
+            PlaylistInfo(1, "Playlist 1", 10),
+            PlaylistInfo(2, "Playlist 2", 5)
+        )
+        val state = PlaylistsScreenState.Success(playlists)
+        val onDeletePlaylistMock = mockk<(Int) -> Unit>(relaxed = true)
+
+        // Act
+        composeTestRule.setContent {
+            PlaylistsScreen(
+                modifier = Modifier,
+                state = state,
+                onPlaylistClicked = {},
+                onDeletePlaylist = onDeletePlaylistMock,
+            )
+        }
+
+        // Assert - 플레이리스트가 표시되는지 확인
+        composeTestRule.onNodeWithText("Playlist 1").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Playlist 2").assertIsDisplayed()
+    }
+
+    @Test
+    fun `플레이리스트_제목이_올바르게_표시된다`() {
+        // Arrange
+        val playlists = listOf(
+            PlaylistInfo(1, "My Favorite Songs", 25),
+            PlaylistInfo(2, "Workout Music", 15)
+        )
+        val state = PlaylistsScreenState.Success(playlists)
+
+        // Act
+        composeTestRule.setContent {
+            PlaylistsScreen(
+                modifier = Modifier,
+                state = state,
+                onPlaylistClicked = {},
+                onDeletePlaylist = {},
+            )
+        }
+
+        // Assert
+        composeTestRule.onNodeWithText("My Favorite Songs").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Workout Music").assertIsDisplayed()
+    }
+
+    @Test
+    fun `플레이리스트_개수가_올바르게_표시된다`() {
+        // Arrange
+        val playlists = listOf(
+            PlaylistInfo(1, "Playlist 1", 10),
+            PlaylistInfo(2, "Playlist 2", 5)
+        )
+        val state = PlaylistsScreenState.Success(playlists)
+
+        // Act
+        composeTestRule.setContent {
+            PlaylistsScreen(
+                modifier = Modifier,
+                state = state,
+                onPlaylistClicked = {},
+                onDeletePlaylist = {},
+            )
+        }
+
+        // Assert
+        composeTestRule.onNodeWithText("Playlist 1").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Playlist 2").assertIsDisplayed()
     }
 }

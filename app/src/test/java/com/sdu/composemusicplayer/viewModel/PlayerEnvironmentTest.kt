@@ -1,17 +1,20 @@
 package com.sdu.composemusicplayer.viewModel
 
 import android.content.Context
+import android.net.Uri
+import android.os.Handler
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import com.sdu.composemusicplayer.core.database.MusicRepository
-import com.sdu.composemusicplayer.core.database.QueueRepository
+import com.sdu.composemusicplayer.domain.repository.MusicRepository
 import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.QueueItem
 import com.sdu.composemusicplayer.mediaPlayer.service.PlayerServiceManager
+import com.sdu.composemusicplayer.utils.AndroidConstants
 import com.sdu.composemusicplayer.viewmodel.PlayerEnvironment
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
@@ -29,9 +32,8 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class PlayerEnvironmentTest {
     private lateinit var playerEnvironment: PlayerEnvironment
-    private val mockContext: Context = mockk(relaxed = true)
+    private val mockHandler: Handler = mockk(relaxed = true)
     private val mockMusicRepository: MusicRepository = mockk(relaxed = true)
-    private val mockQueueRepository: QueueRepository = mockk(relaxed = true)
     private val mockServiceManager: PlayerServiceManager = mockk(relaxed = true)
     private val mockExoPlayer: ExoPlayer = mockk(relaxed = true)
     private val testDispatcher = StandardTestDispatcher()
@@ -40,13 +42,17 @@ class PlayerEnvironmentTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         every { mockMusicRepository.getAllMusics() } returns flowOf(emptyList())
+        
+        // Mock Uri.parse to avoid Android framework dependencies
+        mockkStatic(Uri::class)
+        every { Uri.parse(any()) } returns mockk<Uri>(relaxed = true)
+        
         playerEnvironment =
             PlayerEnvironment(
-                context = mockContext,
                 musicRepository = mockMusicRepository,
-                queueRepository = mockQueueRepository,
                 serviceManager = mockServiceManager,
                 exoPlayer = mockExoPlayer,
+                handler = mockHandler,
             )
     }
 
@@ -56,7 +62,7 @@ class PlayerEnvironmentTest {
     }
 
     @Test
-    fun `playQueueItemAt should set media items and play`() =
+    fun `큐_아이템_재생시_미디어_아이템이_설정되고_재생된다`() =
         runTest {
             val musicList =
                 listOf(
@@ -65,7 +71,7 @@ class PlayerEnvironmentTest {
                         title = "Song 1",
                         artist = "Artist 1",
                         albumPath = "1",
-                        duration = 1000,
+                        duration = AndroidConstants.Time.MILLIS_IN_SECOND.toLong(),
                         audioPath = "path1"
                     ),
                     Music(
@@ -73,7 +79,7 @@ class PlayerEnvironmentTest {
                         title = "Song 2",
                         artist = "Artist 2",
                         albumPath = "2",
-                        duration = 2000,
+                        duration = AndroidConstants.Time.MILLIS_IN_SECOND * 2L,
                         audioPath = "path2"
                     ),
                 )
@@ -81,16 +87,16 @@ class PlayerEnvironmentTest {
 
             playerEnvironment.updateQueue(musicList)
 
-            playerEnvironment.playAt(0)
+            playerEnvironment.playAt(AndroidConstants.Misc.DEFAULT_INDEX)
 
             val mediaItems = musicList.map { MediaItem.fromUri(it.audioPath) }
-            verify { mockExoPlayer.setMediaItems(mediaItems, 0, 0L) }
+            verify { mockExoPlayer.setMediaItems(mediaItems, AndroidConstants.Misc.DEFAULT_INDEX, AndroidConstants.Misc.DEFAULT_DURATION) }
             verify { mockExoPlayer.prepare() }
             verify { mockExoPlayer.play() }
         }
 
     @Test
-    fun `onMediaItemTransition should update current played music`() =
+    fun `미디어_아이템_전환시_현재_재생_음악이_업데이트된다`() =
         runTest {
             val musicList =
                 listOf(
@@ -99,7 +105,7 @@ class PlayerEnvironmentTest {
                         title = "Song 1",
                         artist = "Artist 1",
                         albumPath = "1",
-                        duration = 1000,
+                        duration = AndroidConstants.Time.MILLIS_IN_SECOND.toLong(),
                         audioPath = "path1"
                     ),
                     Music(
@@ -107,7 +113,7 @@ class PlayerEnvironmentTest {
                         title = "Song 2",
                         artist = "Artist 2",
                         albumPath = "2",
-                        duration = 2000,
+                        duration = AndroidConstants.Time.MILLIS_IN_SECOND * 2L,
                         audioPath = "path2"
                     ),
                 )

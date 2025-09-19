@@ -91,9 +91,7 @@ fun PlaylistDetailScreen(
         modifier = modifier,
         state = state,
         playlistActions = playlistDetailViewModel,
-        onBackPressed = onBackPressed,
         onSongClicked = playlistDetailViewModel::onSongClicked,
-        onEdit = {},
     )
 }
 
@@ -130,7 +128,7 @@ internal fun PlaylistDetailContent(
             modifier = 
             Modifier
                 .fillMaxSize()
-                .padding(top = paddingValues.calculateTopPadding())
+                .padding(top = 0.dp)
                 .nestedScroll(topBarScrollBehavior.nestedScrollConnection),
             state = listState,
         ) {

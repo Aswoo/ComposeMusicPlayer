@@ -17,7 +17,7 @@ class CreatePlaylistUseCaseTest {
     }
 
     @Test
-    fun `createPlaylist should add playlist to repository`() = runTest {
+    fun `플레이리스트_생성시_저장소에_플레이리스트가_추가된다`() = runTest {
         // Given
         val playlistName = "Test Playlist"
 

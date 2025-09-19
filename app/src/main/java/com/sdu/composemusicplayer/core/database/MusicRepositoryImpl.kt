@@ -22,7 +22,7 @@ class MusicRepositoryImpl @Inject constructor(
 
     override suspend fun insertMusic(music: MusicEntity) = musicDao.insert(music)
 
-    override suspend fun insertMusics(music: List<MusicEntity>) = musicDao.insert(music)
+    override suspend fun insertMusics(vararg music: MusicEntity) = musicDao.insert(music.toList())
 
     override suspend fun syncMusicWithDevice(
         isTrackSmallerThan100KBSkipped: Boolean,
@@ -130,10 +130,7 @@ class MusicRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteMusics(
-        music: List<MusicEntity>,
-        context: Context,
-    ) {
+    override suspend fun deleteMusics(vararg music: MusicEntity, context: Context) {
         music.forEach { musicItem ->
             val deletedFromDevice = context.contentResolver.delete(
                 Uri.parse(musicItem.audioPath),
@@ -146,6 +143,6 @@ class MusicRepositoryImpl @Inject constructor(
             }
         }
 
-        musicDao.delete(music)
+        musicDao.delete(music.toList())
     }
 }

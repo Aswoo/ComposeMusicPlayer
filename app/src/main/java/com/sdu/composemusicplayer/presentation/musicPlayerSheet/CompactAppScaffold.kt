@@ -39,6 +39,7 @@ import androidx.navigation.NavDestination
 import com.sdu.composemusicplayer.MusicAppState
 import com.sdu.composemusicplayer.navigation.Routes
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.calculateBottomPaddingForContent
+import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.CompactScreenUiStateConfig
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.rememberCompactScreenUiState
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.update
 import kotlinx.coroutines.launch
@@ -99,13 +100,15 @@ fun CompactAppScaffold(
 
     val uiState =
         rememberCompactScreenUiState(
-            screenHeightPx = layoutHeightPx,
-            playerAnchors = playerScreenAnchors,
-            scrollProvider = scrollProvider,
-            bottomBarHeightPx = bottomNavBarHeightPx.toInt(),
-            density = density,
-            isPinnedMode = false,
-            isPlayerVisible = shouldShowPlayerBar,
+            config = CompactScreenUiStateConfig(
+                screenHeightPx = layoutHeightPx,
+                playerAnchors = playerScreenAnchors,
+                scrollProvider = scrollProvider,
+                bottomBarHeightPx = bottomNavBarHeightPx.toInt(),
+                density = density,
+                isPinnedMode = false,
+                isPlayerVisible = shouldShowPlayerBar,
+            )
         )
 
     // App itself
