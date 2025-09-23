@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,9 +13,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.twotone.Pause
 import androidx.compose.material.icons.twotone.PlayArrow
 import androidx.compose.material.icons.twotone.SkipNext
@@ -57,6 +61,8 @@ fun MiniPlayer(
     onTogglePlayback: () -> Unit,
     onNext: () -> Unit,
     onPrevious: () -> Unit,
+    bluetoothDeviceName: String? = null,
+    onBluetoothDeviceClick: () -> Unit = {},
 ) {
     val song = state.currentPlayedMusic
 
@@ -86,12 +92,31 @@ fun MiniPlayer(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.Start,
         ) {
-            Text(
-                modifier = Modifier.basicMarquee(Int.MAX_VALUE),
-                text = song.title,
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.White,
-            )
+            // 곡 제목과 블루투스 아이콘을 같은 행에 배치
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                // 블루투스 아이콘을 곡 제목 왼쪽에 배치
+                if (bluetoothDeviceName != null) {
+                    Icon(
+                        imageVector = Icons.Filled.Bluetooth,
+                        contentDescription = bluetoothDeviceName,
+                        tint = SpotiGreen,
+                        modifier = Modifier
+                            .size(16.dp)
+                            .clickable { onBluetoothDeviceClick() }
+                            .padding(end = 6.dp)
+                    )
+                }
+
+                Text(
+                    modifier = Modifier.basicMarquee(Int.MAX_VALUE),
+                    text = song.title,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White,
+                )
+            }
             Text(
                 modifier = Modifier,
                 text = song.artist.orEmpty(),

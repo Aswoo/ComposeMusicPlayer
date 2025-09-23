@@ -2,6 +2,8 @@
 package com.sdu.composemusicplayer.presentation.musicPlayerSheet
 
 import android.app.Activity
+import android.content.Intent
+import android.provider.Settings
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -33,8 +35,10 @@ import androidx.compose.material.icons.rounded.PauseCircle
 import androidx.compose.material.icons.rounded.PlayCircle
 import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material.icons.rounded.SkipPrevious
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -62,11 +66,16 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sdu.composemusicplayer.core.constants.AppConstants
+import com.sdu.composemusicplayer.core.audio.BluetoothUtil
+import com.sdu.composemusicplayer.presentation.bluetooth.BluetoothConnectBottomSheet
+import com.sdu.composemusicplayer.presentation.bluetooth.BluetoothDevice
+import com.sdu.composemusicplayer.presentation.bluetooth.DeviceType
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.component.ExpandedMusicPlayerContent
 import com.sdu.composemusicplayer.presentation.player.MusicUiState
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Suppress("LongParameterList")
 fun PlayerScreen(
@@ -148,6 +157,9 @@ internal fun PlayerScreen(
             var isShowingQueue by remember {
                 mutableStateOf(false)
             }
+            // 블루투스 바텀시트 상태 변수들
+            var showBluetoothBottomSheet by remember { mutableStateOf(false) }
+            val context = LocalContext.current
             FullScreenNowPlaying(
                 modifier =
                 Modifier
@@ -185,7 +197,56 @@ internal fun PlayerScreen(
                 onTogglePlayback = { viewModel.onEvent(PlayerEvent.PlayPause(uiState.isPlaying)) },
                 onNext = { viewModel.onEvent(PlayerEvent.Next) },
                 onPrevious = { viewModel.onEvent(PlayerEvent.Previous) },
+                bluetoothDeviceName = "승우의 Buds2 Pro", // TODO: 실제 블루투스 기기 이름 가져오기
+                onBluetoothDeviceClick = {
+                    showBluetoothBottomSheet = true
+                },
             )
+
+            // 블루투스 Connect 바텀시트
+            if (showBluetoothBottomSheet) {
+                @OptIn(ExperimentalMaterial3Api::class)
+                ModalBottomSheet(
+                    onDismissRequest = { showBluetoothBottomSheet = false },
+                    containerColor = Color(0xFF121212)
+                ) {
+                    BluetoothConnectBottomSheet(
+                        onDismiss = { showBluetoothBottomSheet = false },
+                        onDeviceSelected = { device ->
+                            // 기기 선택에 따른 오디오 출력 변경
+                            when (device.type) {
+                                DeviceType.PHONE -> {
+                                    // 휴대폰 스피커로 전환
+                                    BluetoothUtil.switchToPhoneSpeaker(context)
+                                }
+                                DeviceType.EARPHONES -> {
+                                    // 블루투스 기기로 전환
+                                    BluetoothUtil.switchToBluetoothDevice(context)
+                                }
+                            }
+                            showBluetoothBottomSheet = false
+                        },
+                        onBluetoothSettingsClick = {
+                            // 블루투스 설정 화면으로 이동
+                            val bluetoothSettingsIntent = Intent().apply {
+                                action = Settings.ACTION_BLUETOOTH_SETTINGS
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            }
+                            try {
+                                context.startActivity(bluetoothSettingsIntent)
+                            } catch (e: Exception) {
+                                // 블루투스 설정이 없는 경우 일반 설정으로 이동
+                                val settingsIntent = Intent().apply {
+                                    action = Settings.ACTION_SETTINGS
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                }
+                                context.startActivity(settingsIntent)
+                            }
+                            showBluetoothBottomSheet = false
+                        }
+                    )
+                }
+            }
         }
     }
 }

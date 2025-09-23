@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -57,6 +58,9 @@ private fun AlbumArt(music: Music) {
             .padding(VERTICAL_PADDING)
             .size(ALBUM_ART_SIZE)
             .clip(RoundedCornerShape(ITEM_SHAPE_RADIUS)),
+        placeholder = painterResource(id = R.drawable.ic_music_unknown),
+        error = painterResource(id = R.drawable.ic_music_unknown),
+        fallback = painterResource(id = R.drawable.ic_music_unknown)
     )
 }
 
