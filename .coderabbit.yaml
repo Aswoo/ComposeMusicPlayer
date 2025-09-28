@@ -1,0 +1,81 @@
+# CodeRabbit Configuration for ComposeMusicPlayer
+# Based on: https://docs.coderabbit.ai/getting-started/configure-coderabbit
+
+# 기본 설정
+chat: true
+summarize: true
+auto_review: true
+
+# 리뷰 설정
+reviews:
+  # 풀 리퀘스트 리뷰 활성화
+  pull_requests:
+    enabled: true
+    # 코드 개선 사항 제안
+    suggest_reviewers: true
+    # 보안 이슈 감지
+    security_review: true
+    # 성능 이슈 감지
+    performance_review: true
+    # 코드 스타일 및 품질 검토
+    quality_review: true
+
+# 코드 분석 설정
+code_analysis:
+  # 매직 넘버 감지
+  magic_numbers: true
+  # 하드코딩된 문자열 감지
+  hardcoded_strings: true
+  # 주석 처리된 코드 감지
+  commented_code: true
+  # TODO 주석 감지
+  todo_comments: true
+  # 중복 코드 감지
+  duplicate_code: true
+  # 복잡한 함수 감지
+  complex_functions: true
+
+# Android/Kotlin 특화 설정
+languages:
+  kotlin:
+    # Kotlin 코딩 컨벤션 검토
+    style_guide: true
+    # Android 베스트 프랙티스 검토
+    android_best_practices: true
+    # Jetpack Compose 베스트 프랙티스
+    compose_best_practices: true
+
+# 파일 경로별 설정
+paths:
+  # 테스트 파일에 대한 설정
+  "**/test/**":
+    reviews:
+      pull_requests:
+        # 테스트 코드 품질 검토
+        quality_review: true
+  
+  # 리소스 파일 제외
+  "**/*.xml":
+    reviews:
+      pull_requests:
+        enabled: false
+  
+  # 빌드 파일 제외
+  "**/build/**":
+    reviews:
+      pull_requests:
+        enabled: false
+
+# 커밋 메시지 설정
+commit_message:
+  # 커밋 메시지 형식 검토
+  format_review: true
+  # 컨벤셔널 커밋 형식 권장
+  conventional_commits: true
+
+# 알림 설정
+notifications:
+  # 리뷰 완료 시 알림
+  review_complete: true
+  # 중요한 이슈 발견 시 알림
+  critical_issues: true
