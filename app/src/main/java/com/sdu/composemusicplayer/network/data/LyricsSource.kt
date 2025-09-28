@@ -1,4 +1,5 @@
 @file:Suppress("TooGenericExceptionCaught", "SwallowedException")
+
 package com.sdu.composemusicplayer.network.data
 
 import com.sdu.composemusicplayer.network.model.NetworkErrorException

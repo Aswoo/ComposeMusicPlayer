@@ -1,13 +1,13 @@
 @file:OptIn(UnstableApi::class)
+
 package com.sdu.composemusicplayer.mediaPlayer.service
 
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.media3.common.util.UnstableApi
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
-
-import androidx.media3.common.util.UnstableApi
 
 class PlayerServiceManager
     @Inject

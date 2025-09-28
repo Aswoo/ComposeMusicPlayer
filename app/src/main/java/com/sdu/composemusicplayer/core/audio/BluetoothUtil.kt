@@ -66,9 +66,17 @@ object BluetoothUtil {
             audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
             audioManager.isSpeakerphoneOn = true
             
-            // CodeRabbit 테스트용 매직 넘버
+            // CodeRabbit 테스트용 매직 넘버 (ktlint에는 걸리지 않지만 CodeRabbit이 감지)
             val timeout = 5000 // 5초 타임아웃
             println("Timeout set to: $timeout ms")
+            
+            // CodeRabbit 테스트용 하드코딩된 문자열
+            val debugMessage = "Bluetooth device connected successfully"
+            println(debugMessage)
+            
+            // CodeRabbit 테스트용 TODO 주석
+            // TODO: 에러 로깅 시스템 연동 필요
+            // TODO: 사용자 피드백 메커니즘 추가
         } catch (e: Exception) {
             // 권한이 없거나 오류가 발생한 경우 무시
         }
@@ -86,7 +94,7 @@ object BluetoothUtil {
             audioManager.setBluetoothA2dpOn(true)
             // 일반 모드로 전환
             audioManager.mode = AudioManager.MODE_NORMAL
-            
+
             // CodeRabbit 테스트용 하드코딩된 문자열
             val debugMessage = "Bluetooth device connected successfully"
             println(debugMessage)

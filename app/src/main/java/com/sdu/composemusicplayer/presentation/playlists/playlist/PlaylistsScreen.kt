@@ -108,29 +108,30 @@ fun PlaylistsScreen(
     var showSheet by remember { mutableStateOf(false) }
 
     PlaylistManagementBottomSheet(
-        config = PlaylistManagementBottomSheetConfig(
-            showSheet = showSheet,
-            sheetState = sheetState,
-            selectedPlaylist = selectedPlaylist,
-            onDismissRequest = { showSheet = false },
-            onRenameClick = {
-                coroutineScope.launch {
-                    sheetState.hide()
-                    renameMode = true
-                }
-            },
-            onPinClick = { /* TODO */ },
-            onDeleteClick = {
-                deletePlaylistDialog.launch()
-                showSheet = false
-            }
-        )
+        config =
+            PlaylistManagementBottomSheetConfig(
+                showSheet = showSheet,
+                sheetState = sheetState,
+                selectedPlaylist = selectedPlaylist,
+                onDismissRequest = { showSheet = false },
+                onRenameClick = {
+                    coroutineScope.launch {
+                        sheetState.hide()
+                        renameMode = true
+                    }
+                },
+                onPinClick = { /* TODO */ },
+                onDeleteClick = {
+                    deletePlaylistDialog.launch()
+                    showSheet = false
+                },
+            ),
     )
 
     PlaylistsScreenScaffold(
         modifier = modifier,
         topBarScrollBehavior = topBarScrollBehavior,
-        onCreatePlaylist = { createPlaylistsDialog.launch() }
+        onCreatePlaylist = { createPlaylistsDialog.launch() },
     ) { paddingValues ->
         PlaylistsScreenContent(
             modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
@@ -140,7 +141,7 @@ fun PlaylistsScreen(
             onPlaylistLongClicked = {
                 selectedPlaylist = it
                 showSheet = true
-            }
+            },
         )
     }
 }
@@ -153,14 +154,12 @@ data class PlaylistManagementBottomSheetConfig(
     val onDismissRequest: () -> Unit,
     val onRenameClick: () -> Unit,
     val onPinClick: () -> Unit,
-    val onDeleteClick: () -> Unit
+    val onDeleteClick: () -> Unit,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PlaylistManagementBottomSheet(
-    config: PlaylistManagementBottomSheetConfig
-) {
+private fun PlaylistManagementBottomSheet(config: PlaylistManagementBottomSheetConfig) {
     if (config.showSheet) {
         ModalBottomSheet(
             onDismissRequest = config.onDismissRequest,
@@ -192,7 +191,7 @@ private fun PlaylistsScreenScaffold(
     modifier: Modifier,
     topBarScrollBehavior: TopAppBarScrollBehavior,
     onCreatePlaylist: () -> Unit,
-    content: @Composable (PaddingValues) -> Unit
+    content: @Composable (PaddingValues) -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -216,14 +215,15 @@ private fun PlaylistsScreenScaffold(
                     }
                 },
                 scrollBehavior = topBarScrollBehavior,
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Black,
-                    titleContentColor = SpotiWhite,
-                    actionIconContentColor = SpotiWhite,
-                ),
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Black,
+                        titleContentColor = SpotiWhite,
+                        actionIconContentColor = SpotiWhite,
+                    ),
             )
         },
-        content = content
+        content = content,
     )
 }
 
@@ -234,7 +234,7 @@ private fun PlaylistsScreenContent(
     state: PlaylistsScreenState,
     topBarScrollBehavior: TopAppBarScrollBehavior,
     onPlaylistClicked: (Int) -> Unit,
-    onPlaylistLongClicked: (PlaylistInfo) -> Unit
+    onPlaylistLongClicked: (PlaylistInfo) -> Unit,
 ) {
     if (state is PlaylistsScreenState.Loading) {
         Box(
@@ -247,9 +247,10 @@ private fun PlaylistsScreenContent(
         val list = (state as PlaylistsScreenState.Success).playlists
 
         LazyColumn(
-            modifier = modifier
-                .fillMaxSize()
-                .nestedScroll(topBarScrollBehavior.nestedScrollConnection),
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .nestedScroll(topBarScrollBehavior.nestedScrollConnection),
         ) {
             item {
                 Divider(Modifier.fillMaxWidth(), color = SpotiDivider)
@@ -261,12 +262,13 @@ private fun PlaylistsScreenContent(
                     currentRenameId = null
                 }
                 PlaylistRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .combinedClickable(
-                            onClick = { onPlaylistClicked(it.id) },
-                            onLongClick = { onPlaylistLongClicked(it) },
-                        ),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .combinedClickable(
+                                onClick = { onPlaylistClicked(it.id) },
+                                onLongClick = { onPlaylistLongClicked(it) },
+                            ),
                     playlistInfo = it,
                 )
 

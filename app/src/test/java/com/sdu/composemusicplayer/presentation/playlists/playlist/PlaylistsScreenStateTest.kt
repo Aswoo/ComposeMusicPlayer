@@ -9,12 +9,12 @@ import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
 class PlaylistsScreenStateTest {
-
-    private val testPlaylistInfo = PlaylistInfo(
-        id = 1,
-        name = "Test Playlist",
-        numberOfMusic = 5
-    )
+    private val testPlaylistInfo =
+        PlaylistInfo(
+            id = 1,
+            name = "Test Playlist",
+            numberOfMusic = 5,
+        )
 
     @Test
     fun `로딩_상태가_올바르게_식별된다`() {
@@ -52,11 +52,12 @@ class PlaylistsScreenStateTest {
     @Test
     fun `성공_상태에서_여러_플레이리스트를_올바르게_처리한다`() {
         // Given
-        val playlists = listOf(
-            testPlaylistInfo,
-            testPlaylistInfo.copy(id = 2, name = "Playlist 2"),
-            testPlaylistInfo.copy(id = 3, name = "Playlist 3")
-        )
+        val playlists =
+            listOf(
+                testPlaylistInfo,
+                testPlaylistInfo.copy(id = 2, name = "Playlist 2"),
+                testPlaylistInfo.copy(id = 3, name = "Playlist 3"),
+            )
         val successState = PlaylistsScreenState.Success(playlists)
 
         // Then
@@ -70,11 +71,12 @@ class PlaylistsScreenStateTest {
     @Test
     fun `성공_상태에서_플레이리스트_순서가_유지된다`() {
         // Given
-        val playlists = listOf(
-            testPlaylistInfo.copy(id = 3, name = "Third"),
-            testPlaylistInfo.copy(id = 1, name = "First"),
-            testPlaylistInfo.copy(id = 2, name = "Second")
-        )
+        val playlists =
+            listOf(
+                testPlaylistInfo.copy(id = 3, name = "Third"),
+                testPlaylistInfo.copy(id = 1, name = "First"),
+                testPlaylistInfo.copy(id = 2, name = "Second"),
+            )
         val successState = PlaylistsScreenState.Success(playlists)
 
         // Then
@@ -86,11 +88,12 @@ class PlaylistsScreenStateTest {
     @Test
     fun `성공_상태에서_다양한_음악_개수를_가진_플레이리스트를_올바르게_처리한다`() {
         // Given
-        val playlists = listOf(
-            testPlaylistInfo.copy(numberOfMusic = 0),
-            testPlaylistInfo.copy(id = 2, name = "Playlist 2", numberOfMusic = 10),
-            testPlaylistInfo.copy(id = 3, name = "Playlist 3", numberOfMusic = 1)
-        )
+        val playlists =
+            listOf(
+                testPlaylistInfo.copy(numberOfMusic = 0),
+                testPlaylistInfo.copy(id = 2, name = "Playlist 2", numberOfMusic = 10),
+                testPlaylistInfo.copy(id = 3, name = "Playlist 3", numberOfMusic = 1),
+            )
         val successState = PlaylistsScreenState.Success(playlists)
 
         // Then

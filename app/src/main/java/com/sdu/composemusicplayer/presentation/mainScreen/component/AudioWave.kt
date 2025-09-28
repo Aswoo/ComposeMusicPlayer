@@ -50,13 +50,13 @@ data class BarAnimation(
     val animationDelay: Long,
     val animationDuration: Int,
     val amplitude: Float,
-    val resetDuration: Int = 150
+    val resetDuration: Int = 150,
 )
 
 @Composable
 private fun animateBarFraction(
     isMusicPlaying: Boolean,
-    animation: BarAnimation
+    animation: BarAnimation,
 ): Float {
     var fraction by remember { mutableFloatStateOf(animation.initialFraction) }
 
@@ -90,48 +90,53 @@ private fun animateBarFraction(
 
 @Composable
 fun AudioWave(isMusicPlaying: Boolean) {
-    val fraction1 = animateBarFraction(
-        isMusicPlaying,
-        BarAnimation(
-            BAR_1_INITIAL_FRACTION,
-            BAR_1_ANIMATION_DELAY,
-            BAR_1_ANIMATION_DURATION,
-            BAR_1_AMPLITUDE
+    val fraction1 =
+        animateBarFraction(
+            isMusicPlaying,
+            BarAnimation(
+                BAR_1_INITIAL_FRACTION,
+                BAR_1_ANIMATION_DELAY,
+                BAR_1_ANIMATION_DURATION,
+                BAR_1_AMPLITUDE,
+            ),
         )
-    )
-    val fraction2 = animateBarFraction(
-        isMusicPlaying,
-        BarAnimation(
-            BAR_2_INITIAL_FRACTION,
-            BAR_2_ANIMATION_DELAY,
-            BAR_2_ANIMATION_DURATION,
-            BAR_2_AMPLITUDE
+    val fraction2 =
+        animateBarFraction(
+            isMusicPlaying,
+            BarAnimation(
+                BAR_2_INITIAL_FRACTION,
+                BAR_2_ANIMATION_DELAY,
+                BAR_2_ANIMATION_DURATION,
+                BAR_2_AMPLITUDE,
+            ),
         )
-    )
-    val fraction3 = animateBarFraction(
-        isMusicPlaying,
-        BarAnimation(
-            BAR_3_INITIAL_FRACTION,
-            BAR_3_ANIMATION_DELAY,
-            BAR_3_ANIMATION_DURATION,
-            BAR_3_AMPLITUDE
+    val fraction3 =
+        animateBarFraction(
+            isMusicPlaying,
+            BarAnimation(
+                BAR_3_INITIAL_FRACTION,
+                BAR_3_ANIMATION_DELAY,
+                BAR_3_ANIMATION_DURATION,
+                BAR_3_AMPLITUDE,
+            ),
         )
-    )
 
     Row(
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier
-            .width(WAVE_WIDTH)
-            .height(WAVE_HEIGHT),
+        modifier =
+            Modifier
+                .width(WAVE_WIDTH)
+                .height(WAVE_HEIGHT),
     ) {
         listOf(fraction1, fraction2, fraction3).forEach { fraction ->
             Box(
-                modifier = Modifier
-                    .width(BAR_WIDTH)
-                    .fillMaxHeight(fraction.coerceIn(0f, 1f))
-                    .clip(RoundedCornerShape(BAR_CORNER_RADIUS))
-                    .background(MaterialTheme.colorScheme.primary),
+                modifier =
+                    Modifier
+                        .width(BAR_WIDTH)
+                        .fillMaxHeight(fraction.coerceIn(0f, 1f))
+                        .clip(RoundedCornerShape(BAR_CORNER_RADIUS))
+                        .background(MaterialTheme.colorScheme.primary),
             )
         }
     }

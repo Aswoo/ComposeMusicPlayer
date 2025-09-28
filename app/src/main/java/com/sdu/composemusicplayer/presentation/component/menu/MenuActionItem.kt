@@ -16,14 +16,12 @@ data class MenuActionItem(
     val callback: () -> Unit,
 )
 
-fun MutableList<MenuActionItem>.delete(callback: () -> Unit) =
-    add(MenuActionItem(Icons.Rounded.Delete, "Delete", callback))
+fun MutableList<MenuActionItem>.delete(callback: () -> Unit) = add(MenuActionItem(Icons.Rounded.Delete, "Delete", callback))
 
 fun MutableList<MenuActionItem>.removeFromPlaylist(callback: () -> Unit) =
     add(MenuActionItem(Icons.Rounded.PlaylistRemove, "Remove from Playlist", callback))
 
-fun MutableList<MenuActionItem>.share(callback: () -> Unit) =
-    add(MenuActionItem(Icons.Rounded.Share, "Share", callback))
+fun MutableList<MenuActionItem>.share(callback: () -> Unit) = add(MenuActionItem(Icons.Rounded.Share, "Share", callback))
 
 fun buildCommonMusicActions(
     music: Music,

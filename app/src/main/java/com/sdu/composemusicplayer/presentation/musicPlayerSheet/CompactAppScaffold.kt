@@ -38,8 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import com.sdu.composemusicplayer.MusicAppState
 import com.sdu.composemusicplayer.navigation.Routes
-import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.calculateBottomPaddingForContent
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.CompactScreenUiStateConfig
+import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.calculateBottomPaddingForContent
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.rememberCompactScreenUiState
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.update
 import kotlinx.coroutines.launch
@@ -100,15 +100,16 @@ fun CompactAppScaffold(
 
     val uiState =
         rememberCompactScreenUiState(
-            config = CompactScreenUiStateConfig(
-                screenHeightPx = layoutHeightPx,
-                playerAnchors = playerScreenAnchors,
-                scrollProvider = scrollProvider,
-                bottomBarHeightPx = bottomNavBarHeightPx.toInt(),
-                density = density,
-                isPinnedMode = false,
-                isPlayerVisible = shouldShowPlayerBar,
-            )
+            config =
+                CompactScreenUiStateConfig(
+                    screenHeightPx = layoutHeightPx,
+                    playerAnchors = playerScreenAnchors,
+                    scrollProvider = scrollProvider,
+                    bottomBarHeightPx = bottomNavBarHeightPx.toInt(),
+                    density = density,
+                    isPinnedMode = false,
+                    isPlayerVisible = shouldShowPlayerBar,
+                ),
         )
 
     // App itself
@@ -138,57 +139,57 @@ fun CompactAppScaffold(
                 ),
         ) {
             AnimatedVisibility(
-            visible = shouldShowPlayerBar,
-            enter =
-                slideInVertically(
-                    tween(ANIMATION_DURATION),
-                    initialOffsetY = { playerBarHeightPx.roundToInt() * INITIAL_OFFSET_Y_MULTIPLIER },
-                ),
-            exit =
-                slideOutVertically(
-                    tween(ANIMATION_DURATION),
-                    targetOffsetY = { -playerBarHeightPx.roundToInt() },
-                ),
-        ) {
-            PlayerScreen(
-                barHeight = COMPACT_NOW_PLAYING_BAR_HEIGHT,
-                nowPlayingBarPadding = PaddingValues(0.dp),
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .offset {
-                            uiState.getNowPlayingOffset()
-                        }.onSizeChanged { layoutSize ->
-                            layoutHeightPx = layoutSize.height
-                            playerBarMinOffset =
-                                playerScreenAnchors
-                                    .update(
-                                        layoutHeightPx,
-                                        playerBarHeightPx.toInt(),
-                                        bottomNavBarHeightPx.toInt(),
-                                    )
-                        }.anchoredDraggable(playerScreenAnchors, Orientation.Vertical)
-                        .pointerInput(Unit) {
-                            // PlayerScreen에서 제스처 차단
-                            detectHorizontalDragGestures { _, _ ->
-                                // 좌우 스와이프 이벤트를 차단
-                            }
-                        },
-                onCollapseNowPlaying = {
-                    appState.coroutineScope.launch {
-                        playerScreenAnchors.animateTo(BarState.COLLAPSED)
-                    }
-                },
-                onExpandNowPlaying = {
-                    appState.coroutineScope.launch {
-                        playerScreenAnchors.animateTo(BarState.EXPANDED)
-                    }
-                },
-                isExpanded = playerScreenAnchors.currentValue == BarState.EXPANDED,
-                progressProvider = scrollProvider,
-                viewModel = appState.playerViewModel,
-            )
-        }
+                visible = shouldShowPlayerBar,
+                enter =
+                    slideInVertically(
+                        tween(ANIMATION_DURATION),
+                        initialOffsetY = { playerBarHeightPx.roundToInt() * INITIAL_OFFSET_Y_MULTIPLIER },
+                    ),
+                exit =
+                    slideOutVertically(
+                        tween(ANIMATION_DURATION),
+                        targetOffsetY = { -playerBarHeightPx.roundToInt() },
+                    ),
+            ) {
+                PlayerScreen(
+                    barHeight = COMPACT_NOW_PLAYING_BAR_HEIGHT,
+                    nowPlayingBarPadding = PaddingValues(0.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .offset {
+                                uiState.getNowPlayingOffset()
+                            }.onSizeChanged { layoutSize ->
+                                layoutHeightPx = layoutSize.height
+                                playerBarMinOffset =
+                                    playerScreenAnchors
+                                        .update(
+                                            layoutHeightPx,
+                                            playerBarHeightPx.toInt(),
+                                            bottomNavBarHeightPx.toInt(),
+                                        )
+                            }.anchoredDraggable(playerScreenAnchors, Orientation.Vertical)
+                            .pointerInput(Unit) {
+                                // PlayerScreen에서 제스처 차단
+                                detectHorizontalDragGestures { _, _ ->
+                                    // 좌우 스와이프 이벤트를 차단
+                                }
+                            },
+                    onCollapseNowPlaying = {
+                        appState.coroutineScope.launch {
+                            playerScreenAnchors.animateTo(BarState.COLLAPSED)
+                        }
+                    },
+                    onExpandNowPlaying = {
+                        appState.coroutineScope.launch {
+                            playerScreenAnchors.animateTo(BarState.EXPANDED)
+                        }
+                    },
+                    isExpanded = playerScreenAnchors.currentValue == BarState.EXPANDED,
+                    progressProvider = scrollProvider,
+                    viewModel = appState.playerViewModel,
+                )
+            }
         }
 
         MusicBottomNavBar(

@@ -89,7 +89,7 @@ fun AddToPlaylistDialog(
             AddToPlaylistDialogContent(
                 state = state,
                 dialogEntries = dialogEntries,
-                onCreatePlaylist = createPlaylistsDialog::launch
+                onCreatePlaylist = createPlaylistsDialog::launch,
             )
         },
         title = { Text(text = "Add to Playlists") },
@@ -101,7 +101,7 @@ fun AddToPlaylistDialog(
 private fun AddToPlaylistDialogContent(
     state: AddToPlaylistState,
     dialogEntries: AddToPlaylistDialogState,
-    onCreatePlaylist: () -> Unit
+    onCreatePlaylist: () -> Unit,
 ) {
     if (state is AddToPlaylistState.Loading) {
         Box {
@@ -111,10 +111,11 @@ private fun AddToPlaylistDialogContent(
         LazyColumn {
             itemsIndexed(dialogEntries.entries) { index, entry ->
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(4.dp))
-                        .clickable { dialogEntries.toggle(index) },
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(4.dp))
+                            .clickable { dialogEntries.toggle(index) },
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Checkbox(
@@ -132,11 +133,12 @@ private fun AddToPlaylistDialogContent(
 
             item {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(4.dp))
-                        .clickable(onClick = onCreatePlaylist)
-                        .padding(8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(4.dp))
+                            .clickable(onClick = onCreatePlaylist)
+                            .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(imageVector = Icons.Rounded.Add, contentDescription = null)

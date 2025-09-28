@@ -38,15 +38,17 @@ val SpotiLightGray = Color(AndroidConstants.Color.SPOTIFY_LIGHT_GRAY)
 val LightRed = Color(AndroidConstants.Color.LIGHT_RED)
 
 val TextDefaultColor: Color
-    @Composable get() = if (!isSystemInDarkTheme()) {
-        Color(AndroidConstants.Color.TEXT_DEFAULT_LIGHT)
-    } else {
-        Color(AndroidConstants.Color.TEXT_DEFAULT_DARK)
-    }
+    @Composable get() =
+        if (!isSystemInDarkTheme()) {
+            Color(AndroidConstants.Color.TEXT_DEFAULT_LIGHT)
+        } else {
+            Color(AndroidConstants.Color.TEXT_DEFAULT_DARK)
+        }
 
 val TintDefaultColor: Color
-    @Composable get() = if (!isSystemInDarkTheme()) {
-        Color(AndroidConstants.Color.TEXT_DEFAULT_LIGHT)
-    } else {
-        Color(AndroidConstants.Color.TEXT_DEFAULT_DARK)
-    }
+    @Composable get() =
+        if (!isSystemInDarkTheme()) {
+            Color(AndroidConstants.Color.TEXT_DEFAULT_LIGHT)
+        } else {
+            Color(AndroidConstants.Color.TEXT_DEFAULT_DARK)
+        }

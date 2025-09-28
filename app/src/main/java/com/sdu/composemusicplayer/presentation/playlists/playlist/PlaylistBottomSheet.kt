@@ -48,12 +48,13 @@ private val ACTION_ITEM_SPACING = 8.dp
 @Composable
 private fun DragHandle() {
     Box(
-        modifier = Modifier
-            .padding(vertical = DRAG_HANDLE_VERTICAL_PADDING)
-            .size(width = DRAG_HANDLE_WIDTH, height = DRAG_HANDLE_HEIGHT)
-            .clip(RoundedCornerShape(DRAG_HANDLE_SHAPE_RADIUS))
-            .background(SpotiLightGray.copy(alpha = DRAG_HANDLE_ALPHA))
-            .fillMaxWidth(),
+        modifier =
+            Modifier
+                .padding(vertical = DRAG_HANDLE_VERTICAL_PADDING)
+                .size(width = DRAG_HANDLE_WIDTH, height = DRAG_HANDLE_HEIGHT)
+                .clip(RoundedCornerShape(DRAG_HANDLE_SHAPE_RADIUS))
+                .background(SpotiLightGray.copy(alpha = DRAG_HANDLE_ALPHA))
+                .fillMaxWidth(),
     )
 }
 
@@ -95,9 +96,10 @@ fun PlaylistBottomSheet(
         dragHandle = { DragHandle() },
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = BOTTOM_SHEET_HORIZONTAL_PADDING, vertical = BOTTOM_SHEET_VERTICAL_PADDING),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = BOTTOM_SHEET_HORIZONTAL_PADDING, vertical = BOTTOM_SHEET_VERTICAL_PADDING),
         ) {
             PlaylistHeader(playlistName)
             Spacer(modifier = Modifier.height(DRAG_HANDLE_HEIGHT))
@@ -138,12 +140,12 @@ fun PlaylistActionItem(
 ) {
     Row(
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
-            .clickable(
-                onClick = onClick,
-            ).padding(vertical = 10.dp, horizontal = 12.dp),
+            Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
+                .clickable(
+                    onClick = onClick,
+                ).padding(vertical = 10.dp, horizontal = 12.dp),
         // vertical padding 줄임
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -152,9 +154,9 @@ fun PlaylistActionItem(
             contentDescription = text,
             tint = iconTint,
             modifier =
-            Modifier
-                .padding(end = 16.dp) // 간격 약간 줄임
-                .size(28.dp),
+                Modifier
+                    .padding(end = 16.dp) // 간격 약간 줄임
+                    .size(28.dp),
         )
         Text(
             text = text,

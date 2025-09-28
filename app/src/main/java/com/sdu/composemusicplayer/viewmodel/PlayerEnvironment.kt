@@ -1,23 +1,21 @@
 @file:Suppress("VariableNaming")
+
 package com.sdu.composemusicplayer.viewmodel
 
-import android.content.Context
 import android.os.Handler
 import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import com.sdu.composemusicplayer.domain.repository.MusicRepository
-import com.sdu.composemusicplayer.domain.repository.QueueRepository
 import com.sdu.composemusicplayer.core.database.entity.MusicEntity
 import com.sdu.composemusicplayer.core.database.mapper.toDomain
 import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.MusicQueue
 import com.sdu.composemusicplayer.domain.model.PlaySource
 import com.sdu.composemusicplayer.domain.model.QueueItem
+import com.sdu.composemusicplayer.domain.repository.MusicRepository
 import com.sdu.composemusicplayer.mediaPlayer.service.PlayerServiceManager
 import com.sdu.composemusicplayer.utils.AndroidConstants
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -264,6 +262,4 @@ class PlayerEnvironment
             handler.removeCallbacks(updateRunnable)
             handler.post(updateRunnable)
         }
-
-        
     }

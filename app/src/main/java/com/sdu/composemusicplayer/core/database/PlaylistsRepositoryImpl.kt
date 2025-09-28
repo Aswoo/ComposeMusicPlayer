@@ -1,7 +1,6 @@
 package com.sdu.composemusicplayer.core.database
 
 import com.sdu.composemusicplayer.core.constants.AppConstants
-import com.sdu.composemusicplayer.domain.repository.MusicRepository
 import com.sdu.composemusicplayer.core.database.dao.PlaylistDao
 import com.sdu.composemusicplayer.core.database.entity.PlaylistEntity
 import com.sdu.composemusicplayer.core.database.mapper.toDomain
@@ -10,6 +9,7 @@ import com.sdu.composemusicplayer.core.model.playlist.MusicUriMapper
 import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.Playlist
 import com.sdu.composemusicplayer.domain.model.PlaylistInfo
+import com.sdu.composemusicplayer.domain.repository.MusicRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -39,9 +39,11 @@ class PlaylistsRepositoryImpl
                 .map {
                     it.toDomainPlaylists()
                 }.stateIn(
-                    coroutineScope, 
-                    SharingStarted.WhileSubscribed(AppConstants.LYRICS_CACHE_DURATION_MS), 
-                    listOf()
+                    coroutineScope,
+                    SharingStarted.WhileSubscribed(
+                        AppConstants.LYRICS_CACHE_DURATION_MS,
+                    ),
+                    listOf(),
                 )
 
         override fun createPlaylist(name: String) {

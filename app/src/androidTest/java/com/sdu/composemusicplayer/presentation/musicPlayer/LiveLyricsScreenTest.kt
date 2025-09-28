@@ -334,9 +334,10 @@ class LiveLyricsScreenTest {
     @Test
     fun `네트워크_오류_상태일_때_재시도_버튼이_표시된다`() {
         // Arrange
-        uiStateFlow.value = defaultUiState.copy(
-            lyricsScreenState = LyricsScreenState.NoLyrics(NoLyricsReason.NETWORK_ERROR)
-        )
+        uiStateFlow.value =
+            defaultUiState.copy(
+                lyricsScreenState = LyricsScreenState.NoLyrics(NoLyricsReason.NETWORK_ERROR),
+            )
         val mockOnRetry = mockk<() -> Unit>(relaxed = true)
 
         // Act
@@ -359,9 +360,10 @@ class LiveLyricsScreenTest {
     @Test
     fun `가사가_없을_때_안내_메시지가_표시된다`() {
         // Arrange
-        uiStateFlow.value = defaultUiState.copy(
-            lyricsScreenState = LyricsScreenState.NoLyrics(NoLyricsReason.NOT_FOUND)
-        )
+        uiStateFlow.value =
+            defaultUiState.copy(
+                lyricsScreenState = LyricsScreenState.NoLyrics(NoLyricsReason.NOT_FOUND),
+            )
         val mockOnBack = mockk<() -> Unit>(relaxed = true)
 
         // Act
@@ -384,9 +386,10 @@ class LiveLyricsScreenTest {
     @Test
     fun `가사_검색_상태일_때_검색_중_메시지가_표시된다`() {
         // Arrange
-        uiStateFlow.value = defaultUiState.copy(
-            lyricsScreenState = LyricsScreenState.SearchingLyrics
-        )
+        uiStateFlow.value =
+            defaultUiState.copy(
+                lyricsScreenState = LyricsScreenState.SearchingLyrics,
+            )
 
         // Act
         composeTestRule.setContent {
@@ -407,17 +410,19 @@ class LiveLyricsScreenTest {
     @Test
     fun `동기화된_가사에서_현재_진행_시간이_올바르게_표시된다`() {
         // Arrange
-        val syncedLyrics = SynchronizedLyrics(
-            listOf(
-                SyncedLyricsSegment("첫 번째 가사", 0),
-                SyncedLyricsSegment("두 번째 가사", 5000),
-                SyncedLyricsSegment("세 번째 가사", 10000),
+        val syncedLyrics =
+            SynchronizedLyrics(
+                listOf(
+                    SyncedLyricsSegment("첫 번째 가사", 0),
+                    SyncedLyricsSegment("두 번째 가사", 5000),
+                    SyncedLyricsSegment("세 번째 가사", 10000),
+                ),
             )
-        )
-        uiStateFlow.value = defaultUiState.copy(
-            lyricsScreenState = LyricsScreenState.SyncedLyrics(syncedLyrics, LyricsFetchSource.FROM_SONG_METADATA),
-            currentProgress = 0.5f,
-        )
+        uiStateFlow.value =
+            defaultUiState.copy(
+                lyricsScreenState = LyricsScreenState.SyncedLyrics(syncedLyrics, LyricsFetchSource.FROM_SONG_METADATA),
+                currentProgress = 0.5f,
+            )
 
         // Act
         composeTestRule.setContent {

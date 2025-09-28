@@ -6,7 +6,7 @@ package com.sdu.composemusicplayer.presentation.bluetooth
 data class BluetoothDevice(
     val name: String,
     val type: DeviceType,
-    val isConnected: Boolean = false
+    val isConnected: Boolean = false,
 )
 
 /**
@@ -14,5 +14,5 @@ data class BluetoothDevice(
  */
 enum class DeviceType {
     EARPHONES, // 이어폰
-    PHONE      // 휴대폰
+    PHONE, // 휴대폰
 }

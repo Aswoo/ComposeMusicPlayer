@@ -14,8 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.sdu.composemusicplayer.core.constants.AppConstants
-import com.sdu.composemusicplayer.domain.repository.MediaRepository
 import com.sdu.composemusicplayer.domain.model.Music
+import com.sdu.composemusicplayer.domain.repository.MediaRepository
 
 fun interface MusicDeleteAction {
     fun deleteMusic(songs: List<Music>)

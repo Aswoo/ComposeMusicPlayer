@@ -26,22 +26,19 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.NavController
 import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.SortOption
 import com.sdu.composemusicplayer.domain.model.SortState
 import com.sdu.composemusicplayer.presentation.mainScreen.component.MusicItem
-import com.sdu.composemusicplayer.ui.theme.SpotiBackground
 import com.sdu.composemusicplayer.presentation.player.MusicUiState
-import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
+import com.sdu.composemusicplayer.ui.theme.SpotiBackground
+import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 
 private const val TAG = "MusicScreen"
 
 @Composable
-fun MainScreen(
-    playerVM: PlayerViewModel,
-) {
+fun MainScreen(playerVM: PlayerViewModel) {
     val musicUiState by playerVM.uiState.collectAsState()
 
     LaunchedEffect(musicUiState.currentPlayedMusic) {

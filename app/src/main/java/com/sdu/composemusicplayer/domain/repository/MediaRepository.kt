@@ -10,5 +10,3 @@ interface MediaRepository {
 
     fun onPermissionAccepted()
 }
-
-

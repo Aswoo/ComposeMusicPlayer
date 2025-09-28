@@ -3,17 +3,11 @@ package com.sdu.composemusicplayer.utils
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.sdu.composemusicplayer.R
-import com.sdu.composemusicplayer.core.database.entity.MusicEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlin.time.Duration.Companion.milliseconds
 
 object MusicUtil {
-    
-
     @Suppress("TooGenericExceptionThrown")
     suspend fun getSongPath(
         context: Context,

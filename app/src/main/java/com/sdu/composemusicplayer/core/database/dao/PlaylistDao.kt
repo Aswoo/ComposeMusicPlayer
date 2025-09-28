@@ -1,4 +1,5 @@
 @file:Suppress("MaxLineLength")
+
 package com.sdu.composemusicplayer.core.database.dao
 
 import androidx.room.Dao

@@ -54,13 +54,14 @@ fun PlayControlButton(
         ) {
             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                 Icon(
-                    painter = 
+                    painter =
                         painterResource(
-                            id = if (!isPlaying) {
-                                R.drawable.ic_play_filled_rounded
-                            } else {
-                                R.drawable.ic_pause_filled_rounded
-                            },
+                            id =
+                                if (!isPlaying) {
+                                    R.drawable.ic_play_filled_rounded
+                                } else {
+                                    R.drawable.ic_pause_filled_rounded
+                                },
                         ),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,

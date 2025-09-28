@@ -16,7 +16,8 @@ interface MusicRepository {
         isTrackShorterThan60SecondsSkipped: Boolean = true,
     )
 
-    suspend fun deleteMusics(vararg music: MusicEntity, context: Context)
+    suspend fun deleteMusics(
+        vararg music: MusicEntity,
+        context: Context,
+    )
 }
-
-
