@@ -83,21 +83,7 @@ private fun BluetoothConnectContent(
         }
     }
 
-    // CodeRabbit 테스트용 예시들 (ktlint에는 걸리지 않지만 CodeRabbit이 감지)
-    
-    // 1. 매직 넘버 사용
-    val maxRetryAttempts = 3
-    
-    // 2. 하드코딩된 문자열
-    val defaultDeviceName = "Unknown Device"
-    
-    // 3. TODO 주석
     // TODO: 기기 연결 상태 실시간 모니터링 구현
-    // TODO: 연결 실패 시 사용자 알림 추가
-    
-    // 4. 주석 처리된 코드 (실제로는 사용되지 않음)
-    // val testDevices = listOf("Test Device 1", "Test Device 2")
-    // val debugMode = true
 
     // 제목 (핸들바는 ModalBottomSheet가 자동 제공)
     Text(
