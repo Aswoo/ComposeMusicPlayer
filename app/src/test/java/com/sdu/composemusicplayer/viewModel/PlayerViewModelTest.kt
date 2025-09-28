@@ -3,10 +3,10 @@ package com.sdu.composemusicplayer.viewModel
 import android.content.Context
 import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.PlaySource
+import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
 import com.sdu.composemusicplayer.utils.AndroidConstants
 import com.sdu.composemusicplayer.viewmodel.IPlayerEnvironment
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
-import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -154,7 +154,7 @@ class PlayerViewModelTest {
             audioId = id,
             title = "Test Music $id",
             artist = "Test Artist $id",
-                duration = AndroidConstants.Time.SECONDS_IN_MINUTE * 3L * AndroidConstants.Time.MILLIS_IN_SECOND, // 3분
+            duration = AndroidConstants.Time.SECONDS_IN_MINUTE * 3L * AndroidConstants.Time.MILLIS_IN_SECOND, // 3분
             albumPath = "/path/to/album",
             audioPath = "/path/to/test/song$id.mp3",
         )

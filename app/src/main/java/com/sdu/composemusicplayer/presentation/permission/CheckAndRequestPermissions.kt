@@ -36,11 +36,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.sdu.composemusicplayer.core.constants.AppConstants
-import com.sdu.composemusicplayer.ui.theme.Dimens
 import com.google.accompanist.permissions.PermissionsRequired
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.sdu.composemusicplayer.R
+import com.sdu.composemusicplayer.core.constants.AppConstants
+import com.sdu.composemusicplayer.ui.theme.Dimens
 import com.sdu.composemusicplayer.ui.theme.TextDefaultColor
 
 @OptIn(ExperimentalPermissionsApi::class)

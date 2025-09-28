@@ -21,16 +21,25 @@ class FakePlaylistsRepository : PlaylistsRepository {
         _playlistsWithInfoFlows.value = playlists.toList()
     }
 
-    override fun createPlaylistAndAddSongs(name: String, songUris: List<String>) {
+    override fun createPlaylistAndAddSongs(
+        name: String,
+        songUris: List<String>,
+    ) {
         createPlaylist(name)
         // Implementation for adding songs would go here
     }
 
-    override fun addMusicToPlaylists(songsUris: List<String>, playlists: List<PlaylistInfo>) {
+    override fun addMusicToPlaylists(
+        songsUris: List<String>,
+        playlists: List<PlaylistInfo>,
+    ) {
         // Implementation for adding music to multiple playlists
     }
 
-    override fun addMusicToPlaylist(musicUri: String, selectedPlayListId: Int) {
+    override fun addMusicToPlaylist(
+        musicUri: String,
+        selectedPlayListId: Int,
+    ) {
         // Implementation for adding music to specific playlist
     }
 
@@ -39,7 +48,10 @@ class FakePlaylistsRepository : PlaylistsRepository {
         _playlistsWithInfoFlows.value = playlists.toList()
     }
 
-    override fun renamePlaylist(id: Int, newName: String) {
+    override fun renamePlaylist(
+        id: Int,
+        newName: String,
+    ) {
         val index = playlists.indexOfFirst { it.id == id }
         if (index != AndroidConstants.Misc.INVALID_INDEX) {
             val playlist = playlists[index]
@@ -48,7 +60,10 @@ class FakePlaylistsRepository : PlaylistsRepository {
         }
     }
 
-    override fun removeMusicFromPlaylist(id: Int, songsUris: List<String>) {
+    override fun removeMusicFromPlaylist(
+        id: Int,
+        songsUris: List<String>,
+    ) {
         // Implementation for removing music from playlist
     }
 
@@ -59,6 +74,8 @@ class FakePlaylistsRepository : PlaylistsRepository {
     override fun getPlaylistWithSongsFlow(playlistId: Int): Flow<Playlist> {
         val playlistInfo = playlists.find { it.id == playlistId }
         val music = playlistMusics[playlistId] ?: emptyList()
-        return MutableStateFlow(Playlist(playlistInfo ?: PlaylistInfo(AndroidConstants.Misc.DEFAULT_INDEX, "", AndroidConstants.Misc.DEFAULT_INDEX), music)).asStateFlow()
+        return MutableStateFlow(
+            Playlist(playlistInfo ?: PlaylistInfo(AndroidConstants.Misc.DEFAULT_INDEX, "", AndroidConstants.Misc.DEFAULT_INDEX), music),
+        ).asStateFlow()
     }
 }

@@ -10,7 +10,6 @@ import org.junit.runners.JUnit4
  */
 @RunWith(JUnit4::class)
 class BluetoothVolumeFeatureTest {
-
     @Test
     fun `블루투스_음량_관리_클래스들이_정의되어_있다`() {
         // Given & When & Then
@@ -30,13 +29,14 @@ class BluetoothVolumeFeatureTest {
         val volumePercentage = 66.7f
 
         // When
-        val volumeInfo = BluetoothVolumeInfo(
-            isConnected = isConnected,
-            currentVolume = currentVolume,
-            maxVolume = maxVolume,
-            deviceName = deviceName,
-            volumePercentage = volumePercentage
-        )
+        val volumeInfo =
+            BluetoothVolumeInfo(
+                isConnected = isConnected,
+                currentVolume = currentVolume,
+                maxVolume = maxVolume,
+                deviceName = deviceName,
+                volumePercentage = volumePercentage,
+            )
 
         // Then
         assert(volumeInfo.isConnected == isConnected)

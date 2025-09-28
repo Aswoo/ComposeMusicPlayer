@@ -1,4 +1,5 @@
 @file:Suppress("ImplicitDefaultLocale")
+
 package com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics
 
 import androidx.compose.ui.semantics.text
@@ -6,15 +7,14 @@ import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sdu.composemusicplayer.core.constants.AppConstants
-import com.sdu.composemusicplayer.domain.repository.LyricsRepository
 import com.sdu.composemusicplayer.core.database.model.LyricsResult
 import com.sdu.composemusicplayer.core.model.lyrics.LyricsFetchSource
 import com.sdu.composemusicplayer.core.model.lyrics.PlainLyrics
 import com.sdu.composemusicplayer.core.model.lyrics.SynchronizedLyrics
 import com.sdu.composemusicplayer.domain.model.Music
+import com.sdu.composemusicplayer.domain.repository.LyricsRepository
 import com.sdu.composemusicplayer.network.data.NetworkMonitor
 import com.sdu.composemusicplayer.network.model.NetworkStatus
-import com.sdu.composemusicplayer.presentation.musicPlayerSheet.lyrics.constructStringForSaving
 import com.sdu.composemusicplayer.viewmodel.IPlayerEnvironment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -228,33 +228,32 @@ class LiveLyricsViewModel
 
                 if (currentMusic != null && currentMusic != Music.default) {
                     when (currentLyricsState) {
-                            is LyricsScreenState.TextLyrics -> {
-                                if (currentLyricsState.lyricsSource == LyricsFetchSource.EXTERNAL) {
+                        is LyricsScreenState.TextLyrics -> {
+                            if (currentLyricsState.lyricsSource == LyricsFetchSource.EXTERNAL) {
 //                                    lyricsRepository.saveLyricsToFile(
 //                                        currentMusic.audioPath.toUri(),
-//                                        currentLyricsState.plainLyrics.constructStringForSaving(), 
+//                                        currentLyricsState.plainLyrics.constructStringForSaving(),
 //                                        // 모델에 저장용 문자열 변환 함수 필요
 //                                    )
-                                } else {
-                                    false
-                                }
+                            } else {
+                                false
                             }
+                        }
 
-                            is LyricsScreenState.SyncedLyrics -> {
-                                if (currentLyricsState.lyricsSource == LyricsFetchSource.EXTERNAL) {
+                        is LyricsScreenState.SyncedLyrics -> {
+                            if (currentLyricsState.lyricsSource == LyricsFetchSource.EXTERNAL) {
 //                                    lyricsRepository.saveLyricsToFile(
 //                                        currentMusic.audioPath.toUri(),
-//                                        currentLyricsState.syncedLyrics.constructStringForSaving(), 
+//                                        currentLyricsState.syncedLyrics.constructStringForSaving(),
 //                                        // 모델에 저장용 문자열 변환 함수 필요 (LRC)
 //                                    )
-                                } else {
-                                    false
-                                }
+                            } else {
+                                false
                             }
-
-                            else -> false
                         }
-                    
+
+                        else -> false
+                    }
                 }
             }
         }
@@ -297,8 +296,8 @@ fun SynchronizedLyrics.constructStringForSaving(): String {
     // LRC 형식으로 변환하는 로직 구현
     // 예: return segments.joinToString("\n") { "[${formatMillisToLrcTime(it.durationMillis)}]${it.text}" }
     // formatMillisToLrcTime 함수는 LRC 시간 형식 (mm:ss.xx)으로 변환해야 함
-    return this.segments.joinToString("\n") { 
-        "[${formatMillisToLrcTime(it.durationMillis.toLong())}]${it.text}" 
+    return this.segments.joinToString("\n") {
+        "[${formatMillisToLrcTime(it.durationMillis.toLong())}]${it.text}"
     } // 예시, 실제 구현 필요
 }
 
@@ -306,7 +305,10 @@ private fun formatMillisToLrcTime(millis: Long): String {
     if (millis < 0) return "00:00.00"
     val minutes = TimeUnit.MILLISECONDS.toMinutes(millis)
     val seconds = TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(minutes)
-    val hundredths = (TimeUnit.MILLISECONDS.toMillis(millis) - 
-        TimeUnit.SECONDS.toMillis(TimeUnit.MILLISECONDS.toSeconds(millis))) / AppConstants.LYRICS_UPDATE_INTERVAL_MS
+    val hundredths =
+        (
+            TimeUnit.MILLISECONDS.toMillis(millis) -
+                TimeUnit.SECONDS.toMillis(TimeUnit.MILLISECONDS.toSeconds(millis))
+        ) / AppConstants.LYRICS_UPDATE_INTERVAL_MS
     return String.format("%02d:%02d.%02d", minutes, seconds, hundredths)
 }

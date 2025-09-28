@@ -3,7 +3,6 @@ package com.sdu.composemusicplayer.presentation.component
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.platform.LocalContext
 import com.sdu.composemusicplayer.domain.repository.MediaRepository
 import com.sdu.composemusicplayer.presentation.component.action.MusicDeleteAction
 import com.sdu.composemusicplayer.presentation.component.action.MusicShareAction
@@ -15,9 +14,10 @@ data class CommonMusicActions(
     val deleteAction: MusicDeleteAction,
 )
 
-val LocalCommonMusicAction = staticCompositionLocalOf<CommonMusicActions> { 
-    throw IllegalArgumentException("not implemented") 
-}
+val LocalCommonMusicAction =
+    staticCompositionLocalOf<CommonMusicActions> {
+        throw IllegalArgumentException("not implemented")
+    }
 
 @Composable
 fun rememberCommonMusicActions(mediaRepository: MediaRepository): CommonMusicActions {

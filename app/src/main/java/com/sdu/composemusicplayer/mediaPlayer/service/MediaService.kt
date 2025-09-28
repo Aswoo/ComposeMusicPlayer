@@ -1,4 +1,5 @@
 @file:Suppress("VariableNaming")
+
 package com.sdu.composemusicplayer.mediaPlayer.service
 
 import android.app.Notification
@@ -120,58 +121,60 @@ class MediaService : MediaSessionService() {
     }
 
     @VisibleForTesting(otherwise = PRIVATE)
-    internal inner class MediaButtonCallback @Suppress("VariableNaming") constructor() : MediaSession.Callback {
-        private var lastClickTime: Long = 0
-        private var lastKeyCode: Int = -1
+    internal inner class MediaButtonCallback
+        @Suppress("VariableNaming")
+        constructor() : MediaSession.Callback {
+            private var lastClickTime: Long = 0
+            private var lastKeyCode: Int = -1
 
-        override fun onMediaButtonEvent(
-            mediaSession: MediaSession,
-            controllerInfo: MediaSession.ControllerInfo,
-            intent: Intent,
-        ): Boolean {
-            if (intent.action != Intent.ACTION_MEDIA_BUTTON) return false
+            override fun onMediaButtonEvent(
+                mediaSession: MediaSession,
+                controllerInfo: MediaSession.ControllerInfo,
+                intent: Intent,
+            ): Boolean {
+                if (intent.action != Intent.ACTION_MEDIA_BUTTON) return false
 
-            val keyEvent = intent.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT) ?: return false
-            if (keyEvent.action != KeyEvent.ACTION_DOWN) return false
+                val keyEvent = intent.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT) ?: return false
+                if (keyEvent.action != KeyEvent.ACTION_DOWN) return false
 
-            val currentTime = System.currentTimeMillis()
-            val keyCode = keyEvent.keyCode
+                val currentTime = System.currentTimeMillis()
+                val keyCode = keyEvent.keyCode
 
-            when (keyCode) {
-                KeyEvent.KEYCODE_MEDIA_PLAY,
-                KeyEvent.KEYCODE_MEDIA_PAUSE,
-                KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
-                -> {
-                    val diff = currentTime - lastClickTime
-                    if (lastKeyCode == keyCode && diff < DOUBLE_CLICK_TIMEOUT) {
-                        // 더블 클릭
-                        handleMediaButtonDoubleClick()
-                        resetClickState()
-                    } else {
-                        // 싱글 클릭
-                        handleMediaButtonSingleClick()
-                        lastClickTime = currentTime
-                        lastKeyCode = keyCode
+                when (keyCode) {
+                    KeyEvent.KEYCODE_MEDIA_PLAY,
+                    KeyEvent.KEYCODE_MEDIA_PAUSE,
+                    KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
+                    -> {
+                        val diff = currentTime - lastClickTime
+                        if (lastKeyCode == keyCode && diff < DOUBLE_CLICK_TIMEOUT) {
+                            // 더블 클릭
+                            handleMediaButtonDoubleClick()
+                            resetClickState()
+                        } else {
+                            // 싱글 클릭
+                            handleMediaButtonSingleClick()
+                            lastClickTime = currentTime
+                            lastKeyCode = keyCode
+                        }
+                        return true
                     }
-                    return true
+                    KeyEvent.KEYCODE_MEDIA_NEXT -> {
+                        handleMediaButtonNext()
+                        return true
+                    }
+                    KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
+                        handleMediaButtonPrevious()
+                        return true
+                    }
                 }
-                KeyEvent.KEYCODE_MEDIA_NEXT -> {
-                    handleMediaButtonNext()
-                    return true
-                }
-                KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
-                    handleMediaButtonPrevious()
-                    return true
-                }
+                return false
             }
-            return false
-        }
 
-        private fun resetClickState() {
-            lastClickTime = 0
-            lastKeyCode = -1
+            private fun resetClickState() {
+                lastClickTime = 0
+                lastKeyCode = -1
+            }
         }
-    }
 
     override fun onStartCommand(
         intent: Intent?,

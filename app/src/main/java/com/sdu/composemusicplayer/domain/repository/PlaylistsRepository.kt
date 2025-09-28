@@ -10,21 +10,34 @@ interface PlaylistsRepository {
 
     fun createPlaylist(name: String)
 
-    fun createPlaylistAndAddSongs(name: String, songUris: List<String>)
+    fun createPlaylistAndAddSongs(
+        name: String,
+        songUris: List<String>,
+    )
 
-    fun addMusicToPlaylists(songsUris: List<String>, playlists: List<PlaylistInfo>)
+    fun addMusicToPlaylists(
+        songsUris: List<String>,
+        playlists: List<PlaylistInfo>,
+    )
 
-    fun addMusicToPlaylist(musicUri: String, selectedPlayListId: Int)
+    fun addMusicToPlaylist(
+        musicUri: String,
+        selectedPlayListId: Int,
+    )
 
     fun deletePlaylist(id: Int)
 
-    fun renamePlaylist(id: Int, newName: String)
+    fun renamePlaylist(
+        id: Int,
+        newName: String,
+    )
 
-    fun removeMusicFromPlaylist(id: Int, songsUris: List<String>)
+    fun removeMusicFromPlaylist(
+        id: Int,
+        songsUris: List<String>,
+    )
 
     suspend fun getPlaylistSongs(id: Int): List<Music>
 
     fun getPlaylistWithSongsFlow(playlistId: Int): Flow<Playlist>
 }
-
-

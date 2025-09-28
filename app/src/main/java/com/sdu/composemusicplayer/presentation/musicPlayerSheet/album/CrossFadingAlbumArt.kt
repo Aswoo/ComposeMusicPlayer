@@ -23,8 +23,6 @@ import com.sdu.composemusicplayer.R
 import com.sdu.composemusicplayer.domain.model.MusicAlbumArtModel
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.util.BlurTransformation
 
-
-
 @Composable
 @Suppress("LongParameterList", "LongMethod")
 fun CrossFadingAlbumArt(

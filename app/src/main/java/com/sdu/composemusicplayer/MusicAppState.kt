@@ -53,9 +53,10 @@ class MusicAppState(
             }.distinctUntilChanged()
             .stateIn(
                 scope = coroutineScope,
-                started = SharingStarted.WhileSubscribed(
-                    AndroidConstants.Time.MILLIS_IN_SECOND * AndroidConstants.Misc.SUBSCRIPTION_TIMEOUT_SECONDS.toLong()
-                ),
+                started =
+                    SharingStarted.WhileSubscribed(
+                        AndroidConstants.Time.MILLIS_IN_SECOND * AndroidConstants.Misc.SUBSCRIPTION_TIMEOUT_SECONDS.toLong(),
+                    ),
                 initialValue = false,
             )
 }

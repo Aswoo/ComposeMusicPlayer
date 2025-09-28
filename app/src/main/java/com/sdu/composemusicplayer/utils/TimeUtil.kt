@@ -1,4 +1,5 @@
 @file:Suppress("ImplicitDefaultLocale")
+
 package com.sdu.composemusicplayer.utils
 
 private const val MILLIS_IN_SECOND = 1000

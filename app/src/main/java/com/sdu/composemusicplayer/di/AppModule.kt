@@ -1,23 +1,22 @@
 package com.sdu.composemusicplayer.di
 
 import android.content.Context
-import com.sdu.composemusicplayer.core.database.MusicDB
-import com.sdu.composemusicplayer.core.database.PlaylistsRepositoryImpl
-import com.sdu.composemusicplayer.core.database.MusicRepositoryImpl
-import com.sdu.composemusicplayer.core.database.QueueRepositoryImpl
 import com.sdu.composemusicplayer.core.database.LyricsRepositoryImpl
-import com.sdu.composemusicplayer.core.media.MediaRepositoryImpl
-import com.sdu.composemusicplayer.core.database.dao.MusicDao
-import com.sdu.composemusicplayer.core.database.dao.QueueDao
+import com.sdu.composemusicplayer.core.database.MusicDB
+import com.sdu.composemusicplayer.core.database.MusicRepositoryImpl
+import com.sdu.composemusicplayer.core.database.PlaylistsRepositoryImpl
+import com.sdu.composemusicplayer.core.database.QueueRepositoryImpl
 import com.sdu.composemusicplayer.core.database.dao.LyricsDao
+import com.sdu.composemusicplayer.core.database.dao.MusicDao
 import com.sdu.composemusicplayer.core.database.dao.PlaylistDao
-import com.sdu.composemusicplayer.network.data.LyricsSource
-import com.sdu.composemusicplayer.domain.repository.PlaylistsRepository
-import com.sdu.composemusicplayer.domain.repository.MusicRepository
-import com.sdu.composemusicplayer.domain.repository.QueueRepository
+import com.sdu.composemusicplayer.core.database.dao.QueueDao
+import com.sdu.composemusicplayer.core.media.MediaRepositoryImpl
 import com.sdu.composemusicplayer.domain.repository.LyricsRepository
 import com.sdu.composemusicplayer.domain.repository.MediaRepository
-import dagger.Binds
+import com.sdu.composemusicplayer.domain.repository.MusicRepository
+import com.sdu.composemusicplayer.domain.repository.PlaylistsRepository
+import com.sdu.composemusicplayer.domain.repository.QueueRepository
+import com.sdu.composemusicplayer.network.data.LyricsSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -70,9 +69,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideQueueRepository(
-        queueDao: QueueDao,
-    ): QueueRepository = QueueRepositoryImpl(queueDao)
+    fun provideQueueRepository(queueDao: QueueDao): QueueRepository = QueueRepositoryImpl(queueDao)
 
     @Provides
     @Singleton

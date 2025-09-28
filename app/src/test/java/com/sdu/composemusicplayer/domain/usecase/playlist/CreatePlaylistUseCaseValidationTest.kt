@@ -26,69 +26,74 @@ class CreatePlaylistUseCaseValidationTest {
     }
 
     @Test
-    fun `createPlaylistUseCase가_유효한_플레이리스트_이름을_받아들인다`() = runTest {
-        // Given
-        val validPlaylistName = "Test Playlist"
+    fun `createPlaylistUseCase가_유효한_플레이리스트_이름을_받아들인다`() =
+        runTest {
+            // Given
+            val validPlaylistName = "Test Playlist"
 
-        // When
-        createPlaylistUseCase(validPlaylistName)
+            // When
+            createPlaylistUseCase(validPlaylistName)
 
-        // Then
-        // Should not throw any exception
-        // This is a basic validation test
-    }
-
-    @Test
-    fun `createPlaylistUseCase가_빈_플레이리스트_이름을_처리한다`() = runTest {
-        // Given
-        val emptyPlaylistName = ""
-
-        // When
-        createPlaylistUseCase(emptyPlaylistName)
-
-        // Then
-        // Should not throw any exception
-        // This tests edge case handling
-    }
-
-    @Test
-    fun `createPlaylistUseCase가_긴_플레이리스트_이름을_처리한다`() = runTest {
-        // Given
-        val longPlaylistName = "This is a very long playlist name that might test the limits of the system"
-
-        // When
-        createPlaylistUseCase(longPlaylistName)
-
-        // Then
-        // Should not throw any exception
-        // This tests edge case handling
-    }
-
-    @Test
-    fun `createPlaylistUseCase가_특수문자가_포함된_플레이리스트_이름을_처리한다`() = runTest {
-        // Given
-        val specialCharPlaylistName = "Playlist!@#$%^&*()_+{}|:<>?"
-
-        // When
-        createPlaylistUseCase(specialCharPlaylistName)
-
-        // Then
-        // Should not throw any exception
-        // This tests edge case handling
-    }
-
-    @Test
-    fun `createPlaylistUseCase가_여러_플레이리스트_생성을_처리한다`() = runTest {
-        // Given
-        val playlistNames = listOf("Playlist 1", "Playlist 2", "Playlist 3")
-
-        // When
-        playlistNames.forEach { name ->
-            createPlaylistUseCase(name)
+            // Then
+            // Should not throw any exception
+            // This is a basic validation test
         }
 
-        // Then
-        // Should not throw any exception
-        // This tests multiple operations
-    }
+    @Test
+    fun `createPlaylistUseCase가_빈_플레이리스트_이름을_처리한다`() =
+        runTest {
+            // Given
+            val emptyPlaylistName = ""
+
+            // When
+            createPlaylistUseCase(emptyPlaylistName)
+
+            // Then
+            // Should not throw any exception
+            // This tests edge case handling
+        }
+
+    @Test
+    fun `createPlaylistUseCase가_긴_플레이리스트_이름을_처리한다`() =
+        runTest {
+            // Given
+            val longPlaylistName = "This is a very long playlist name that might test the limits of the system"
+
+            // When
+            createPlaylistUseCase(longPlaylistName)
+
+            // Then
+            // Should not throw any exception
+            // This tests edge case handling
+        }
+
+    @Test
+    fun `createPlaylistUseCase가_특수문자가_포함된_플레이리스트_이름을_처리한다`() =
+        runTest {
+            // Given
+            val specialCharPlaylistName = "Playlist!@#$%^&*()_+{}|:<>?"
+
+            // When
+            createPlaylistUseCase(specialCharPlaylistName)
+
+            // Then
+            // Should not throw any exception
+            // This tests edge case handling
+        }
+
+    @Test
+    fun `createPlaylistUseCase가_여러_플레이리스트_생성을_처리한다`() =
+        runTest {
+            // Given
+            val playlistNames = listOf("Playlist 1", "Playlist 2", "Playlist 3")
+
+            // When
+            playlistNames.forEach { name ->
+                createPlaylistUseCase(name)
+            }
+
+            // Then
+            // Should not throw any exception
+            // This tests multiple operations
+        }
 }

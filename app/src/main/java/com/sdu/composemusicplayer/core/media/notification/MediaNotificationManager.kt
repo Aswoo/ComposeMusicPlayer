@@ -1,9 +1,6 @@
 package com.sdu.composemusicplayer.core.media.notification
 
-import android.app.Notification
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
@@ -73,16 +70,19 @@ class MediaNotificationManager(
                 .apply {
                     setPlayer(player)
                     // Spotify 스타일: 기본 재생 컨트롤만 사용
-                    setUseRewindAction(false)  // 이전 곡 버튼 제거
-                    setUseFastForwardAction(false)  // 다음 곡 버튼 제거
+                    setUseRewindAction(false) // 이전 곡 버튼 제거
+                    setUseFastForwardAction(false) // 다음 곡 버튼 제거
                     setUseRewindActionInCompactView(false)
                     setUseFastForwardActionInCompactView(false)
-                    setUseStopAction(false)  // 정지 버튼 제거
-                    setUsePlayPauseActions(true)  // 재생/일시정지 버튼 유지
+                    setUseStopAction(false) // 정지 버튼 제거
+                    setUsePlayPauseActions(true) // 재생/일시정지 버튼 유지
                 }
     }
 
-    private fun startForegroundMusicService(mediaSessionService: MediaSessionService, mediaSession: MediaSession) {
+    private fun startForegroundMusicService(
+        mediaSessionService: MediaSessionService,
+        mediaSession: MediaSession,
+    ) {
         // 임시 노티피케이션 완전 제거 설계
         // PlayerNotificationManager가 즉시 노티피케이션을 생성하고 포어그라운드 시작
         // NotificationListener에서 onNotificationPosted가 호출되면 자동으로 startForeground가 실행됨

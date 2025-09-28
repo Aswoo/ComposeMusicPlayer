@@ -43,10 +43,10 @@ import com.sdu.composemusicplayer.core.constants.AppConstants
 import com.sdu.composemusicplayer.domain.model.toMusicAlbumArtModel
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.CrossFadingAlbumArt
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.ErrorPainterType
+import com.sdu.composemusicplayer.presentation.player.MusicUiState
 import com.sdu.composemusicplayer.ui.theme.SpotiDarkGray
 import com.sdu.composemusicplayer.ui.theme.SpotiGreen
 import com.sdu.composemusicplayer.ui.theme.SpotiLightGray
-import com.sdu.composemusicplayer.presentation.player.MusicUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
@@ -95,7 +95,7 @@ fun MiniPlayer(
             // 곡 제목과 블루투스 아이콘을 같은 행에 배치
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
+                horizontalArrangement = Arrangement.Start,
             ) {
                 // 블루투스 아이콘을 곡 제목 왼쪽에 배치
                 if (bluetoothDeviceName != null) {
@@ -103,10 +103,11 @@ fun MiniPlayer(
                         imageVector = Icons.Filled.Bluetooth,
                         contentDescription = bluetoothDeviceName,
                         tint = SpotiGreen,
-                        modifier = Modifier
-                            .size(16.dp)
-                            .clickable { onBluetoothDeviceClick() }
-                            .padding(end = 6.dp)
+                        modifier =
+                            Modifier
+                                .size(16.dp)
+                                .clickable { onBluetoothDeviceClick() }
+                                .padding(end = 6.dp),
                     )
                 }
 

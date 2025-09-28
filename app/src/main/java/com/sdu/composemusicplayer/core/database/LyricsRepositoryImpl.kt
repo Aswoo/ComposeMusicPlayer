@@ -1,4 +1,5 @@
 @file:Suppress("PrintStackTrace")
+
 package com.sdu.composemusicplayer.core.database
 
 import android.content.Context
@@ -45,33 +46,40 @@ class LyricsRepositoryImpl
             album: String,
             artist: String,
             durationSeconds: Int,
-        ): LyricsResult = withContext(Dispatchers.IO) {
-            val audioFile = File(getSongPath(context, uri))
-            val tags = AudioFileIO().readFile(audioFile).tagOrCreateAndSetDefault
+        ): LyricsResult =
+            withContext(Dispatchers.IO) {
+                val audioFile = File(getSongPath(context, uri))
+                val tags = AudioFileIO().readFile(audioFile).tagOrCreateAndSetDefault
 
-            getLyricsFromMetadata(tags)?.let { return@withContext it }
-            getLyricsFromDatabase(title, album, artist)?.let { return@withContext it }
-            getLyricsFromApi(title, album, artist, durationSeconds)
-        }
+                getLyricsFromMetadata(tags)?.let { return@withContext it }
+                getLyricsFromDatabase(title, album, artist)?.let { return@withContext it }
+                getLyricsFromApi(title, album, artist, durationSeconds)
+            }
 
         private fun getLyricsFromMetadata(tags: Tag): LyricsResult? {
             val lyrics = tags.getFirstField(FieldKey.LYRICS)?.toString() ?: return null
             val syncedLyrics = SynchronizedLyrics.fromString(lyrics)
 
             return when {
-                syncedLyrics != null -> LyricsResult.FoundSyncedLyrics(
-                    syncedLyrics,
-                    LyricsFetchSource.FROM_SONG_METADATA,
-                )
-                lyrics.isNotBlank() -> LyricsResult.FoundPlainLyrics(
-                    PlainLyrics.fromString(lyrics),
-                    LyricsFetchSource.FROM_SONG_METADATA,
-                )
+                syncedLyrics != null ->
+                    LyricsResult.FoundSyncedLyrics(
+                        syncedLyrics,
+                        LyricsFetchSource.FROM_SONG_METADATA,
+                    )
+                lyrics.isNotBlank() ->
+                    LyricsResult.FoundPlainLyrics(
+                        PlainLyrics.fromString(lyrics),
+                        LyricsFetchSource.FROM_SONG_METADATA,
+                    )
                 else -> null
             }
         }
 
-        private suspend fun getLyricsFromDatabase(title: String, album: String, artist: String): LyricsResult? {
+        private suspend fun getLyricsFromDatabase(
+            title: String,
+            album: String,
+            artist: String,
+        ): LyricsResult? {
             val lyricsEntity = lyricsDao.getSongLyrics(title, album, artist) ?: return null
 
             if (lyricsEntity.syncedLyrics.isNotBlank()) {

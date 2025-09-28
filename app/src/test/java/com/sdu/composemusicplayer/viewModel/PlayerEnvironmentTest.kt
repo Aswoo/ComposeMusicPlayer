@@ -1,14 +1,12 @@
 package com.sdu.composemusicplayer.viewModel
 
-import android.content.Context
 import android.net.Uri
 import android.os.Handler
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import com.sdu.composemusicplayer.domain.repository.MusicRepository
 import com.sdu.composemusicplayer.domain.model.Music
-import com.sdu.composemusicplayer.domain.model.QueueItem
+import com.sdu.composemusicplayer.domain.repository.MusicRepository
 import com.sdu.composemusicplayer.mediaPlayer.service.PlayerServiceManager
 import com.sdu.composemusicplayer.utils.AndroidConstants
 import com.sdu.composemusicplayer.viewmodel.PlayerEnvironment
@@ -42,11 +40,11 @@ class PlayerEnvironmentTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         every { mockMusicRepository.getAllMusics() } returns flowOf(emptyList())
-        
+
         // Mock Uri.parse to avoid Android framework dependencies
         mockkStatic(Uri::class)
         every { Uri.parse(any()) } returns mockk<Uri>(relaxed = true)
-        
+
         playerEnvironment =
             PlayerEnvironment(
                 musicRepository = mockMusicRepository,
@@ -72,7 +70,7 @@ class PlayerEnvironmentTest {
                         artist = "Artist 1",
                         albumPath = "1",
                         duration = AndroidConstants.Time.MILLIS_IN_SECOND.toLong(),
-                        audioPath = "path1"
+                        audioPath = "path1",
                     ),
                     Music(
                         audioId = 2,
@@ -80,7 +78,7 @@ class PlayerEnvironmentTest {
                         artist = "Artist 2",
                         albumPath = "2",
                         duration = AndroidConstants.Time.MILLIS_IN_SECOND * 2L,
-                        audioPath = "path2"
+                        audioPath = "path2",
                     ),
                 )
             // Removed unused queueItems variable
@@ -106,7 +104,7 @@ class PlayerEnvironmentTest {
                         artist = "Artist 1",
                         albumPath = "1",
                         duration = AndroidConstants.Time.MILLIS_IN_SECOND.toLong(),
-                        audioPath = "path1"
+                        audioPath = "path1",
                     ),
                     Music(
                         audioId = 2,
@@ -114,7 +112,7 @@ class PlayerEnvironmentTest {
                         artist = "Artist 2",
                         albumPath = "2",
                         duration = AndroidConstants.Time.MILLIS_IN_SECOND * 2L,
-                        audioPath = "path2"
+                        audioPath = "path2",
                     ),
                 )
             playerEnvironment.updateQueue(musicList)

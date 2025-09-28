@@ -31,11 +31,11 @@ val roundedShape =
                 Path().apply {
                     addOval(
                         Rect(
-                            AndroidConstants.Dp.SMALL.toFloat(), 
-                            AndroidConstants.Misc.SHAPE_OFFSET_Y, 
-                            size.width - AndroidConstants.Dp.SMALL, 
-                            size.height - AndroidConstants.Dp.SMALL
-                        )
+                            AndroidConstants.Dp.SMALL.toFloat(),
+                            AndroidConstants.Misc.SHAPE_OFFSET_Y,
+                            size.width - AndroidConstants.Dp.SMALL,
+                            size.height - AndroidConstants.Dp.SMALL,
+                        ),
                     )
                 }
             val thickness = size.height / AndroidConstants.Misc.SHAPE_THICKNESS_DIVISOR

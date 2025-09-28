@@ -1,16 +1,11 @@
 package com.sdu.composemusicplayer.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.sdu.composemusicplayer.domain.model.PlaySource
 import com.sdu.composemusicplayer.domain.model.SortDirection
 import com.sdu.composemusicplayer.domain.model.SortOption
 import com.sdu.composemusicplayer.domain.model.SortState
-import com.sdu.composemusicplayer.viewmodel.IPlayerEnvironment
-import com.sdu.composemusicplayer.viewmodel.PlayerEvent
-import com.sdu.composemusicplayer.viewmodel.StatefulViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -84,7 +79,6 @@ class PlayerViewModel
                     updateState { copy(isPaused = isPaused) }
                 }
             }
-            
         }
 
         fun onEvent(

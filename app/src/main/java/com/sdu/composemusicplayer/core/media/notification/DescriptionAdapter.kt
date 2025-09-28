@@ -58,7 +58,7 @@ class DescriptionAdapter(
                     updateNotification()
                 }
         }
-        
+
         // 블루투스 연결 상태에 따라 기기 정보 표시 (Spotify 스타일)
         val bluetoothInfo = bluetoothVolumeManager?.getBluetoothVolumeInfo()
         return when {

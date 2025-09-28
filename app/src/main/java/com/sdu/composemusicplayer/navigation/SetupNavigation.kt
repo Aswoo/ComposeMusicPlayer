@@ -18,7 +18,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.sdu.composemusicplayer.MusicAppState
 import com.sdu.composemusicplayer.presentation.mainScreen.MainScreen
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.BarState
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.CompactAppScaffold
@@ -52,10 +51,11 @@ fun SetupNavigation(
         remember {
             AnchoredDraggableState(
                 initialValue = BarState.COLLAPSED,
-                anchors = DraggableAnchors {
-                    BarState.COLLAPSED at 0f
-                    BarState.EXPANDED at 1f
-                },
+                anchors =
+                    DraggableAnchors {
+                        BarState.COLLAPSED at 0f
+                        BarState.EXPANDED at 1f
+                    },
                 positionalThreshold = { distance: Float -> POSITIONAL_THRESHOLD_FACTOR * distance },
                 velocityThreshold = { with(density) { VELOCITY_THRESHOLD.toPx() } },
                 snapAnimationSpec = tween(),
@@ -63,26 +63,28 @@ fun SetupNavigation(
             )
         }
 
-    val appState = rememberMusicAppState(
-        playerViewModel = playerVM,
-        playerScreenOffset = {
-            if (playerScreenAnchors.anchors.size > 0) {
-                playerScreenAnchors.requireOffset()
-            } else {
-                0.0f
+    val appState =
+        rememberMusicAppState(
+            playerViewModel = playerVM,
+            playerScreenOffset = {
+                if (playerScreenAnchors.anchors.size > 0) {
+                    playerScreenAnchors.requireOffset()
+                } else {
+                    0.0f
+                }
+            },
+            navHostController = navController,
+        )
+    val navHost =
+        remember {
+            movableContentOf<Modifier, MutableState<Modifier>> { navHostModifier, contentModifier ->
+                AppNavHost(
+                    playerVM = playerVM,
+                    navController = navController,
+                    modifier = navHostModifier.then(contentModifier.value),
+                )
             }
-        },
-        navHostController = navController,
-    )
-    val navHost = remember {
-        movableContentOf<Modifier, MutableState<Modifier>> { navHostModifier, contentModifier ->
-            AppNavHost(
-                playerVM = playerVM,
-                navController = navController,
-                modifier = navHostModifier.then(contentModifier.value)
-            )
         }
-    }
     CompactAppScaffold(
         appState = appState,
         modifier = modifier,
@@ -98,7 +100,7 @@ fun SetupNavigation(
 private fun AppNavHost(
     playerVM: PlayerViewModel,
     navController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
 ) {
     NavHost(
         modifier = modifier,

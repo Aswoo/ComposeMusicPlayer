@@ -3,7 +3,6 @@
 package com.sdu.composemusicplayer.presentation.mainScreen.component
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -54,52 +52,63 @@ private fun AlbumArt(music: Music) {
     AsyncImage(
         model = music.albumPath.toUri(),
         contentDescription = null,
-        modifier = Modifier
-            .padding(VERTICAL_PADDING)
-            .size(ALBUM_ART_SIZE)
-            .clip(RoundedCornerShape(ITEM_SHAPE_RADIUS)),
+        modifier =
+            Modifier
+                .padding(VERTICAL_PADDING)
+                .size(ALBUM_ART_SIZE)
+                .clip(RoundedCornerShape(ITEM_SHAPE_RADIUS)),
         placeholder = painterResource(id = R.drawable.ic_music_unknown),
         error = painterResource(id = R.drawable.ic_music_unknown),
-        fallback = painterResource(id = R.drawable.ic_music_unknown)
+        fallback = painterResource(id = R.drawable.ic_music_unknown),
     )
 }
 
 @Composable
-private fun RowScope.MusicDetails(music: Music, selected: Boolean) {
+private fun RowScope.MusicDetails(
+    music: Music,
+    selected: Boolean,
+) {
     Column(
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .padding(start = HORIZONTAL_PADDING)
-            .weight(1f),
+        modifier =
+            Modifier
+                .padding(start = HORIZONTAL_PADDING)
+                .weight(1f),
     ) {
         Text(
             text = music.title,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.bodyMedium.copy(
-                color = if (selected) SpotiGreen else Color.White,
-                fontWeight = FontWeight.SemiBold,
-            ),
+            style =
+                MaterialTheme.typography.bodyMedium.copy(
+                    color = if (selected) SpotiGreen else Color.White,
+                    fontWeight = FontWeight.SemiBold,
+                ),
         )
         Text(
             text = music.artist,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.bodySmall.copy(
-                color = if (selected) SpotiGreen.copy(alpha = SELECTED_ARTIST_ALPHA) else Color.Gray,
-                fontFamily = Inter,
-                fontSize = ARTIST_FONT_SIZE,
-            ),
+            style =
+                MaterialTheme.typography.bodySmall.copy(
+                    color = if (selected) SpotiGreen.copy(alpha = SELECTED_ARTIST_ALPHA) else Color.Gray,
+                    fontFamily = Inter,
+                    fontSize = ARTIST_FONT_SIZE,
+                ),
         )
     }
 }
 
 @Composable
-private fun PlayingIndicator(selected: Boolean, isMusicPlaying: Boolean) {
+private fun PlayingIndicator(
+    selected: Boolean,
+    isMusicPlaying: Boolean,
+) {
     Box(
-        modifier = Modifier
-            .padding(end = VERTICAL_PADDING)
-            .alpha(if (selected) 1f else 0f),
+        modifier =
+            Modifier
+                .padding(end = VERTICAL_PADDING)
+                .alpha(if (selected) 1f else 0f),
     ) {
         AudioWave(isMusicPlaying = isMusicPlaying)
     }
@@ -118,14 +127,15 @@ fun MusicItem(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = HORIZONTAL_PADDING, vertical = VERTICAL_PADDING)
-                .height(ITEM_HEIGHT)
-                .background(
-                    if (selected) SELECTED_BACKGROUND_COLOR else Color.Transparent,
-                    shape = RoundedCornerShape(ITEM_SHAPE_RADIUS),
-                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = HORIZONTAL_PADDING, vertical = VERTICAL_PADDING)
+                    .height(ITEM_HEIGHT)
+                    .background(
+                        if (selected) SELECTED_BACKGROUND_COLOR else Color.Transparent,
+                        shape = RoundedCornerShape(ITEM_SHAPE_RADIUS),
+                    ),
         ) {
             AlbumArt(music)
             MusicDetails(music, selected)

@@ -12,19 +12,18 @@ import kotlinx.coroutines.flow.asStateFlow
  * 블루투스 이어폰 연결 상태에 따른 음량 제어를 제공합니다.
  */
 class AudioVolumeManager(private val context: Context) {
-    
     private val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    
+
     private val _currentVolume = MutableStateFlow(getCurrentVolume())
     val currentVolume: StateFlow<Int> = _currentVolume.asStateFlow()
-    
+
     private val _isBluetoothConnected = MutableStateFlow(isBluetoothAudioConnected())
     val isBluetoothConnected: StateFlow<Boolean> = _isBluetoothConnected.asStateFlow()
-    
+
     companion object {
         private const val TAG = "AudioVolumeManager"
     }
-    
+
     /**
      * 현재 음량을 반환합니다.
      * @return 현재 음량 (0 ~ maxVolume)
@@ -37,7 +36,7 @@ class AudioVolumeManager(private val context: Context) {
             0
         }
     }
-    
+
     /**
      * 최대 음량을 반환합니다.
      * @return 최대 음량
@@ -50,7 +49,7 @@ class AudioVolumeManager(private val context: Context) {
             15 // 기본값
         }
     }
-    
+
     /**
      * 음량을 설정합니다.
      * @param volume 설정할 음량 (0 ~ maxVolume)
@@ -59,20 +58,20 @@ class AudioVolumeManager(private val context: Context) {
         try {
             val maxVolume = getMaxVolume()
             val adjustedVolume = volume.coerceIn(0, maxVolume)
-            
+
             audioManager.setStreamVolume(
                 AudioManager.STREAM_MUSIC,
                 adjustedVolume,
-                0 // 플래그 없음
+                0, // 플래그 없음
             )
-            
+
             _currentVolume.value = adjustedVolume
             Log.d(TAG, "음량 설정: $adjustedVolume/$maxVolume")
         } catch (e: Exception) {
             Log.e(TAG, "음량 설정 실패", e)
         }
     }
-    
+
     /**
      * 음량을 조절합니다.
      * @param direction AudioManager.ADJUST_RAISE, ADJUST_LOWER, ADJUST_SAME 중 하나
@@ -82,16 +81,16 @@ class AudioVolumeManager(private val context: Context) {
             audioManager.adjustStreamVolume(
                 AudioManager.STREAM_MUSIC,
                 direction,
-                0 // 플래그 없음
+                0, // 플래그 없음
             )
-            
+
             _currentVolume.value = getCurrentVolume()
             Log.d(TAG, "음량 조절: $direction, 현재 음량: ${_currentVolume.value}")
         } catch (e: Exception) {
             Log.e(TAG, "음량 조절 실패", e)
         }
     }
-    
+
     /**
      * 블루투스 오디오가 연결되어 있는지 확인합니다.
      * @return 블루투스 오디오 연결 상태
@@ -104,7 +103,7 @@ class AudioVolumeManager(private val context: Context) {
             false
         }
     }
-    
+
     /**
      * 현재 오디오 출력 장치 정보를 반환합니다.
      * @return 오디오 출력 장치 정보
@@ -117,7 +116,7 @@ class AudioVolumeManager(private val context: Context) {
             else -> "기본 스피커"
         }
     }
-    
+
     /**
      * 음량 상태를 업데이트합니다.
      * 블루투스 연결 상태 변화 시 호출되어야 합니다.
@@ -127,7 +126,7 @@ class AudioVolumeManager(private val context: Context) {
         _isBluetoothConnected.value = isBluetoothAudioConnected()
         Log.d(TAG, "음량 상태 업데이트: ${_currentVolume.value}/${getMaxVolume()}, 블루투스: ${_isBluetoothConnected.value}")
     }
-    
+
     /**
      * 음량을 퍼센트로 반환합니다.
      * @return 음량 퍼센트 (0.0 ~ 100.0)
@@ -137,7 +136,7 @@ class AudioVolumeManager(private val context: Context) {
         val max = getMaxVolume()
         return if (max > 0) (current.toFloat() / max.toFloat()) * 100f else 0f
     }
-    
+
     /**
      * 퍼센트로 음량을 설정합니다.
      * @param percentage 설정할 음량 퍼센트 (0.0 ~ 100.0)

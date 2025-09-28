@@ -65,6 +65,8 @@ object BluetoothUtil {
             // 스피커폰 모드로 전환 (휴대폰 스피커 사용)
             audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
             audioManager.isSpeakerphoneOn = true
+
+            // TODO: 에러 로깅 시스템 연동 필요
         } catch (e: Exception) {
             // 권한이 없거나 오류가 발생한 경우 무시
         }

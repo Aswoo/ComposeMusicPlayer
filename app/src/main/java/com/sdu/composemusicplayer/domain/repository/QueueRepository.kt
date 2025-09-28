@@ -10,5 +10,3 @@ interface QueueRepository {
 
     fun saveQueueFromDBQueueItems(songs: List<DBQueueItem>)
 }
-
-

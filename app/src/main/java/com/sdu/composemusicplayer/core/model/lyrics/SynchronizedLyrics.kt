@@ -18,8 +18,10 @@ data class SynchronizedLyrics(
         fun fromString(text: String?): SynchronizedLyrics? {
             if (text.isNullOrBlank()) return null
 
-            val segments = text.lines()
-                .mapNotNull { parseLine(it) }
+            val segments =
+                text
+                    .lines()
+                    .mapNotNull { parseLine(it) }
 
             if (segments.isEmpty()) return null
             return SynchronizedLyrics(segments)
@@ -42,11 +44,12 @@ data class SynchronizedLyrics(
 
             val text = line.substring(timeInfoLastIndex + 1).trim()
 
-            val minutesInMillis = minutes * AndroidConstants.Time.SECONDS_IN_MINUTE * 
-                AndroidConstants.Time.MILLIS_IN_SECOND
+            val minutesInMillis =
+                minutes * AndroidConstants.Time.SECONDS_IN_MINUTE *
+                    AndroidConstants.Time.MILLIS_IN_SECOND
             val secondsInMillis = seconds * AndroidConstants.Time.MILLIS_IN_SECOND
             val totalMillis = minutesInMillis + secondsInMillis + millis
-            
+
             return SyncedLyricsSegment(text, totalMillis)
         }
     }

@@ -13,15 +13,15 @@ import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
 class MusicUiStateTest {
-
-    private val testMusic = Music(
-        audioId = 1L,
-        title = "Test Song",
-        artist = "Test Artist",
-        duration = AndroidConstants.Time.MILLIS_IN_SECOND * 180L,
-        albumPath = "/test/album",
-        audioPath = "/test/path"
-    )
+    private val testMusic =
+        Music(
+            audioId = 1L,
+            title = "Test Song",
+            artist = "Test Artist",
+            duration = AndroidConstants.Time.MILLIS_IN_SECOND * 180L,
+            albumPath = "/test/album",
+            audioPath = "/test/path",
+        )
 
     @Test
     fun `MusicUiState의_기본값이_올바르게_설정된다`() {
@@ -43,15 +43,16 @@ class MusicUiStateTest {
         // Given
         val musicList = listOf(testMusic)
         val sortState = SortState(SortOption.ARTIST)
-        val customState = MusicUiState(
-            musicList = musicList,
-            sortState = sortState,
-            currentPlayedMusic = testMusic,
-            isPlaying = true,
-            isPaused = false,
-            currentDuration = 5000L,
-            isBottomPlayerShow = true
-        )
+        val customState =
+            MusicUiState(
+                musicList = musicList,
+                sortState = sortState,
+                currentPlayedMusic = testMusic,
+                isPlaying = true,
+                isPaused = false,
+                currentDuration = 5000L,
+                isBottomPlayerShow = true,
+            )
 
         // Then
         assertEquals("Music list should match", musicList, customState.musicList)
@@ -66,26 +67,29 @@ class MusicUiStateTest {
     @Test
     fun `MusicUiState가_재생과_일시정지_상태를_올바르게_처리한다`() {
         // Test playing state
-        val playingState = MusicUiState(
-            isPlaying = true,
-            isPaused = false
-        )
+        val playingState =
+            MusicUiState(
+                isPlaying = true,
+                isPaused = false,
+            )
         assertTrue("Should be playing", playingState.isPlaying)
         assertFalse("Should not be paused", playingState.isPaused)
 
         // Test paused state
-        val pausedState = MusicUiState(
-            isPlaying = false,
-            isPaused = true
-        )
+        val pausedState =
+            MusicUiState(
+                isPlaying = false,
+                isPaused = true,
+            )
         assertFalse("Should not be playing", pausedState.isPlaying)
         assertTrue("Should be paused", pausedState.isPaused)
 
         // Test stopped state
-        val stoppedState = MusicUiState(
-            isPlaying = false,
-            isPaused = false
-        )
+        val stoppedState =
+            MusicUiState(
+                isPlaying = false,
+                isPaused = false,
+            )
         assertFalse("Should not be playing", stoppedState.isPlaying)
         assertFalse("Should not be paused", stoppedState.isPaused)
     }

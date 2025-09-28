@@ -1,4 +1,5 @@
 @file:Suppress("LongParameterList", "LongMethod")
+
 package com.sdu.composemusicplayer.presentation.musicPlayerSheet
 
 import android.app.Activity
@@ -21,7 +22,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -65,15 +65,14 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sdu.composemusicplayer.core.constants.AppConstants
 import com.sdu.composemusicplayer.core.audio.BluetoothUtil
+import com.sdu.composemusicplayer.core.constants.AppConstants
 import com.sdu.composemusicplayer.presentation.bluetooth.BluetoothConnectBottomSheet
-import com.sdu.composemusicplayer.presentation.bluetooth.BluetoothDevice
 import com.sdu.composemusicplayer.presentation.bluetooth.DeviceType
 import com.sdu.composemusicplayer.presentation.musicPlayerSheet.component.ExpandedMusicPlayerContent
 import com.sdu.composemusicplayer.presentation.player.MusicUiState
-import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
+import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -162,11 +161,11 @@ internal fun PlayerScreen(
             val context = LocalContext.current
             FullScreenNowPlaying(
                 modifier =
-                Modifier
-                    .fillMaxSize()
-                    .graphicsLayer {
-                        alpha = ((progressProvider() - AppConstants.FADE_ALPHA) * 2.0f).coerceIn(0.0f, 1.0f)
-                    },
+                    Modifier
+                        .fillMaxSize()
+                        .graphicsLayer {
+                            alpha = ((progressProvider() - AppConstants.FADE_ALPHA) * 2.0f).coerceIn(0.0f, 1.0f)
+                        },
                 isShowingQueue = isShowingQueue,
                 onOpenQueue = showAddToPlaylistDialog,
                 progressProvider = progressProvider,
@@ -177,15 +176,15 @@ internal fun PlayerScreen(
             }
             MiniPlayer(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(barHeight)
-                    .padding(nowPlayingBarPadding)
-                    .pointerInput(Unit) {
-                        detectTapGestures { onExpandNowPlaying() }
-                    }.graphicsLayer {
-                        alpha = (1 - (progressProvider() * AppConstants.DEFAULT_ALPHA).coerceAtMost(1.0f))
-                    }.testTag("miniPlayer"),
+                    Modifier
+                        .fillMaxWidth()
+                        .height(barHeight)
+                        .padding(nowPlayingBarPadding)
+                        .pointerInput(Unit) {
+                            detectTapGestures { onExpandNowPlaying() }
+                        }.graphicsLayer {
+                            alpha = (1 - (progressProvider() * AppConstants.DEFAULT_ALPHA).coerceAtMost(1.0f))
+                        }.testTag("miniPlayer"),
                 state = uiState,
                 showExtraControls = true,
                 songProgressProvider = {
@@ -208,7 +207,7 @@ internal fun PlayerScreen(
                 @OptIn(ExperimentalMaterial3Api::class)
                 ModalBottomSheet(
                     onDismissRequest = { showBluetoothBottomSheet = false },
-                    containerColor = Color(0xFF121212)
+                    containerColor = Color(0xFF121212),
                 ) {
                     BluetoothConnectBottomSheet(
                         onDismiss = { showBluetoothBottomSheet = false },
@@ -228,22 +227,24 @@ internal fun PlayerScreen(
                         },
                         onBluetoothSettingsClick = {
                             // 블루투스 설정 화면으로 이동
-                            val bluetoothSettingsIntent = Intent().apply {
-                                action = Settings.ACTION_BLUETOOTH_SETTINGS
-                                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                            }
+                            val bluetoothSettingsIntent =
+                                Intent().apply {
+                                    action = Settings.ACTION_BLUETOOTH_SETTINGS
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                }
                             try {
                                 context.startActivity(bluetoothSettingsIntent)
                             } catch (e: Exception) {
                                 // 블루투스 설정이 없는 경우 일반 설정으로 이동
-                                val settingsIntent = Intent().apply {
-                                    action = Settings.ACTION_SETTINGS
-                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                                }
+                                val settingsIntent =
+                                    Intent().apply {
+                                        action = Settings.ACTION_SETTINGS
+                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                    }
                                 context.startActivity(settingsIntent)
                             }
                             showBluetoothBottomSheet = false
-                        }
+                        },
                     )
                 }
             }
@@ -293,10 +294,10 @@ fun FullScreenNowPlaying(
 
         val screenSize =
             when {
-                heightClass == WindowHeightSizeClass.Compact && 
-                widthClass == WindowWidthSizeClass.Compact -> NowPlayingScreenSize.COMPACT
-                heightClass == WindowHeightSizeClass.Compact && 
-                widthClass != WindowWidthSizeClass.Compact -> NowPlayingScreenSize.LANDSCAPE
+                heightClass == WindowHeightSizeClass.Compact &&
+                    widthClass == WindowWidthSizeClass.Compact -> NowPlayingScreenSize.COMPACT
+                heightClass == WindowHeightSizeClass.Compact &&
+                    widthClass != WindowWidthSizeClass.Compact -> NowPlayingScreenSize.LANDSCAPE
                 else -> NowPlayingScreenSize.PORTRAIT
             }
 
@@ -362,7 +363,7 @@ data class SongControlsActions(
 fun SongControls(
     modifier: Modifier,
     isPlaying: Boolean,
-    actions: SongControlsActions
+    actions: SongControlsActions,
 ) {
     Row(
         modifier = modifier,
@@ -371,9 +372,9 @@ fun SongControls(
     ) {
         ControlButton(
             modifier =
-            Modifier
-                .size(34.dp)
-                .clip(RoundedCornerShape(4.dp)),
+                Modifier
+                    .size(34.dp)
+                    .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.SkipPrevious,
             "Previous", // Changed from "Skip Previous"
             actions.onPrevious,
@@ -383,9 +384,9 @@ fun SongControls(
 
         ControlButton(
             modifier =
-            Modifier
-                .size(34.dp)
-                .clip(RoundedCornerShape(4.dp)),
+                Modifier
+                    .size(34.dp)
+                    .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.FastRewind,
             "Rewind", // Changed from "Jump Back"
             actions.onJumpBackward,
@@ -400,9 +401,9 @@ fun SongControls(
 
         ControlButton(
             modifier =
-            Modifier
-                .size(64.dp)
-                .clip(CircleShape),
+                Modifier
+                    .size(64.dp)
+                    .clip(CircleShape),
             icon = pausePlayButton,
             "Play/Pause", // Changed from "Skip Previous"
             actions.onTogglePlayback,
@@ -412,9 +413,9 @@ fun SongControls(
 
         ControlButton(
             modifier =
-            Modifier
-                .size(36.dp)
-                .clip(RoundedCornerShape(4.dp)),
+                Modifier
+                    .size(36.dp)
+                    .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.FastForward,
             "Forward", // Changed from "Jump Forward"
             actions.onJumpForward,
@@ -424,9 +425,9 @@ fun SongControls(
 
         ControlButton(
             modifier =
-            Modifier
-                .size(36.dp)
-                .clip(RoundedCornerShape(4.dp)),
+                Modifier
+                    .size(36.dp)
+                    .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.SkipNext,
             "Next", // Changed from "Skip To Next"
             actions.onNext,

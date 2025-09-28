@@ -1,4 +1,5 @@
 @file:Suppress("TooGenericExceptionCaught", "TooGenericExceptionThrown")
+
 package com.sdu.composemusicplayer.core.media
 
 import android.annotation.TargetApi
@@ -9,16 +10,15 @@ import android.provider.MediaStore
 import android.util.Log
 import com.sdu.composemusicplayer.core.constants.AppConstants
 import com.sdu.composemusicplayer.domain.model.Music
-import com.sdu.composemusicplayer.domain.repository.MediaRepository as MediaRepositoryContract
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
+import com.sdu.composemusicplayer.domain.repository.MediaRepository as MediaRepositoryContract
 
 private const val TAG = "MediaRepository"
 

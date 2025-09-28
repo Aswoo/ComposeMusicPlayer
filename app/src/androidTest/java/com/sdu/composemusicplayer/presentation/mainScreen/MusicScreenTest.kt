@@ -12,11 +12,11 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.NavController
 import com.sdu.composemusicplayer.domain.model.Music
-import com.sdu.composemusicplayer.domain.model.SortState
 import com.sdu.composemusicplayer.domain.model.SortOption
-import com.sdu.composemusicplayer.ui.theme.SpotiBackground
+import com.sdu.composemusicplayer.domain.model.SortState
 import com.sdu.composemusicplayer.presentation.player.MusicUiState
 import com.sdu.composemusicplayer.presentation.player.PlayerViewModel
+import com.sdu.composemusicplayer.ui.theme.SpotiBackground
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -278,3 +278,4 @@ class MusicScreenTest {
         composeTestRule.onNodeWithText("Artist 1").assertIsDisplayed()
     }
 }
+

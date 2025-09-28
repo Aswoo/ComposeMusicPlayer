@@ -3,41 +3,39 @@ package com.sdu.composemusicplayer.core.audio
 import android.content.Context
 import android.media.AudioManager
 import android.util.Log
+import com.sdu.composemusicplayer.core.audio.BluetoothUtil.getBluetoothConnectedDeviceAsync
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import com.sdu.composemusicplayer.core.audio.BluetoothUtil.getBluetoothConnectedDeviceAsync
+import kotlinx.coroutines.launch
 
 /**
  * 블루투스 이어폰 전용 음량 관리 클래스
  * 블루투스 연결 상태와 음량을 통합 관리합니다.
  */
 class BluetoothVolumeManager(private val context: Context) {
-    
     private val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    
+
     private val _isBluetoothAudioConnected = MutableStateFlow(false)
     val isBluetoothAudioConnected: StateFlow<Boolean> = _isBluetoothAudioConnected.asStateFlow()
-    
+
     private val _connectedDeviceName = MutableStateFlow<String?>(null)
     val connectedDeviceName: StateFlow<String?> = _connectedDeviceName.asStateFlow()
-    
+
     private val _bluetoothVolume = MutableStateFlow(0)
     val bluetoothVolume: StateFlow<Int> = _bluetoothVolume.asStateFlow()
-    
-    
+
     companion object {
         private const val TAG = "BluetoothVolumeManager"
         private const val BLUETOOTH_VOLUME_MAX = 15 // 블루투스 이어폰 최대 음량
     }
-    
+
     init {
         updateBluetoothConnectionState()
     }
-    
+
     /**
      * 블루투스 오디오 연결 상태를 확인합니다.
      * @return 블루투스 오디오 연결 상태
@@ -50,7 +48,7 @@ class BluetoothVolumeManager(private val context: Context) {
             false
         }
     }
-    
+
     /**
      * 블루투스 음량을 가져옵니다.
      * @return 블루투스 음량 (0 ~ BLUETOOTH_VOLUME_MAX)
@@ -67,7 +65,7 @@ class BluetoothVolumeManager(private val context: Context) {
             0
         }
     }
-    
+
     /**
      * 블루투스 음량을 설정합니다.
      * @param volume 설정할 음량 (0 ~ BLUETOOTH_VOLUME_MAX)
@@ -77,23 +75,23 @@ class BluetoothVolumeManager(private val context: Context) {
             Log.w(TAG, "블루투스 오디오가 연결되지 않음")
             return
         }
-        
+
         try {
             val adjustedVolume = volume.coerceIn(0, BLUETOOTH_VOLUME_MAX)
-            
+
             audioManager.setStreamVolume(
                 AudioManager.STREAM_MUSIC,
                 adjustedVolume,
-                AudioManager.FLAG_SHOW_UI // 음량 변경 시 UI 표시
+                AudioManager.FLAG_SHOW_UI, // 음량 변경 시 UI 표시
             )
-            
+
             _bluetoothVolume.value = adjustedVolume
             Log.d(TAG, "블루투스 음량 설정: $adjustedVolume/$BLUETOOTH_VOLUME_MAX")
         } catch (e: Exception) {
             Log.e(TAG, "블루투스 음량 설정 실패", e)
         }
     }
-    
+
     /**
      * 블루투스 음량을 조절합니다.
      * @param direction AudioManager.ADJUST_RAISE, ADJUST_LOWER, ADJUST_SAME 중 하나
@@ -103,21 +101,21 @@ class BluetoothVolumeManager(private val context: Context) {
             Log.w(TAG, "블루투스 오디오가 연결되지 않음")
             return
         }
-        
+
         try {
             audioManager.adjustStreamVolume(
                 AudioManager.STREAM_MUSIC,
                 direction,
-                AudioManager.FLAG_SHOW_UI
+                AudioManager.FLAG_SHOW_UI,
             )
-            
+
             _bluetoothVolume.value = getBluetoothVolume()
             Log.d(TAG, "블루투스 음량 조절: $direction, 현재 음량: ${_bluetoothVolume.value}")
         } catch (e: Exception) {
             Log.e(TAG, "블루투스 음량 조절 실패", e)
         }
     }
-    
+
     /**
      * 연결된 블루투스 기기 이름을 비동기로 가져옵니다.
      * @return 연결된 블루투스 기기 이름
@@ -125,14 +123,14 @@ class BluetoothVolumeManager(private val context: Context) {
     suspend fun getBluetoothConnectedDeviceNameAsync(): String? {
         return getBluetoothConnectedDeviceAsync(context)
     }
-    
+
     /**
      * 블루투스 연결 상태를 업데이트합니다.
      */
     fun updateBluetoothConnectionState() {
         val isConnected = isBluetoothAudioConnected()
         _isBluetoothAudioConnected.value = isConnected
-        
+
         if (isConnected) {
             _bluetoothVolume.value = getBluetoothVolume()
             // 비동기로 기기 이름 업데이트
@@ -141,10 +139,10 @@ class BluetoothVolumeManager(private val context: Context) {
             _bluetoothVolume.value = 0
             _connectedDeviceName.value = null
         }
-        
+
         Log.d(TAG, "블루투스 연결 상태 업데이트: $isConnected, 음량: ${_bluetoothVolume.value}")
     }
-    
+
     /**
      * 연결된 기기 이름을 업데이트합니다.
      */
@@ -161,7 +159,7 @@ class BluetoothVolumeManager(private val context: Context) {
             }
         }
     }
-    
+
     /**
      * 블루투스 음량을 퍼센트로 반환합니다.
      * @return 음량 퍼센트 (0.0 ~ 100.0)
@@ -174,7 +172,7 @@ class BluetoothVolumeManager(private val context: Context) {
             0f
         }
     }
-    
+
     /**
      * 퍼센트로 블루투스 음량을 설정합니다.
      * @param percentage 설정할 음량 퍼센트 (0.0 ~ 100.0)
@@ -183,7 +181,7 @@ class BluetoothVolumeManager(private val context: Context) {
         val volume = ((percentage / 100f) * BLUETOOTH_VOLUME_MAX).toInt()
         setBluetoothVolume(volume)
     }
-    
+
     /**
      * 블루투스 음량 상태 정보를 반환합니다.
      * @return 블루투스 음량 상태 정보
@@ -194,7 +192,7 @@ class BluetoothVolumeManager(private val context: Context) {
             currentVolume = getBluetoothVolume(),
             maxVolume = BLUETOOTH_VOLUME_MAX,
             deviceName = _connectedDeviceName.value,
-            volumePercentage = getBluetoothVolumePercentage()
+            volumePercentage = getBluetoothVolumePercentage(),
         )
     }
 }
@@ -207,5 +205,5 @@ data class BluetoothVolumeInfo(
     val currentVolume: Int,
     val maxVolume: Int,
     val deviceName: String?,
-    val volumePercentage: Float
+    val volumePercentage: Float,
 )

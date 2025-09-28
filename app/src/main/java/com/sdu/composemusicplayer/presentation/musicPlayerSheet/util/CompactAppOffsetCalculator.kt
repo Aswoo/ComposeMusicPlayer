@@ -24,54 +24,54 @@ private const val ANIMATION_DURATION = 400
  * (ie. the bottom bar is shown and the NowPlayingScreen is above it)
  */
 class CompactAppOffsetCalculator
-@OptIn(ExperimentalFoundationApi::class)
-constructor(
-    private val config: CompactAppOffsetCalculatorConfig
-) {
-    /**
-     * Returns the offset of the NowPlaying screen
-     * taking into consideration the drag commands of the user
-     * and the visibility of the bottomBar
-     */
     @OptIn(ExperimentalFoundationApi::class)
-    fun getNowPlayingOffset(): IntOffset {
-        val navigationInsetPx = getBottomNavInsetsPx()
+    constructor(
+        private val config: CompactAppOffsetCalculatorConfig,
+    ) {
+        /**
+         * Returns the offset of the NowPlaying screen
+         * taking into consideration the drag commands of the user
+         * and the visibility of the bottomBar
+         */
+        @OptIn(ExperimentalFoundationApi::class)
+        fun getNowPlayingOffset(): IntOffset {
+            val navigationInsetPx = getBottomNavInsetsPx()
 
-        val dragProgress = config.scrollProvider()
-        val dragOffset = config.playerAnchors.requireOffset().toInt()
+            val dragProgress = config.scrollProvider()
+            val dragOffset = config.playerAnchors.requireOffset().toInt()
 
-        val baseOffset = dragOffset - navigationInsetPx * (1 - dragProgress)
-        val bottomBarOffset =
-            (getBottomBarOffset().y)
-                .coerceIn(0, config.bottomBarHeightPx) * (1 - dragProgress)
+            val baseOffset = dragOffset - navigationInsetPx * (1 - dragProgress)
+            val bottomBarOffset =
+                (getBottomBarOffset().y)
+                    .coerceIn(0, config.bottomBarHeightPx) * (1 - dragProgress)
 
-        val y = baseOffset.toInt() + bottomBarOffset.toInt()
-        return IntOffset(0, y)
-    }
-
-    /**
-     * Returns the bottom bar offset when it slides out and into
-     * the screen
-     */
-    fun getBottomBarOffset(): IntOffset {
-        val navigationInsetsPx = getBottomNavInsetsPx()
-        val totalBarHeightPx = config.bottomBarHeightPx + navigationInsetsPx
-
-        val nowPlayingExpansionProgress = config.scrollProvider().coerceIn(0.0f, 1.0f)
-        var y: Float = config.bottomBarOffsetAnimation.value.toFloat()
-
-        if (config.isPlayerVisible) {
-            y += totalBarHeightPx * nowPlayingExpansionProgress
+            val y = baseOffset.toInt() + bottomBarOffset.toInt()
+            return IntOffset(0, y)
         }
 
-        return IntOffset(0, y.toInt())
+        /**
+         * Returns the bottom bar offset when it slides out and into
+         * the screen
+         */
+        fun getBottomBarOffset(): IntOffset {
+            val navigationInsetsPx = getBottomNavInsetsPx()
+            val totalBarHeightPx = config.bottomBarHeightPx + navigationInsetsPx
+
+            val nowPlayingExpansionProgress = config.scrollProvider().coerceIn(0.0f, 1.0f)
+            var y: Float = config.bottomBarOffsetAnimation.value.toFloat()
+
+            if (config.isPlayerVisible) {
+                y += totalBarHeightPx * nowPlayingExpansionProgress
+            }
+
+            return IntOffset(0, y.toInt())
+        }
+
+        private fun getBottomNavInsetsPx() = config.navigationInsets.getBottom(config.density)
+
+        val bottomBarAlpha: Float
+            get() = 1 - config.scrollProvider()
     }
-
-    private fun getBottomNavInsetsPx() = config.navigationInsets.getBottom(config.density)
-
-    val bottomBarAlpha: Float
-        get() = 1 - config.scrollProvider()
-}
 
 @OptIn(ExperimentalFoundationApi::class)
 data class CompactAppOffsetCalculatorConfig(
@@ -87,9 +87,7 @@ data class CompactAppOffsetCalculatorConfig(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun rememberCompactScreenUiState(
-    config: CompactScreenUiStateConfig
-): CompactAppOffsetCalculator {
+fun rememberCompactScreenUiState(config: CompactScreenUiStateConfig): CompactAppOffsetCalculator {
     val navigationInsets = WindowInsets.navigationBars
 
     val bottomNavBarOffsetPx =
@@ -118,7 +116,7 @@ fun rememberCompactScreenUiState(
                 density = config.density,
                 isPlayerVisible = config.isPlayerVisible,
                 isPinnedMode = config.isPinnedMode,
-            )
+            ),
         )
     }
 }

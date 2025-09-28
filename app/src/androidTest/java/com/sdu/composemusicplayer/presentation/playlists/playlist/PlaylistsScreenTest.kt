@@ -1,28 +1,28 @@
 package com.sdu.composemusicplayer.presentation.playlists.playlist
 
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.sdu.composemusicplayer.domain.model.PlaylistInfo
-import androidx.compose.ui.Modifier
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Rule
 import org.junit.Test
 
 class PlaylistsScreenTest {
-
     @get:Rule
     val composeTestRule = createComposeRule()
 
     @Test
     fun `플레이리스트_목록이_정상적으로_표시된다`() {
         // Arrange
-        val playlists = listOf(
-            PlaylistInfo(1, "Playlist 1", 10),
-            PlaylistInfo(2, "Playlist 2", 5)
-        )
+        val playlists =
+            listOf(
+                PlaylistInfo(1, "Playlist 1", 10),
+                PlaylistInfo(2, "Playlist 2", 5),
+            )
         val state = PlaylistsScreenState.Success(playlists)
 
         // Act
@@ -104,10 +104,11 @@ class PlaylistsScreenTest {
     @Test
     fun `플레이리스트_삭제_버튼을_클릭하면_onDeletePlaylist가_호출된다`() {
         // Arrange
-        val playlists = listOf(
-            PlaylistInfo(1, "Playlist 1", 10),
-            PlaylistInfo(2, "Playlist 2", 5)
-        )
+        val playlists =
+            listOf(
+                PlaylistInfo(1, "Playlist 1", 10),
+                PlaylistInfo(2, "Playlist 2", 5),
+            )
         val state = PlaylistsScreenState.Success(playlists)
         val onDeletePlaylistMock = mockk<(Int) -> Unit>(relaxed = true)
 
@@ -129,10 +130,11 @@ class PlaylistsScreenTest {
     @Test
     fun `플레이리스트_제목이_올바르게_표시된다`() {
         // Arrange
-        val playlists = listOf(
-            PlaylistInfo(1, "My Favorite Songs", 25),
-            PlaylistInfo(2, "Workout Music", 15)
-        )
+        val playlists =
+            listOf(
+                PlaylistInfo(1, "My Favorite Songs", 25),
+                PlaylistInfo(2, "Workout Music", 15),
+            )
         val state = PlaylistsScreenState.Success(playlists)
 
         // Act
@@ -153,10 +155,11 @@ class PlaylistsScreenTest {
     @Test
     fun `플레이리스트_개수가_올바르게_표시된다`() {
         // Arrange
-        val playlists = listOf(
-            PlaylistInfo(1, "Playlist 1", 10),
-            PlaylistInfo(2, "Playlist 2", 5)
-        )
+        val playlists =
+            listOf(
+                PlaylistInfo(1, "Playlist 1", 10),
+                PlaylistInfo(2, "Playlist 2", 5),
+            )
         val state = PlaylistsScreenState.Success(playlists)
 
         // Act
