@@ -79,9 +79,13 @@ private fun BluetoothConnectContent(
             val connectedDevice = BluetoothUtil.getBluetoothConnectedDeviceAsync(context)
             bluetoothDeviceName = connectedDevice
         } catch (e: Exception) {
+            // TODO: 에러 로깅 추가 필요
             bluetoothDeviceName = null
         }
     }
+    
+    // 테스트용 더미 데이터 (CodeRabbit 테스트)
+    // val testDevices = listOf("Test Device 1", "Test Device 2")
 
     // 제목 (핸들바는 ModalBottomSheet가 자동 제공)
     Text(
