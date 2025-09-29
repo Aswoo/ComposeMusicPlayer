@@ -112,9 +112,8 @@ Generate code, corrections, and refactorings that comply with the basic principl
   - Settings
   - Patients
   - Appointments
-- Use ViewBinding to manage views
+- Use Jetpack Compose to manage views
 - Use Flow / LiveData to manage UI state
-- Use xml and fragments instead of jetpack compose
 - Use Material 3 for the UI
 - Use ConstraintLayout for layouts
 ### Testing

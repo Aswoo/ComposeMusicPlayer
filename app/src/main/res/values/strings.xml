@@ -10,4 +10,16 @@
     <string name="music_player">Music Player</string>
     <string name="media_notification_channel">media_noti_channel</string>
     <string name="media_notification_channel_description">media_notification_channel_description</string>
+    
+    <!-- Glance 위젯 관련 문자열 -->
+    <string name="glance_widget_description">Compose 기반 음악 플레이어 위젯</string>
+    
+    <!-- 위젯 관련 문자열 -->
+    <string name="widget_description">음악 플레이어 위젯</string>
+    <string name="widget_default_song">음악을 재생해보세요</string>
+    <string name="widget_default_artist">Compose Music Player</string>
+    <string name="widget_album_art_description">앨범 아트</string>
+    <string name="widget_previous_description">이전 곡</string>
+    <string name="widget_play_pause_description">재생/일시정지</string>
+    <string name="widget_next_description">다음 곡</string>
 </resources>

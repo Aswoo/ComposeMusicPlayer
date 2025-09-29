@@ -186,6 +186,10 @@ dependencies {
 
     implementation(libs.jaudio.tagger)
 
+    // Glance for Compose Widgets
+    implementation(libs.glance.appwidget)
+    implementation(libs.glance.material3)
+
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk)

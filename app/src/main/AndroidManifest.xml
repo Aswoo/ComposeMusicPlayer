@@ -42,14 +42,25 @@
         </activity>
 
         <service
-            android:name=".mediaPlayer.service.MediaService"
+            android:name=".core.media.service.MediaService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback">
             <intent-filter>
                 <action android:name="androidx.media3.session.MediaSessionService" />
             </intent-filter>
-
         </service>
+
+        <!-- Glance 홈화면 위젯 Provider -->
+        <receiver
+            android:name=".presentation.widget.MusicPlayerGlanceWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/glance_widget_info" />
+        </receiver>
     </application>
 
 </manifest>
