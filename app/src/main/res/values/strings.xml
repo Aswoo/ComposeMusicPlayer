@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Music\nPlayer</string>
     <string name="unknown">Unknown</string>
-
     <string name="permission_prompt">Please allow access to the permissions to use this app!</string>
     <string name="permissions_rationale">Permission is denied. Please grant access manually in settings to use this app!</string>
     <string name="open_settings">Open Settings</string>
@@ -10,9 +9,6 @@
     <string name="music_player">Music Player</string>
     <string name="media_notification_channel">media_noti_channel</string>
     <string name="media_notification_channel_description">media_notification_channel_description</string>
-    
-    <!-- Glance 위젯 관련 문자열 -->
-    <string name="glance_widget_description">Compose 기반 음악 플레이어 위젯</string>
     
     <!-- 위젯 관련 문자열 -->
     <string name="widget_description">음악 플레이어 위젯</string>

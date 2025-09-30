@@ -1,5 +1,6 @@
 package com.sdu.composemusicplayer
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -22,6 +23,7 @@ import com.sdu.composemusicplayer.ui.theme.ComposeMusicPlayerTheme
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import android.util.Log
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -32,6 +34,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Glance 위젯에서 온 액션 처리
+        handleWidgetAction(intent)
 
         val listOfPermissions =
             mutableListOf<String>().apply {
@@ -79,5 +84,40 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    /**
+     * Glance 위젯에서 전달된 액션을 처리합니다.
+     */
+    private fun handleWidgetAction(intent: Intent?) {
+        val action = intent?.getStringExtra("action")
+        Log.d("MainActivity", "위젯 액션 수신: $action")
+        
+        when (action) {
+            "com.sdu.composemusicplayer.action.PLAY_PAUSE" -> {
+                Log.d("MainActivity", "재생/일시정지 토글")
+                // 현재 재생 상태를 토글
+                val currentState = playerVM.uiState.value.isPlaying
+                playerVM.onEvent(PlayerEvent.PlayPause(!currentState))
+            }
+            "com.sdu.composemusicplayer.action.PREVIOUS" -> {
+                Log.d("MainActivity", "이전 곡 재생")
+                playerVM.onEvent(PlayerEvent.Previous)
+            }
+            "com.sdu.composemusicplayer.action.NEXT" -> {
+                Log.d("MainActivity", "다음 곡 재생")
+                playerVM.onEvent(PlayerEvent.Next)
+            }
+            "com.sdu.composemusicplayer.action.OPEN_APP" -> {
+                Log.d("MainActivity", "앱 열기")
+                // 이미 앱이 열려있으므로 별도 처리 불필요
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleWidgetAction(intent)
     }
 }

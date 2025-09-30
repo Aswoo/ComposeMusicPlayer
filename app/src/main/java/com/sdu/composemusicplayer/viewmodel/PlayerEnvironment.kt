@@ -14,7 +14,8 @@ import com.sdu.composemusicplayer.domain.model.MusicQueue
 import com.sdu.composemusicplayer.domain.model.PlaySource
 import com.sdu.composemusicplayer.domain.model.QueueItem
 import com.sdu.composemusicplayer.domain.repository.MusicRepository
-import com.sdu.composemusicplayer.mediaPlayer.service.PlayerServiceManager
+import com.sdu.composemusicplayer.core.media.presentation.service.PlayerServiceManager
+import com.sdu.composemusicplayer.presentation.widget.MusicPlayerWidgetProvider
 import com.sdu.composemusicplayer.utils.AndroidConstants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,6 +71,14 @@ class PlayerEnvironment
 
         override fun isPaused(): Flow<Boolean> = _isPaused.asStateFlow()
 
+        // 초기 상태 여부 (한 번도 재생된 적이 없는 상태)
+        private val _isInitialState = MutableStateFlow(true)
+
+        fun isInitialState(): Flow<Boolean> = _isInitialState.asStateFlow()
+
+        // 재생이 시작되었는지 여부
+        private val _hasEverPlayed = MutableStateFlow(false)
+
         // 재생 시간
         private val _currentDuration = MutableStateFlow(0L)
 
@@ -102,8 +111,23 @@ class PlayerEnvironment
                 }
 
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
+                    android.util.Log.d("PlayerEnvironment", "onIsPlayingChanged: isPlaying=$isPlaying, hasEverPlayed=${_hasEverPlayed.value}")
+                    
                     _isPlaying.value = isPlaying
                     _isPaused.value = !isPlaying
+                    
+                    // 재생이 시작되면 초기 상태가 아님
+                    if (isPlaying && !_hasEverPlayed.value) {
+                        _hasEverPlayed.value = true
+                        _isInitialState.value = false
+                        android.util.Log.d("PlayerEnvironment", "첫 재생 시작 - 초기 상태 해제")
+                    }
+                    
+                    // 위젯 업데이트
+                    scope.launch {
+                        // Context가 필요하므로 serviceManager를 통해 접근
+                        // 실제로는 MediaService에서 위젯 업데이트를 처리
+                    }
                 }
 
                 override fun onMediaItemTransition(
@@ -117,6 +141,12 @@ class PlayerEnvironment
                         if (newIndex >= 0 && newIndex < currentQueue.items.size) {
                             _musicQueue.value = currentQueue.copy(currentIndex = newIndex)
                             _currentPlayedMusic.value = currentQueue.items[newIndex].music
+                            
+                            // 위젯 업데이트
+                            scope.launch {
+                                // Context가 필요하므로 serviceManager를 통해 접근
+                                // 실제로는 MediaService에서 위젯 업데이트를 처리
+                            }
                         }
                     }
                 }
@@ -166,19 +196,47 @@ class PlayerEnvironment
         }
 
         private fun playQueueItemAt(index: Int) {
+            android.util.Log.d("PlayerEnvironment", "playQueueItemAt 호출됨: index=$index")
             val queue = _musicQueue.value
-            if (index !in queue.items.indices) return
+            if (index !in queue.items.indices) {
+                android.util.Log.w("PlayerEnvironment", "유효하지 않은 인덱스: $index")
+                return
+            }
 
             val item = queue.items[index]
+            android.util.Log.d("PlayerEnvironment", "재생할 곡: ${item.music.title} - ${item.music.artist}")
             _musicQueue.value = queue.copy(currentIndex = index)
             _currentPlayedMusic.value = item.music
+            
+            // 새로운 곡 재생 시 상태 초기화
+            _isInitialState.value = false
+            _hasEverPlayed.value = true
+            android.util.Log.d("PlayerEnvironment", "새 곡 재생 - 상태 초기화")
+            
+            // MediaService 시작
+            android.util.Log.d("PlayerEnvironment", "MediaService 시작 요청")
+            serviceManager.startMusicService()
 
-            val mediaItems = queue.items.map { MediaItem.fromUri(it.music.audioPath.toUri()) }
+            val mediaItems = queue.items.map { queueItem ->
+                MediaItem.Builder()
+                    .setUri(queueItem.music.audioPath.toUri())
+                    .setMediaMetadata(
+                        androidx.media3.common.MediaMetadata.Builder()
+                            .setTitle(queueItem.music.title)
+                            .setArtist(queueItem.music.artist)
+                            .setAlbumTitle("") // album 필드가 없으므로 빈 문자열
+                            .setDisplayTitle(queueItem.music.title)
+                            .build()
+                    )
+                    .build()
+            }
             exoPlayer.setMediaItems(mediaItems, index, 0L)
             exoPlayer.prepare()
             exoPlayer.play()
 
             startDurationUpdates()
+            
+            // MediaSession이 준비된 후 위젯 업데이트는 MediaService에서 처리
         }
 
         override suspend fun play(

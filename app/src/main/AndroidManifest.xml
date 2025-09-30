@@ -42,7 +42,7 @@
         </activity>
 
         <service
-            android:name=".core.media.service.MediaService"
+            android:name=".core.media.presentation.service.MediaService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback">
             <intent-filter>
@@ -50,17 +50,27 @@
             </intent-filter>
         </service>
 
-        <!-- Glance 홈화면 위젯 Provider -->
+        <!-- 기본 위젯 Provider -->
         <receiver
-            android:name=".presentation.widget.MusicPlayerGlanceWidgetReceiver"
+            android:name=".presentation.widget.BasicWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/glance_widget_info" />
+                android:resource="@xml/basic_widget_info" />
         </receiver>
+
+        <!-- 위젯 액션 처리 BroadcastReceiver -->
+        <receiver
+            android:name=".presentation.widget.MediaSessionBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.sdu.composemusicplayer.WIDGET_ACTION" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

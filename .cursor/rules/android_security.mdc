@@ -1,0 +1,363 @@
+---
+description: Android Marshmallow+ security best practices and modern permission handling
+globs: app/src/main/java/**/*.kt, app/src/main/AndroidManifest.xml
+alwaysApply: true
+---
+
+# Android Security Best Practices (Marshmallow+)
+
+## **Runtime Permissions (API 23+)**
+
+### **✅ DO: Use Runtime Permission Checks**
+```kotlin
+// Always check permissions at runtime for API 23+
+if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) 
+    != PackageManager.PERMISSION_GRANTED) {
+    
+    ActivityCompat.requestPermissions(
+        activity,
+        arrayOf(Manifest.permission.CAMERA),
+        CAMERA_PERMISSION_REQUEST_CODE
+    )
+    return
+}
+```
+
+### **❌ DON'T: Assume Permissions are Granted**
+```kotlin
+// Never assume permissions without checking
+val camera = Camera.open() // This will crash on API 23+ without permission
+```
+
+## **Modern Permission Handling**
+
+### **✅ DO: Use Permission Launcher (Recommended)**
+```kotlin
+class MainActivity : ComponentActivity() {
+    private val permissionLauncher = registerForActivityResult(
+        RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            // Permission granted, proceed with operation
+        } else {
+            // Handle permission denial
+        }
+    }
+    
+    private fun requestCameraPermission() {
+        permissionLauncher.launch(Manifest.permission.CAMERA)
+    }
+}
+```
+
+### **✅ DO: Handle Permission Results Properly**
+```kotlin
+override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<String>,
+    grantResults: IntArray
+) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    
+    when (requestCode) {
+        CAMERA_PERMISSION_REQUEST_CODE -> {
+            if (grantResults.isNotEmpty() && 
+                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted
+            } else {
+                // Permission denied - show rationale or disable feature
+                if (shouldShowRequestPermissionRationale(permissions[0])) {
+                    // Show explanation dialog
+                } else {
+                    // User permanently denied - redirect to settings
+                    showSettingsDialog()
+                }
+            }
+        }
+    }
+}
+```
+
+## **Background Execution Limits (API 26+)**
+
+### **✅ DO: Use Foreground Services for Long-Running Tasks**
+```kotlin
+// For media playback, file downloads, etc.
+class MediaService : Service() {
+    override fun onCreate() {
+        super.onCreate()
+        
+        // Create notification channel for API 26+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel()
+        }
+        
+        // Start foreground service
+        startForeground(NOTIFICATION_ID, createNotification())
+    }
+}
+```
+
+### **✅ DO: Use WorkManager for Background Tasks**
+```kotlin
+// For non-urgent background work
+val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
+    .build()
+
+WorkManager.getInstance(context).enqueue(workRequest)
+```
+
+### **❌ DON'T: Start Background Services Directly**
+```kotlin
+// This will crash on API 26+ for most apps
+startService(Intent(this, BackgroundService::class.java))
+```
+
+## **Network Security**
+
+### **✅ DO: Use HTTPS by Default**
+```kotlin
+// Always use HTTPS for network requests
+val client = OkHttpClient.Builder()
+    .certificatePinner(
+        CertificatePinner.Builder()
+            .add("api.example.com", "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
+            .build()
+    )
+    .build()
+```
+
+### **✅ DO: Configure Network Security Config**
+```xml
+<!-- res/xml/network_security_config.xml -->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">example.com</domain>
+    </domain-config>
+</network-security-config>
+```
+
+```xml
+<!-- AndroidManifest.xml -->
+<application
+    android:networkSecurityConfig="@xml/network_security_config"
+    android:usesCleartextTraffic="false">
+```
+
+## **Data Protection**
+
+### **✅ DO: Use Encrypted Storage for Sensitive Data**
+```kotlin
+// Use EncryptedSharedPreferences
+val masterKey = MasterKey.Builder(context)
+    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+    .build()
+
+val sharedPreferences = EncryptedSharedPreferences.create(
+    context,
+    "secret_prefs",
+    masterKey,
+    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+)
+```
+
+### **✅ DO: Validate Input Data**
+```kotlin
+// Always validate and sanitize input
+fun processUserInput(input: String): String {
+    return input
+        .trim()
+        .takeIf { it.matches(Regex("[a-zA-Z0-9\\s]+")) }
+        ?: throw IllegalArgumentException("Invalid input format")
+}
+```
+
+## **Media and File Access**
+
+### **✅ DO: Use Scoped Storage (API 29+)**
+```kotlin
+// Use MediaStore for accessing media files
+val contentResolver = context.contentResolver
+val projection = arrayOf(MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE)
+val cursor = contentResolver.query(
+    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+    projection,
+    null,
+    null,
+    null
+)
+```
+
+### **✅ DO: Request Specific Media Permissions**
+```xml
+<!-- Request specific media permissions instead of broad storage -->
+<uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+```
+
+## **Security Headers and Configuration**
+
+### **✅ DO: Set Secure Flags**
+```xml
+<!-- AndroidManifest.xml -->
+<activity
+    android:name=".MainActivity"
+    android:exported="true"
+    android:screenOrientation="portrait">
+    
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+</activity>
+```
+
+### **✅ DO: Use ProGuard/R8 for Code Obfuscation**
+```proguard
+# proguard-rules.pro
+-keep class com.sdu.composemusicplayer.** { *; }
+-dontwarn com.sdu.composemusicplayer.**
+
+# Remove debug information in release builds
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+}
+```
+
+## **Biometric Authentication**
+
+### **✅ DO: Use BiometricPrompt for Authentication**
+```kotlin
+class BiometricAuthManager(private val activity: Activity) {
+    
+    fun authenticateUser(callback: (Boolean) -> Unit) {
+        val biometricPrompt = BiometricPrompt(
+            activity as FragmentActivity,
+            ContextCompat.getMainExecutor(activity),
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    callback(true)
+                }
+                
+                override fun onAuthenticationFailed() {
+                    callback(false)
+                }
+            }
+        )
+        
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Authenticate")
+            .setSubtitle("Use your biometric to authenticate")
+            .setNegativeButtonText("Cancel")
+            .build()
+            
+        biometricPrompt.authenticate(promptInfo)
+    }
+}
+```
+
+## **Common Security Patterns**
+
+### **✅ DO: Implement Proper Error Handling**
+```kotlin
+// Never expose sensitive information in error messages
+try {
+    // Sensitive operation
+} catch (e: Exception) {
+    Log.e(TAG, "Operation failed", e) // Log full error internally
+    showUserFriendlyError("Something went wrong. Please try again.") // Show safe message to user
+}
+```
+
+### **✅ DO: Use Secure Random for Sensitive Operations**
+```kotlin
+// Use SecureRandom for cryptographic operations
+val secureRandom = SecureRandom()
+val randomBytes = ByteArray(32)
+secureRandom.nextBytes(randomBytes)
+```
+
+### **✅ DO: Validate App Signatures**
+```kotlin
+fun verifyAppSignature(context: Context): Boolean {
+    val packageInfo = context.packageManager.getPackageInfo(
+        context.packageName,
+        PackageManager.GET_SIGNATURES
+    )
+    
+    // Validate signature against expected certificate
+    return packageInfo.signatures.any { signature ->
+        // Your signature validation logic
+        true
+    }
+}
+```
+
+## **Performance and Security Balance**
+
+### **✅ DO: Implement Proper Caching with Security**
+```kotlin
+// Cache sensitive data securely
+class SecureCacheManager(context: Context) {
+    private val encryptedCache = EncryptedSharedPreferences.create(
+        context,
+        "secure_cache",
+        masterKey,
+        // ... encryption schemes
+    )
+    
+    fun storeSecureData(key: String, data: String) {
+        encryptedCache.edit()
+            .putString(key, data)
+            .apply()
+    }
+}
+```
+
+### **✅ DO: Use Modern Networking Libraries**
+```kotlin
+// Use Retrofit with proper security configurations
+@Provides
+@Singleton
+fun provideOkHttpClient(): OkHttpClient {
+    return OkHttpClient.Builder()
+        .addInterceptor(HttpLoggingInterceptor().apply {
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
+        })
+        .certificatePinner(certificatePinner)
+        .build()
+}
+```
+
+## **Testing Security**
+
+### **✅ DO: Write Security Tests**
+```kotlin
+@Test
+fun testPermissionHandling() {
+    // Test permission request flow
+    val activity = ActivityScenario.launch(MainActivity::class.java)
+    
+    // Simulate permission denial
+    activity.onActivity { it.requestCameraPermission() }
+    
+    // Verify appropriate handling
+    // ... assertions
+}
+```
+
+---
+
+**Remember**: Security is not a one-time implementation but an ongoing process. Always stay updated with the latest Android security guidelines and regularly audit your app's security posture.
