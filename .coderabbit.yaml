@@ -15,7 +15,7 @@ reviews:
   # 코드래빗이 리뷰 완료 후 자동으로 PR 승인
   request_changes_workflow: true
   
-  # 고수준 요약 활성화
+  # 고수준 요약 활성화  
   high_level_summary: true
   
   # 시(poem) 형태의 요약 활성화

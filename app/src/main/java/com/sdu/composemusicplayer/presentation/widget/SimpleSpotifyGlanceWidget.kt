@@ -141,3 +141,4 @@ class SimpleSpotifyGlanceWidget : GlanceAppWidget() {
 class SimpleSpotifyGlanceWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = SimpleSpotifyGlanceWidget()
 }
+
