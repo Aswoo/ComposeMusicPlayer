@@ -82,7 +82,8 @@ fun ExpandedMusicPlayerContent(
             onSwap = {
                 screenState.value = !screenState.value
             },
-            onBack = { screenState.value = true }, // Add this line
+            // Add this line
+            onBack = { screenState.value = true },
         )
         return
     }

@@ -62,7 +62,8 @@ class AudioVolumeManager(private val context: Context) {
             audioManager.setStreamVolume(
                 AudioManager.STREAM_MUSIC,
                 adjustedVolume,
-                0, // 플래그 없음
+                // 플래그 없음
+                0,
             )
 
             _currentVolume.value = adjustedVolume
@@ -81,7 +82,8 @@ class AudioVolumeManager(private val context: Context) {
             audioManager.adjustStreamVolume(
                 AudioManager.STREAM_MUSIC,
                 direction,
-                0, // 플래그 없음
+                // 플래그 없음
+                0,
             )
 
             _currentVolume.value = getCurrentVolume()

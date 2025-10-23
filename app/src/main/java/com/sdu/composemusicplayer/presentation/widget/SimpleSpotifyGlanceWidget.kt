@@ -31,7 +31,6 @@ import androidx.glance.unit.ColorProvider
  * 복잡한 Box 구조 없이 기본 컴포넌트만 사용
  */
 class SimpleSpotifyGlanceWidget : GlanceAppWidget() {
-
     override suspend fun provideGlance(
         context: Context,
         id: GlanceId,
@@ -40,20 +39,23 @@ class SimpleSpotifyGlanceWidget : GlanceAppWidget() {
             GlanceTheme {
                 // 스포티파이 스타일 메인 컨테이너
                 Row(
-                    modifier = GlanceModifier
-                        .fillMaxSize()
-                        .appWidgetBackground()
-                        .cornerRadius(16.dp)
-                        .padding(16.dp),
+                    modifier =
+                        GlanceModifier
+                            .fillMaxSize()
+                            .appWidgetBackground()
+                            .cornerRadius(16.dp)
+                            .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     // 앨범 아트 영역 (이모지로 대체)
                     Text(
                         text = "🎵",
-                        style = TextStyle(
-                            fontSize = 48.sp,
-                            color = ColorProvider(Color(0xFF1DB954)), // Spotify Green
-                        ),
+                        style =
+                            TextStyle(
+                                fontSize = 48.sp,
+                                // Spotify Green
+                                color = ColorProvider(Color(0xFF1DB954)),
+                            ),
                         modifier = GlanceModifier.size(64.dp),
                     )
 
@@ -66,22 +68,26 @@ class SimpleSpotifyGlanceWidget : GlanceAppWidget() {
                         // 곡 제목 - 굵은 폰트, 흰색
                         Text(
                             text = "음악을 재생해보세요",
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = ColorProvider(Color(0xFFFFFFFF)), // White
-                            ),
+                            style =
+                                TextStyle(
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    // White
+                                    color = ColorProvider(Color(0xFFFFFFFF)),
+                                ),
                         )
-                        
+
                         Spacer(modifier = GlanceModifier.width(4.dp))
-                        
+
                         // 아티스트 - 회색, 작은 폰트
                         Text(
                             text = "Compose Music Player",
-                            style = TextStyle(
-                                fontSize = 13.sp,
-                                color = ColorProvider(Color(0xFFB3B3B3)), // Spotify Gray
-                            ),
+                            style =
+                                TextStyle(
+                                    fontSize = 13.sp,
+                                    // Spotify Gray
+                                    color = ColorProvider(Color(0xFFB3B3B3)),
+                                ),
                         )
                     }
 
@@ -97,10 +103,12 @@ class SimpleSpotifyGlanceWidget : GlanceAppWidget() {
                             // 이전 곡 버튼
                             Text(
                                 text = "⏮",
-                                style = TextStyle(
-                                    fontSize = 20.sp,
-                                    color = ColorProvider(Color(0xFFFFFFFF)), // White
-                                ),
+                                style =
+                                    TextStyle(
+                                        fontSize = 20.sp,
+                                        // White
+                                        color = ColorProvider(Color(0xFFFFFFFF)),
+                                    ),
                                 modifier = GlanceModifier.size(40.dp),
                             )
 
@@ -109,10 +117,12 @@ class SimpleSpotifyGlanceWidget : GlanceAppWidget() {
                             // 재생/일시정지 버튼
                             Text(
                                 text = "▶",
-                                style = TextStyle(
-                                    fontSize = 24.sp,
-                                    color = ColorProvider(Color(0xFF1DB954)), // Spotify Green
-                                ),
+                                style =
+                                    TextStyle(
+                                        fontSize = 24.sp,
+                                        // Spotify Green
+                                        color = ColorProvider(Color(0xFF1DB954)),
+                                    ),
                                 modifier = GlanceModifier.size(48.dp),
                             )
 
@@ -121,10 +131,12 @@ class SimpleSpotifyGlanceWidget : GlanceAppWidget() {
                             // 다음 곡 버튼
                             Text(
                                 text = "⏭",
-                                style = TextStyle(
-                                    fontSize = 20.sp,
-                                    color = ColorProvider(Color(0xFFFFFFFF)), // White
-                                ),
+                                style =
+                                    TextStyle(
+                                        fontSize = 20.sp,
+                                        // White
+                                        color = ColorProvider(Color(0xFFFFFFFF)),
+                                    ),
                                 modifier = GlanceModifier.size(40.dp),
                             )
                         }
@@ -141,4 +153,3 @@ class SimpleSpotifyGlanceWidget : GlanceAppWidget() {
 class SimpleSpotifyGlanceWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = SimpleSpotifyGlanceWidget()
 }
-

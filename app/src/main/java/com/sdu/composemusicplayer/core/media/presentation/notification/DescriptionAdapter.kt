@@ -19,7 +19,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * A custom implementation of PlayerNotificationManager.MediaDescriptionAdapter
@@ -52,26 +51,50 @@ class DescriptionAdapter(
         }
     }
 
-    override fun getCurrentLargeIcon(player: Player, callback: PlayerNotificationManager.BitmapCallback): Bitmap? {
+    override fun getCurrentLargeIcon(
+        player: Player,
+        callback: PlayerNotificationManager.BitmapCallback,
+    ): Bitmap? {
         val mediaMetadata = player.mediaMetadata
         val albumArtUri = mediaMetadata.artworkUri
 
         return if (albumArtUri != null && albumArtUri != Uri.EMPTY) {
             try {
-                val imageRequest = ImageRequest.Builder(context)
-                    .data(albumArtUri)
-                    .size(NOTIFICATION_LARGE_ICON_SIZE)
-                    .build()
+                val imageRequest =
+                    ImageRequest
+                        .Builder(context)
+                        .data(albumArtUri)
+                        .size(NOTIFICATION_LARGE_ICON_SIZE)
+                        .build()
 
                 scope.launch {
                     try {
                         val result = context.imageLoader.execute(imageRequest)
                         val drawable = result.drawable
                         val bitmap = drawable?.toBitmap(NOTIFICATION_LARGE_ICON_SIZE, NOTIFICATION_LARGE_ICON_SIZE)
-                        callback.onBitmap(bitmap ?: android.graphics.Bitmap.createBitmap(1, 1, android.graphics.Bitmap.Config.ARGB_8888))
+                        callback.onBitmap(
+                            bitmap ?: android.graphics.Bitmap.createBitmap(
+                                1, 1,
+                                android
+                                    .graphics
+                                    .Bitmap
+                                    .Config
+                                    .ARGB_8888,
+                            ),
+                        )
                     } catch (e: Exception) {
                         Log.e("DescriptionAdapter", "Error loading album art", e)
-                        callback.onBitmap(android.graphics.Bitmap.createBitmap(1, 1, android.graphics.Bitmap.Config.ARGB_8888))
+                        callback.onBitmap(
+                            android.graphics.Bitmap.createBitmap(
+                                1,
+                                1,
+                                android
+                                    .graphics
+                                    .Bitmap
+                                    .Config
+                                    .ARGB_8888,
+                            ),
+                        )
                     }
                 }
                 null
@@ -96,24 +119,29 @@ class DescriptionAdapter(
     @SuppressLint("MissingPermission")
     fun registerBluetoothReceiver(context: Context) {
         if (bluetoothReceiver == null) {
-            bluetoothReceiver = object : android.content.BroadcastReceiver() {
-                override fun onReceive(context: Context, intent: android.content.Intent) {
-                    when (intent.action) {
-                        android.bluetooth.BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED -> {
-                            scope.launch {
-                                val device = getBluetoothConnectedDeviceAsync(context)
-                                if (device != null) {
-                                    Log.d("DescriptionAdapter", "Bluetooth device connected")
+            bluetoothReceiver =
+                object : android.content.BroadcastReceiver() {
+                    override fun onReceive(
+                        context: Context,
+                        intent: android.content.Intent,
+                    ) {
+                        when (intent.action) {
+                            android.bluetooth.BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED -> {
+                                scope.launch {
+                                    val device = getBluetoothConnectedDeviceAsync(context)
+                                    if (device != null) {
+                                        Log.d("DescriptionAdapter", "Bluetooth device connected")
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            val filter = android.content.IntentFilter().apply {
-                addAction(android.bluetooth.BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED)
-            }
+            val filter =
+                android.content.IntentFilter().apply {
+                    addAction(android.bluetooth.BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED)
+                }
             context.registerReceiver(bluetoothReceiver, filter)
         }
     }

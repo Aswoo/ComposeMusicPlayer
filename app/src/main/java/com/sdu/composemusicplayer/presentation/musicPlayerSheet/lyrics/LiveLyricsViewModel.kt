@@ -19,7 +19,15 @@ import com.sdu.composemusicplayer.viewmodel.IPlayerEnvironment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,11 +39,14 @@ data class LiveLyricsUiState(
     val currentPlayedMusic: Music? = null,
     val lyricsScreenState: LyricsScreenState = LyricsScreenState.Loading,
     val isPlaying: Boolean = false,
-    val currentProgress: Float = 0f, // 0.0f ~ 1.0f
+    // 0.0f ~ 1.0f
+    val currentProgress: Float = 0f,
     val currentTimeDisplay: String = "0:00",
     val totalTimeDisplay: String = "0:00",
-    val lyricsSourceForMenu: LyricsFetchSource? = null, // "Save to file" 메뉴 표시 여부 결정용
-    val lyricsTextForCopy: String = "", // 복사할 전체 가사 텍스트
+    // "Save to file" 메뉴 표시 여부 결정용
+    val lyricsSourceForMenu: LyricsFetchSource? = null,
+    // 복사할 전체 가사 텍스트
+    val lyricsTextForCopy: String = "",
 )
 
 @HiltViewModel

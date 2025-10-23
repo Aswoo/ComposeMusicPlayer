@@ -3,6 +3,7 @@ package com.sdu.composemusicplayer
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -23,7 +24,6 @@ import com.sdu.composemusicplayer.ui.theme.ComposeMusicPlayerTheme
 import com.sdu.composemusicplayer.viewmodel.PlayerEvent
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import android.util.Log
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -92,7 +92,6 @@ class MainActivity : ComponentActivity() {
     private fun handleWidgetAction(intent: Intent?) {
         val action = intent?.getStringExtra("action")
         Log.d("MainActivity", "위젯 액션 수신: $action")
-        
         when (action) {
             "com.sdu.composemusicplayer.action.PLAY_PAUSE" -> {
                 Log.d("MainActivity", "재생/일시정지 토글")

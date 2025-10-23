@@ -92,11 +92,14 @@ class MusicRepositoryImpl
             val duration = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION))
             val albumId = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID))
 
-            val albumPath =
+            val albumPath = if (albumId != null && albumId.isNotEmpty()) {
                 Uri.withAppendedPath(
                     Uri.parse("content://media/external/audio/albumart"),
                     albumId,
-                )
+                ).toString()
+            } else {
+                "" // 앨범 ID가 없으면 빈 문자열
+            }
             val musicPath = Uri.withAppendedPath(audioUriExternal, "" + audioID)
 
             return MusicEntity(
@@ -109,7 +112,7 @@ class MusicRepositoryImpl
                         artist
                     },
                 duration = duration,
-                albumPath = albumPath.toString(),
+                albumPath = albumPath,
                 audioPath = musicPath.toString(),
             )
         }

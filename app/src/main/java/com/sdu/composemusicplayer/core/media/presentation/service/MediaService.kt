@@ -9,16 +9,15 @@ import android.os.Build
 import android.view.KeyEvent
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.Companion.PRIVATE
-import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import androidx.media3.ui.PlayerNotificationManager
 import com.sdu.composemusicplayer.core.media.presentation.notification.MediaNotificationManager
+import com.sdu.composemusicplayer.presentation.widget.BasicWidgetProvider
 import com.sdu.composemusicplayer.utils.AppStateUtil.isAppInForeground
 import com.sdu.composemusicplayer.viewmodel.IPlayerEnvironment
-import com.sdu.composemusicplayer.presentation.widget.BasicWidgetProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -59,14 +58,16 @@ class MediaService : MediaSessionService() {
                 }
 
         mediaSession =
-            MediaSession.Builder(this, exoPlayer)
-                .setSessionActivity(sessionActivityPendingIntent ?: PendingIntent.getActivity(
-                    this,
-                    0,
-                    Intent(this, com.sdu.composemusicplayer.MainActivity::class.java),
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                ))
-                .build()
+            MediaSession
+                .Builder(this, exoPlayer)
+                .setSessionActivity(
+                    sessionActivityPendingIntent ?: PendingIntent.getActivity(
+                        this,
+                        0,
+                        Intent(this, com.sdu.composemusicplayer.MainActivity::class.java),
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+                    ),
+                ).build()
 
         musicNotificationManager =
             MediaNotificationManager(
@@ -135,31 +136,31 @@ class MediaService : MediaSessionService() {
         startId: Int,
     ): Int {
         android.util.Log.d("MediaService", "onStartCommand 호출됨")
-        
+
         // Intent 액션 처리
         when (intent?.action) {
-               "ACTION_PLAY_PAUSE" -> {
-                   android.util.Log.d("MediaService", "재생/일시정지 명령 수신")
-                   serviceScope.launch {
-                       val isPlaying = playerEnvironment.isPlaying().first()
-                       if (isPlaying) {
-                           playerEnvironment.pause()
-                           android.util.Log.d("MediaService", "일시정지 실행")
-                       } else {
-                           playerEnvironment.resume()
-                           android.util.Log.d("MediaService", "재생 실행")
-                       }
-                       
-                       // 상태 변경 후 즉시 위젯 업데이트 (깜박임 방지)
-                       BasicWidgetProvider.updateAllWidgets(this@MediaService)
-                   }
-               }
+            "ACTION_PLAY_PAUSE" -> {
+                android.util.Log.d("MediaService", "재생/일시정지 명령 수신")
+                serviceScope.launch {
+                    val isPlaying = playerEnvironment.isPlaying().first()
+                    if (isPlaying) {
+                        playerEnvironment.pause()
+                        android.util.Log.d("MediaService", "일시정지 실행")
+                    } else {
+                        playerEnvironment.resume()
+                        android.util.Log.d("MediaService", "재생 실행")
+                    }
+
+                    // 상태 변경 후 즉시 위젯 업데이트 (깜박임 방지)
+                    BasicWidgetProvider.updateAllWidgets(this@MediaService)
+                }
+            }
             "ACTION_PREVIOUS" -> {
                 android.util.Log.d("MediaService", "이전 곡 명령 수신")
                 serviceScope.launch {
                     playerEnvironment.previous()
                     android.util.Log.d("MediaService", "이전 곡 실행")
-                    
+
                     // 상태 변경 후 즉시 위젯 업데이트 (깜박임 방지)
                     BasicWidgetProvider.updateAllWidgets(this@MediaService)
                 }
@@ -169,7 +170,7 @@ class MediaService : MediaSessionService() {
                 serviceScope.launch {
                     playerEnvironment.next()
                     android.util.Log.d("MediaService", "다음 곡 실행")
-                    
+
                     // 상태 변경 후 즉시 위젯 업데이트 (깜박임 방지)
                     BasicWidgetProvider.updateAllWidgets(this@MediaService)
                 }
@@ -180,7 +181,7 @@ class MediaService : MediaSessionService() {
                     android.util.Log.d("MediaService", "Notification 서비스 시작")
                     musicNotificationManager.startMusicNotificationService(this, mediaSession)
                 }
-                
+
                 // MediaService 시작 후 위젯 업데이트
                 serviceScope.launch {
                     android.util.Log.d("MediaService", "위젯 업데이트 시작 (2초 후)")
@@ -190,7 +191,7 @@ class MediaService : MediaSessionService() {
                 }
             }
         }
-        
+
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -205,7 +206,6 @@ class MediaService : MediaSessionService() {
     override fun onTaskRemoved(rootIntent: Intent?) {
         stopSelf()
     }
-
 
     companion object {
         private var lastClickTime = 0L

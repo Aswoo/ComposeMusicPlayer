@@ -48,7 +48,8 @@ class PlaylistDetailScreenTest {
             CompositionLocalProvider(
                 LocalCommonMusicAction provides mockCommonMusicAction,
                 LocalInefficientThumbnailImageLoader provides fakeImageLoader,
-                LocalEfficientThumbnailImageLoader provides fakeImageLoader, // 여기 추가!
+                // 여기 추가!
+                LocalEfficientThumbnailImageLoader provides fakeImageLoader,
             ) {
                 PlaylistDetailContent(
                     modifier = Modifier,

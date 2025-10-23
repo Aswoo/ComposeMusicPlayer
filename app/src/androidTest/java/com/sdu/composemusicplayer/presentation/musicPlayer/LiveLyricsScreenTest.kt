@@ -67,7 +67,8 @@ class LiveLyricsScreenTest {
         // Arrange
         uiStateFlow.value =
             defaultUiState.copy(
-                currentPlayedMusic = null, // 명시적으로 null 또는 Music.NONE (ViewModel 구현에 따라)
+                // 명시적으로 null 또는 Music.NONE (ViewModel 구현에 따라)
+                currentPlayedMusic = null,
                 lyricsScreenState = LyricsScreenState.NotPlaying,
             )
         // Act
@@ -126,8 +127,10 @@ class LiveLyricsScreenTest {
         uiStateFlow.value =
             defaultUiState.copy(
                 lyricsScreenState = textLyricsState,
-                lyricsTextForCopy = lyricsLines.joinToString("\n"), // 복사할 텍스트도 설정
-                lyricsSourceForMenu = LyricsFetchSource.FROM_SONG_METADATA, // 메뉴 표시 여부 결정용
+                // 복사할 텍스트도 설정
+                lyricsTextForCopy = lyricsLines.joinToString("\n"),
+                // 메뉴 표시 여부 결정용
+                lyricsSourceForMenu = LyricsFetchSource.FROM_SONG_METADATA,
             )
         // Act
         setScreenContent()
@@ -197,7 +200,8 @@ class LiveLyricsScreenTest {
         uiStateFlow.value =
             defaultUiState.copy(
                 isPlaying = true,
-                lyricsScreenState = textLyricsState, // 컨트롤러 표시를 위해 가사 상태도 설정
+                // 컨트롤러 표시를 위해 가사 상태도 설정
+                lyricsScreenState = textLyricsState,
                 lyricsSourceForMenu = LyricsFetchSource.FROM_SONG_METADATA,
             )
         every { mockViewModel.togglePlayPause() } just Runs

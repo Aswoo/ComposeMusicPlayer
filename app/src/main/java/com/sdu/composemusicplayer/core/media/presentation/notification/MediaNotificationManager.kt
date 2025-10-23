@@ -22,7 +22,11 @@ import com.sdu.composemusicplayer.R
  */
 @OptIn(
     UnstableApi::class,
-    androidx.media3.common.util.UnstableApi::class,
+    androidx
+        .media3
+        .common
+        .util
+        .UnstableApi::class,
 )
 class MediaNotificationManager(
     private val context: Context,
@@ -56,7 +60,8 @@ class MediaNotificationManager(
             )
 
         notificationManager =
-            PlayerNotificationManager.Builder(context, NOW_PLAYING_NOTIFICATION_ID, NOW_PLAYING_CHANNEL_ID)
+            PlayerNotificationManager
+                .Builder(context, NOW_PLAYING_NOTIFICATION_ID, NOW_PLAYING_CHANNEL_ID)
                 .setNotificationListener(notificationListener)
                 .setChannelImportance(NotificationManager.IMPORTANCE_LOW)
                 .setChannelDescriptionResourceId(R.string.media_notification_channel_description)
@@ -70,7 +75,7 @@ class MediaNotificationManager(
     private fun startForegroundMusicService(mediaSessionService: MediaSessionService) {
         // PlayerNotificationManager가 생성한 Notification을 사용
         notificationManager.setPlayer(player)
-        
+
         // 기본 Notification으로 시작 (PlayerNotificationManager가 업데이트함)
         val musicNotification =
             Notification
@@ -93,17 +98,18 @@ class MediaNotificationManager(
     private fun createNotificationChannel() {
         android.util.Log.d("MediaNotificationManager", "Notification Channel 생성 시작")
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        
-        val channel = NotificationChannel(
-            NOW_PLAYING_CHANNEL_ID,
-            context.getString(R.string.media_notification_channel),
-            NotificationManager.IMPORTANCE_LOW
-        ).apply {
-            description = context.getString(R.string.media_notification_channel_description)
-            setShowBadge(false)
-            lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-        }
-        
+
+        val channel =
+            NotificationChannel(
+                NOW_PLAYING_CHANNEL_ID,
+                context.getString(R.string.media_notification_channel),
+                NotificationManager.IMPORTANCE_LOW,
+            ).apply {
+                description = context.getString(R.string.media_notification_channel_description)
+                setShowBadge(false)
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            }
+
         notificationManager.createNotificationChannel(channel)
         android.util.Log.d("MediaNotificationManager", "Notification Channel 생성 완료: ${channel.id}")
     }

@@ -278,4 +278,3 @@ class MusicScreenTest {
         composeTestRule.onNodeWithText("Artist 1").assertIsDisplayed()
     }
 }
-

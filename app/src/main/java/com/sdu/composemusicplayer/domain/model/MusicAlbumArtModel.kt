@@ -14,5 +14,14 @@ fun Music?.toMusicAlbumArtModel(): MusicAlbumArtModel =
     if (this == null) {
         MusicAlbumArtModel(null, Uri.EMPTY)
     } else {
-        MusicAlbumArtModel(albumId = audioId, uri = Uri.parse(albumPath))
+        val uri = if (albumPath.isNotEmpty()) {
+            try {
+                Uri.parse(albumPath)
+            } catch (e: Exception) {
+                Uri.EMPTY
+            }
+        } else {
+            Uri.EMPTY
+        }
+        MusicAlbumArtModel(albumId = audioId, uri = uri)
     }

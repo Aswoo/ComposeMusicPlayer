@@ -1,6 +1,7 @@
 package com.sdu.composemusicplayer.presentation.musicPlayerSheet.album
 
 import android.media.MediaMetadataRetriever
+import android.net.Uri
 import android.util.Log
 import coil.ImageLoader
 import coil.decode.DataSource
@@ -46,18 +47,33 @@ class AlbumArtFetcher(
                 "${options.size}",
         )
 
-        val metadataRetriever =
-            MediaMetadataRetriever()
-                .apply { setDataSource(options.context, data.uri) }
+        return try {
+            val metadataRetriever = MediaMetadataRetriever()
+            
+            // URI가 유효한지 확인
+            if (data.uri == Uri.EMPTY || data.uri.toString().isEmpty()) {
+                Log.d("Keyer", "Empty URI, returning null")
+                return null
+            }
+            
+            metadataRetriever.setDataSource(options.context, data.uri)
+            val byteArr = metadataRetriever.embeddedPicture
+            
+            if (byteArr == null) {
+                Log.d("Keyer", "No embedded picture found")
+                return null
+            }
 
-        val byteArr = metadataRetriever.embeddedPicture ?: return null
-
-        val bufferedSource = ByteArrayInputStream(byteArr).source().buffer()
-        return SourceResult(
-            ImageSource(bufferedSource, options.context),
-            "image/*",
-            DataSource.MEMORY,
-        )
+            val bufferedSource = ByteArrayInputStream(byteArr).source().buffer()
+            SourceResult(
+                ImageSource(bufferedSource, options.context),
+                "image/*",
+                DataSource.MEMORY,
+            )
+        } catch (e: Exception) {
+            Log.e("Keyer", "Error fetching album art: ${e.message}")
+            null
+        }
     }
 
     class Factory : Fetcher.Factory<MusicAlbumArtModel> {

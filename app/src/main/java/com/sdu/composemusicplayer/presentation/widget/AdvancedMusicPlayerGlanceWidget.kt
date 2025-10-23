@@ -32,7 +32,6 @@ import androidx.glance.unit.ColorProvider
  * Spotify 스타일의 4x1 음악 플레이어 위젯
  */
 class AdvancedMusicPlayerGlanceWidget : GlanceAppWidget() {
-
     override suspend fun provideGlance(
         context: Context,
         id: GlanceId,
@@ -41,27 +40,31 @@ class AdvancedMusicPlayerGlanceWidget : GlanceAppWidget() {
             GlanceTheme {
                 // 메인 컨테이너 - XML의 LinearLayout과 동일한 구조
                 Row(
-                    modifier = GlanceModifier
-                        .fillMaxSize()
-                        .appWidgetBackground()
-                        .cornerRadius(12.dp)
-                        .padding(12.dp),
+                    modifier =
+                        GlanceModifier
+                            .fillMaxSize()
+                            .appWidgetBackground()
+                            .cornerRadius(12.dp)
+                            .padding(12.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     // 앨범 아트 영역 - XML의 ImageView와 동일한 크기와 스타일
                     Box(
-                        modifier = GlanceModifier
-                            .size(48.dp)
-                            .appWidgetBackground()
-                            .cornerRadius(8.dp),
+                        modifier =
+                            GlanceModifier
+                                .size(48.dp)
+                                .appWidgetBackground()
+                                .cornerRadius(8.dp),
                     ) {
                         // 앨범 아트 아이콘 (실제로는 이미지가 들어갈 자리)
                         Text(
                             text = "🎵",
-                            style = TextStyle(
-                                fontSize = 24.sp,
-                                color = ColorProvider(Color(0xFF03DAC5)), // teal_200
-                            ),
+                            style =
+                                TextStyle(
+                                    fontSize = 24.sp,
+                                    // teal_200
+                                    color = ColorProvider(Color(0xFF03DAC5)),
+                                ),
                             modifier = GlanceModifier.fillMaxSize(),
                         )
                     }
@@ -70,29 +73,34 @@ class AdvancedMusicPlayerGlanceWidget : GlanceAppWidget() {
 
                     // 곡 정보 영역 - XML의 LinearLayout과 동일한 구조
                     Column(
-                        modifier = GlanceModifier
-                            .fillMaxWidth(),
+                        modifier =
+                            GlanceModifier
+                                .fillMaxWidth(),
                     ) {
                         // 곡 제목 - XML의 TextView와 동일한 스타일
                         Text(
                             text = "음악을 재생해보세요",
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = ColorProvider(Color(0xFFFFFFFF)), // white
-                            ),
+                            style =
+                                TextStyle(
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    // white
+                                    color = ColorProvider(Color(0xFFFFFFFF)),
+                                ),
                         )
-                        
+
                         // 아티스트와 제목 사이의 간격 (XML의 marginTop="2dp")
                         Spacer(modifier = GlanceModifier.width(2.dp))
-                        
+
                         // 아티스트 - XML의 TextView와 동일한 스타일
                         Text(
                             text = "Compose Music Player",
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                color = ColorProvider(Color(0xFF03DAC5)), // teal_200
-                            ),
+                            style =
+                                TextStyle(
+                                    fontSize = 12.sp,
+                                    // teal_200
+                                    color = ColorProvider(Color(0xFF03DAC5)),
+                                ),
                         )
                     }
 
@@ -104,22 +112,26 @@ class AdvancedMusicPlayerGlanceWidget : GlanceAppWidget() {
                         // 이전 곡 버튼 - XML의 ImageButton과 동일한 크기
                         Text(
                             text = "⏮",
-                            style = TextStyle(
-                                fontSize = 20.sp,
-                                color = ColorProvider(Color(0xFFFFFFFF)), // white
-                            ),
+                            style =
+                                TextStyle(
+                                    fontSize = 20.sp,
+                                    // white
+                                    color = ColorProvider(Color(0xFFFFFFFF)),
+                                ),
                             modifier = GlanceModifier.size(40.dp),
                         )
 
                         // 재생/일시정지 버튼 - XML의 marginHorizontal="4dp" 반영
                         Spacer(modifier = GlanceModifier.width(4.dp))
-                        
+
                         Text(
                             text = "▶",
-                            style = TextStyle(
-                                fontSize = 20.sp,
-                                color = ColorProvider(Color(0xFFFFFFFF)), // white
-                            ),
+                            style =
+                                TextStyle(
+                                    fontSize = 20.sp,
+                                    // white
+                                    color = ColorProvider(Color(0xFFFFFFFF)),
+                                ),
                             modifier = GlanceModifier.size(40.dp),
                         )
 
@@ -128,10 +140,12 @@ class AdvancedMusicPlayerGlanceWidget : GlanceAppWidget() {
                         // 다음 곡 버튼
                         Text(
                             text = "⏭",
-                            style = TextStyle(
-                                fontSize = 20.sp,
-                                color = ColorProvider(Color(0xFFFFFFFF)), // white
-                            ),
+                            style =
+                                TextStyle(
+                                    fontSize = 20.sp,
+                                    // white
+                                    color = ColorProvider(Color(0xFFFFFFFF)),
+                                ),
                             modifier = GlanceModifier.size(40.dp),
                         )
                     }

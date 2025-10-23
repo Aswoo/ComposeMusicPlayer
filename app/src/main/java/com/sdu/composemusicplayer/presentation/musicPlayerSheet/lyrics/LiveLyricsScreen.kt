@@ -54,8 +54,10 @@ private const val SCROLL_OFFSET_FACTOR = 2
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LiveLyricsScreen(
-    onSwap: () -> Unit, // 이 콜백은 화면 전환과 관련될 수 있으므로 유지
-    onBack: () -> Unit, // 화면 닫기와 관련될 수 있으므로 유지
+    // 이 콜백은 화면 전환과 관련될 수 있으므로 유지
+    onSwap: () -> Unit,
+    // 화면 닫기와 관련될 수 있으므로 유지
+    onBack: () -> Unit,
     lyricsViewModel: LiveLyricsViewModel = hiltViewModel(),
 ) {
     // ViewModel의 uiState를 구독하여 LiveLyricsUiState를 가져옵니다.
@@ -90,7 +92,8 @@ fun LiveLyricsScreen(
                 )
             }
         },
-        containerColor = Color(DARK_BACKGROUND_COLOR.toLong()), // 어두운 배경색
+        // 어두운 배경색
+        containerColor = Color(DARK_BACKGROUND_COLOR.toLong()),
     ) { paddingValues ->
         LiveLyricsContent(
             modifier =
@@ -99,10 +102,13 @@ fun LiveLyricsScreen(
                     .fillMaxSize(),
             // LiveLyricsUiState에서 직접 값을 사용합니다.
             lyricsScreenState = uiState.lyricsScreenState,
-            songProgressMillis = lyricsViewModel::getCurrentSongProgressMillis, // SyncedLyricsState에 필요
-            onSeekToPositionMillis = lyricsViewModel::setSongProgressMillis, // SyncedLyricsState에 필요
+            // SyncedLyricsState에 필요
+            songProgressMillis = lyricsViewModel::getCurrentSongProgressMillis,
+            // SyncedLyricsState에 필요
+            onSeekToPositionMillis = lyricsViewModel::setSongProgressMillis,
             onRetry = lyricsViewModel::retryLoadLyrics,
-            onBack = onBack, // NoLyricsState에 필요
+            // NoLyricsState에 필요
+            onBack = onBack,
         )
     }
 }
@@ -427,7 +433,8 @@ fun PlainLyricsState(
                             ) {}
                         },
                 line = s,
-                isCurrentLine = true, // PlainLyrics에서는 항상 현재 라인처럼 표시
+                // PlainLyrics에서는 항상 현재 라인처럼 표시
+                isCurrentLine = true,
                 isShowingContextMenu = index == contextMenuShownIndex,
             )
             Spacer(modifier = Modifier.height(itemsSpacing))
