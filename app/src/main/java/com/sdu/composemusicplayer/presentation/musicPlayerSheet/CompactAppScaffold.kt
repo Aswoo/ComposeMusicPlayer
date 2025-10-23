@@ -92,7 +92,8 @@ fun CompactAppScaffold(
                 bottom =
                     calculateBottomPaddingForContent(
                         shouldShowPlayerBar,
-                        with(density) { bottomNavBarHeightPx.toDp() }, // Use actual bottom nav bar height
+                        // Use actual bottom nav bar height
+                        with(density) { bottomNavBarHeightPx.toDp() },
                         COMPACT_NOW_PLAYING_BAR_HEIGHT,
                     ),
             )

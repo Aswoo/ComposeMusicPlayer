@@ -82,7 +82,8 @@ class BluetoothVolumeManager(private val context: Context) {
             audioManager.setStreamVolume(
                 AudioManager.STREAM_MUSIC,
                 adjustedVolume,
-                AudioManager.FLAG_SHOW_UI, // 음량 변경 시 UI 표시
+                // 음량 변경 시 UI 표시
+                AudioManager.FLAG_SHOW_UI,
             )
 
             _bluetoothVolume.value = adjustedVolume

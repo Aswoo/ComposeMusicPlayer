@@ -18,7 +18,8 @@ class MusicPlayerScreenshots {
             audioId = 1L,
             title = "Beautiful Song",
             artist = "Amazing Artist",
-            duration = AndroidConstants.Time.MILLIS_IN_SECOND * 180L, // 3분
+            // 3분
+            duration = AndroidConstants.Time.MILLIS_IN_SECOND * 180L,
             albumPath = "https://example.com/album.jpg",
             audioPath = "/test/path",
         )
@@ -56,7 +57,8 @@ class MusicPlayerScreenshots {
             // 로딩 상태의 음악 플레이어
             TestableExpandedMusicPlayerContent(
                 isPlaying = false,
-                currentMusic = Music.default, // 기본값 (로딩 중)
+                // 기본값 (로딩 중)
+                currentMusic = Music.default,
                 progress = 0f,
             )
         }

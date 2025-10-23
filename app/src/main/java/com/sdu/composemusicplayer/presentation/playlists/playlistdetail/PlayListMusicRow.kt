@@ -38,7 +38,7 @@ import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.model.toMusicAlbumArtModel
 import com.sdu.composemusicplayer.presentation.component.menu.MenuActionItem
 import com.sdu.composemusicplayer.presentation.component.menu.MusicDropdownMenu
-import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.LocalEfficientThumbnailImageLoader
+import com.sdu.composemusicplayer.presentation.musicPlayerSheet.album.LocalInefficientThumbnailImageLoader
 import com.sdu.composemusicplayer.ui.theme.SpotiDarkGray
 import com.sdu.composemusicplayer.ui.theme.SpotiGray
 import com.sdu.composemusicplayer.ui.theme.SpotiGreen
@@ -61,6 +61,7 @@ fun PlayListMusicRow(
                 .background(if (isPlaying) SpotiDarkGray else Color.Transparent),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        println("PlayList Music : ${music.title} ${music.albumPath}")
         AsyncImage(
             modifier =
                 Modifier
@@ -68,7 +69,7 @@ fun PlayListMusicRow(
                     .size(60.dp)
                     .clip(RoundedCornerShape(12.dp)),
             model = music.toMusicAlbumArtModel(),
-            imageLoader = LocalEfficientThumbnailImageLoader.current,
+            imageLoader = LocalInefficientThumbnailImageLoader.current,
             contentDescription = "Album Art",
             contentScale = ContentScale.Crop,
             fallback = rememberVectorPainter(image = Icons.Rounded.MusicNote),

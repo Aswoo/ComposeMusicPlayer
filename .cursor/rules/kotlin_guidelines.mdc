@@ -1,3 +1,10 @@
+---
+description: Kotlin and Android development guidelines and best practices
+globs: app/src/main/java/**/*.kt, app/src/test/java/**/*.kt, app/src/androidTest/java/**/*.kt
+alwaysApply: true
+---
+
+# Kotlin & Android Development Guidelines
 
 You are a Senior Kotlin programmer with experience in the Android framework and a preference for clean programming and design patterns.
 
@@ -88,7 +95,7 @@ Generate code, corrections, and refactorings that comply with the basic principl
 - Write acceptance tests for each module.
   - Follow the Given-When-Then convention.
 
-## Specific to Android
+## Android-Specific Guidelines
 
 ### Basic Principles
 
@@ -112,12 +119,12 @@ Generate code, corrections, and refactorings that comply with the basic principl
   - Settings
   - Patients
   - Appointments
-- Use ViewBinding to manage views
+- Use Jetpack Compose to manage views
 - Use Flow / LiveData to manage UI state
-- Use xml and fragments instead of jetpack compose
 - Use Material 3 for the UI
 - Use ConstraintLayout for layouts
+
 ### Testing
 
 - Use the standard widget testing for flutter
-- Use integration tests for each api module.   
+- Use integration tests for each api module.

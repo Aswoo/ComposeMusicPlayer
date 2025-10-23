@@ -154,7 +154,8 @@ class PlayerViewModelTest {
             audioId = id,
             title = "Test Music $id",
             artist = "Test Artist $id",
-            duration = AndroidConstants.Time.SECONDS_IN_MINUTE * 3L * AndroidConstants.Time.MILLIS_IN_SECOND, // 3분
+            // 3분
+            duration = AndroidConstants.Time.SECONDS_IN_MINUTE * 3L * AndroidConstants.Time.MILLIS_IN_SECOND,
             albumPath = "/path/to/album",
             audioPath = "/path/to/test/song$id.mp3",
         )

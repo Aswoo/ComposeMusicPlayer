@@ -101,6 +101,28 @@ object AndroidConstants {
         const val WRITE_TIMEOUT_SECONDS = 30
     }
 
+    // ===== 위젯 관련 상수들 =====
+    object Widget {
+        // PendingIntent 요청 코드들
+        const val OPEN_APP_REQUEST_CODE = 0
+        const val PLAY_PAUSE_REQUEST_CODE = 1
+        const val PREVIOUS_REQUEST_CODE = 2
+        const val NEXT_REQUEST_CODE = 3
+        const val FAVORITE_REQUEST_CODE = 4
+
+        // 위젯 크기 (dp)
+        const val WIDGET_MIN_WIDTH_DP = 250
+        const val WIDGET_MIN_HEIGHT_DP = 110
+
+        // 위젯 업데이트 주기 (밀리초)
+        const val UPDATE_PERIOD_MILLIS = 30000L
+
+        // 위젯 패딩 (dp)
+        const val WIDGET_PADDING_DP = 12
+        const val ALBUM_ART_SIZE_DP = 48
+        const val BUTTON_SIZE_DP = 40
+    }
+
     // ===== 기타 상수들 =====
     object Misc {
         // 기본값들

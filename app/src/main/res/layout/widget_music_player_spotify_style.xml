@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_spotify_background"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:gravity="center_vertical">
+
+    <!-- 앨범 아트 영역 -->
+    <FrameLayout
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginEnd="16dp">
+
+        <!-- 앨범 아트 이미지 -->
+        <ImageView
+            android:id="@+id/widget_album_art"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/album_art_spotify_background"
+            android:contentDescription="@string/widget_album_art_description"
+            android:scaleType="centerCrop" />
+
+        <!-- 재생 상태 표시 -->
+        <ImageView
+            android:id="@+id/widget_play_indicator"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="4dp"
+            android:background="@drawable/play_indicator_background"
+            android:src="@drawable/ic_play_arrow"
+            android:contentDescription="@string/widget_play_pause_description"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+    <!-- 곡 정보 영역 -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- 곡 제목 -->
+        <TextView
+            android:id="@+id/widget_song_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:fontFamily="sans-serif-medium"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="@string/widget_default_song"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- 아티스트 -->
+        <TextView
+            android:id="@+id/widget_artist_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/widget_default_artist"
+            android:textColor="#B3B3B3"
+            android:textSize="13sp" />
+
+        <!-- 진행 바 (선택사항) -->
+        <ProgressBar
+            android:id="@+id/widget_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:progressTint="#1DB954"
+            android:progressBackgroundTint="#404040"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:max="100"
+            android:progress="0" />
+
+    </LinearLayout>
+
+    <!-- 컨트롤 버튼 영역 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:orientation="horizontal">
+
+        <!-- 이전 곡 버튼 -->
+        <ImageButton
+            android:id="@+id/widget_btn_previous"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/control_button_background"
+            android:contentDescription="@string/widget_previous_description"
+            android:src="@drawable/ic_skip_previous"
+            android:padding="10dp" />
+
+        <!-- 재생/일시정지 버튼 -->
+        <ImageButton
+            android:id="@+id/widget_btn_play_pause"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/play_button_background"
+            android:contentDescription="@string/widget_play_pause_description"
+            android:src="@drawable/ic_play_arrow"
+            android:padding="12dp" />
+
+        <!-- 다음 곡 버튼 -->
+        <ImageButton
+            android:id="@+id/widget_btn_next"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/control_button_background"
+            android:contentDescription="@string/widget_next_description"
+            android:src="@drawable/ic_skip_next"
+            android:padding="10dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
+

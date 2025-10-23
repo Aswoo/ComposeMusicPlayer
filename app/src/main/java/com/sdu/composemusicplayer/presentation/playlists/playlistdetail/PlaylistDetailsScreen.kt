@@ -128,9 +128,9 @@ internal fun PlaylistDetailContent(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(top = 0.dp)
                     .nestedScroll(topBarScrollBehavior.nestedScrollConnection),
             state = listState,
+            contentPadding = PaddingValues(top = 24.dp), // 상태표시줄과 겹치지 않도록 상단 패딩 추가
         ) {
             item {
                 PlaylistHeader(

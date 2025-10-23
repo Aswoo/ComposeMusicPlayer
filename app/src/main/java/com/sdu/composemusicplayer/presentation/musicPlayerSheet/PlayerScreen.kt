@@ -196,7 +196,8 @@ internal fun PlayerScreen(
                 onTogglePlayback = { viewModel.onEvent(PlayerEvent.PlayPause(uiState.isPlaying)) },
                 onNext = { viewModel.onEvent(PlayerEvent.Next) },
                 onPrevious = { viewModel.onEvent(PlayerEvent.Previous) },
-                bluetoothDeviceName = "승우의 Buds2 Pro", // TODO: 실제 블루투스 기기 이름 가져오기
+                // TODO: 실제 블루투스 기기 이름 가져오기
+                bluetoothDeviceName = "승우의 Buds2 Pro",
                 onBluetoothDeviceClick = {
                     showBluetoothBottomSheet = true
                 },
@@ -376,7 +377,8 @@ fun SongControls(
                     .size(34.dp)
                     .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.SkipPrevious,
-            "Previous", // Changed from "Skip Previous"
+            // Changed from "Skip Previous"
+            "Previous",
             actions.onPrevious,
         )
 
@@ -388,7 +390,8 @@ fun SongControls(
                     .size(34.dp)
                     .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.FastRewind,
-            "Rewind", // Changed from "Jump Back"
+            // Changed from "Jump Back"
+            "Rewind",
             actions.onJumpBackward,
         )
 
@@ -405,7 +408,8 @@ fun SongControls(
                     .size(64.dp)
                     .clip(CircleShape),
             icon = pausePlayButton,
-            "Play/Pause", // Changed from "Skip Previous"
+            // Changed from "Skip Previous"
+            "Play/Pause",
             actions.onTogglePlayback,
         )
 
@@ -417,7 +421,8 @@ fun SongControls(
                     .size(36.dp)
                     .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.FastForward,
-            "Forward", // Changed from "Jump Forward"
+            // Changed from "Jump Forward"
+            "Forward",
             actions.onJumpForward,
         )
 
@@ -429,7 +434,8 @@ fun SongControls(
                     .size(36.dp)
                     .clip(RoundedCornerShape(4.dp)),
             icon = Icons.Rounded.SkipNext,
-            "Next", // Changed from "Skip To Next"
+            // Changed from "Skip To Next"
+            "Next",
             actions.onNext,
         )
     }
