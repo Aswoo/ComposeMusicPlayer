@@ -2,18 +2,21 @@ package com.sdu.composemusicplayer.viewModel
 
 import android.net.Uri
 import android.os.Handler
+import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import com.sdu.composemusicplayer.domain.model.Music
 import com.sdu.composemusicplayer.domain.repository.MusicRepository
-import com.sdu.composemusicplayer.mediaPlayer.service.PlayerServiceManager
+import com.sdu.composemusicplayer.core.media.presentation.service.PlayerServiceManager
 import com.sdu.composemusicplayer.utils.AndroidConstants
 import com.sdu.composemusicplayer.viewmodel.PlayerEnvironment
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.slot
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,6 +48,11 @@ class PlayerEnvironmentTest {
         mockkStatic(Uri::class)
         every { Uri.parse(any()) } returns mockk<Uri>(relaxed = true)
 
+        // Mock Android Log to avoid "not mocked" errors
+        mockkStatic(android.util.Log::class)
+        every { android.util.Log.d(any(), any<String>()) } returns 0
+        every { android.util.Log.d(any(), any<String>(), any<Throwable>()) } returns 0
+
         playerEnvironment =
             PlayerEnvironment(
                 musicRepository = mockMusicRepository,
@@ -57,6 +65,8 @@ class PlayerEnvironmentTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
+        unmockkStatic(Uri::class)
+        unmockkStatic(android.util.Log::class)
     }
 
     @Test
@@ -87,8 +97,20 @@ class PlayerEnvironmentTest {
 
             playerEnvironment.playAt(AndroidConstants.Misc.DEFAULT_INDEX)
 
-            val mediaItems = musicList.map { MediaItem.fromUri(it.audioPath) }
-            verify { mockExoPlayer.setMediaItems(mediaItems, AndroidConstants.Misc.DEFAULT_INDEX, AndroidConstants.Misc.DEFAULT_DURATION) }
+            val mediaItems = musicList.map { music ->
+                MediaItem.Builder()
+                    .setUri(music.audioPath.toUri())
+                    .setMediaMetadata(
+                        MediaMetadata.Builder()
+                            .setTitle(music.title)
+                            .setArtist(music.artist)
+                            .setAlbumTitle("")
+                            .setDisplayTitle(music.title)
+                            .build()
+                    )
+                    .build()
+            }
+            verify { mockExoPlayer.setMediaItems(mediaItems, AndroidConstants.Misc.DEFAULT_INDEX, 0L) }
             verify { mockExoPlayer.prepare() }
             verify { mockExoPlayer.play() }
         }
